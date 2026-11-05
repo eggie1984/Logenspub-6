@@ -1,0 +1,755 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Logan's Pub 6 Teamplanner</title>
+<meta name="theme-color" content="#15493A"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Logan's Pub 6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one narrow column like a pub scoreboard. A dark board-green header, then one card per match
+   with date block, opponent, and a seven-cell bar (one cell per player). A card turns red under 4 players. */
+:root {
+  --bg: #EBEFE8;
+  --surface: #F9FBF7;
+  --surface-2: #DFE6DC;
+  --ink: #14211A;
+  --ink-2: #4A5A51;
+  --line: #C4CFC2;
+  --brand: #15493A;
+  --brand-ink: #F2F7F1;
+  --accent: #15493A;
+  --yes: #17683F;
+  --yes-bg: #CFEBD8;
+  --no: #A82E24;
+  --no-bg: #F5D6D2;
+  --late: #8A5A00;
+  --late-bg: #F3E2B0;
+  --on-status: #FFFFFF;
+  --board-red: #C8372D;
+  --board-green: #2F8F5B;
+  --board-cream: #EFE6CC;
+  --board-black: #101512;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1612; --surface: #14211B; --surface-2: #1B2C24; --ink: #E6EFE8; --ink-2: #9BB0A3; --line: #28392F;
+    --brand: #0A2A20; --brand-ink: #E6EFE8; --accent: #7FD4AC;
+    --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
+    --on-status: #0B1A12;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1612; --surface: #14211B; --surface-2: #1B2C24; --ink: #E6EFE8; --ink-2: #9BB0A3; --line: #28392F;
+  --brand: #0A2A20; --brand-ink: #E6EFE8; --accent: #7FD4AC;
+  --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
+  --on-status: #0B1A12;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.45 var(--font-body); padding-bottom: 40px; }
+h1, h2, h3, p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .55; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.in {
+  width: 100%; max-width: 640px; margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* header */
+.top { background: var(--brand); color: var(--brand-ink); padding-block: 18px 16px; }
+.top .in { display: flex; align-items: center; gap: 14px; }
+.board {
+  flex: none; width: 46px; height: 46px; border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--board-red) 0 8%, var(--board-green) 8% 18%, transparent 18% 61%, var(--board-red) 61% 68%, transparent 68% 89%, var(--board-green) 89% 100%),
+    repeating-conic-gradient(var(--board-cream) 0 9deg, var(--board-black) 9deg 18deg);
+  box-shadow: 0 0 0 2px var(--board-black);
+}
+.top h1 { font: 700 30px/1 var(--font-display); letter-spacing: .01em; text-wrap: balance; }
+.top .sub { font-size: 13px; opacity: .8; margin-top: 4px; }
+
+main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
+.note { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; font-size: 14px; color: var(--ink-2); }
+.note[hidden] { display: none; }
+
+/* who am I */
+.who { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.who h2 { font: 700 24px/1.1 var(--font-display); }
+.who p { color: var(--ink-2); font-size: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid var(--line); background: var(--bg); font-weight: 600; }
+.chip:hover:not(:disabled) { border-color: var(--accent); }
+.chip small { font-weight: 400; color: var(--ink-2); margin-left: 4px; }
+.whoami { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; flex-wrap: wrap; }
+.linkbtn { background: none; border: 0; padding: 8px 0; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; min-height: 40px; text-align: left; }
+
+/* summary */
+.summary { display: flex; align-items: center; gap: 14px; }
+.summary .num { font: 700 56px/0.9 var(--font-display); color: var(--no); font-variant-numeric: tabular-nums; min-width: 40px; text-align: center; }
+.summary .txt { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; font-size: 15px; }
+.summary .txt strong { font-weight: 600; }
+.summary .txt span { color: var(--ink-2); font-size: 13px; }
+
+.month { font: 600 15px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); padding: 10px 2px 0; }
+.group { display: flex; flex-direction: column; gap: 12px; }
+
+/* match card */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.card.next { border: 2px solid var(--accent); padding: 13px; }
+.card.low { background: var(--no-bg); border: 2px solid var(--no); padding: 13px; }
+.card.past { opacity: .82; }
+.card-main { display: flex; gap: 14px; align-items: flex-start; }
+.date { flex: none; width: 58px; padding: 7px 0 8px; border-radius: 10px; background: var(--surface-2); display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.card.low .date { background: var(--bg); }
+.date .wd, .date .mo { font: 600 13px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.date .d { font: 700 32px/1.05 var(--font-display); font-variant-numeric: tabular-nums; }
+.info { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.tag { font: 600 13px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; padding: 5px 8px 4px; border-radius: 6px; }
+.tag.home { background: var(--brand); color: var(--brand-ink); }
+.tag.away { border: 1px solid var(--ink-2); color: var(--ink); }
+.tag.tbd { border: 1px dashed var(--ink-2); color: var(--ink-2); }
+.time { font: 600 18px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.nexttag { font-size: 12px; font-weight: 600; color: var(--accent); }
+.opp { font: 700 27px/1.05 var(--font-display); overflow-wrap: anywhere; text-wrap: balance; }
+.opp.muted { color: var(--ink-2); font-weight: 600; }
+.where { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+
+.bar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.bar i { height: 8px; border-radius: 4px; background: var(--line); }
+.bar i.yes { background: var(--yes); }
+.bar i.late { background: var(--late); }
+.bar i.no { background: var(--no); }
+.lowmsg { font-size: 14px; color: var(--no); }
+.lowmsg strong { font-weight: 700; }
+
+.mine { display: flex; flex-direction: column; gap: 6px; }
+.mine .lab { font: 600 13px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.opt { min-height: 46px; padding: 0 6px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 15px; font-weight: 600; min-width: 0; }
+.card.low .opt { background: var(--surface); }
+.opt:hover:not(:disabled) { border-color: var(--ink-2); }
+.opt[aria-pressed="true"].yes { background: var(--yes); border-color: var(--yes); color: var(--on-status); }
+.opt[aria-pressed="true"].late { background: var(--late); border-color: var(--late); color: var(--on-status); }
+.opt[aria-pressed="true"].no { background: var(--no); border-color: var(--no); color: var(--on-status); }
+.opt.mini { min-height: 36px; font-size: 13px; border-radius: 8px; }
+
+.more { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 44px; padding: 0 2px; border: 0; background: none; text-align: left; font-size: 14px; color: var(--ink-2); }
+.more b { color: var(--ink); font-weight: 600; }
+.chev { flex: none; width: 10px; height: 10px; border-right: 2px solid var(--ink-2); border-bottom: 2px solid var(--ink-2); transform: rotate(45deg); transition: transform .15s; margin-right: 4px; }
+.more[aria-expanded="true"] .chev { transform: rotate(-135deg); }
+
+.detail { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
+.roster { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.roster li { display: flex; flex-direction: column; gap: 6px; }
+.rrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pname { min-width: 0; font-size: 15px; overflow-wrap: anywhere; }
+.pname small { color: var(--ink-2); font-size: 12px; margin-left: 4px; }
+.badge { display: inline-block; margin-left: 6px; padding: 2px 5px; border-radius: 4px; background: var(--brand); color: var(--brand-ink); font: 700 11px/1 var(--font-body); vertical-align: 1px; }
+.pill { flex: none; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 12px; }
+.pill.yes { background: var(--yes-bg); color: var(--yes); }
+.pill.late { background: var(--late-bg); color: var(--late); }
+.pill.no { background: var(--no-bg); color: var(--no); }
+.card.low .pill.no { background: var(--surface); }
+.addr { font-size: 14px; color: var(--ink-2); }
+.acts { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 0 16px; }
+.panel[hidden] { display: none; }
+.panel > summary { min-height: 52px; display: flex; align-items: center; font-weight: 600; cursor: pointer; }
+.panel[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+.panel .body { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; font-size: 14px; color: var(--ink-2); }
+.panel .cards { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; }
+.panel h3 { font: 600 15px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.panel input[type="file"] { font: inherit; max-width: 100%; }
+.links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.links li { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 40px; }
+.btn { align-self: flex-start; min-height: 46px; padding: 0 18px; border-radius: 10px; border: 0; background: var(--brand); color: var(--brand-ink); font-weight: 600; }
+.lrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.lact { display: flex; gap: 14px; }
+.links li { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 4px; }
+.links small { color: var(--ink-2); }
+.danger { color: var(--no); }
+.btn.danger { background: var(--no); color: var(--on-status); }
+.btn.small { min-height: 40px; padding: 0 14px; }
+.confirm { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; background: var(--no-bg); border-radius: 10px; padding: 10px 12px; color: var(--ink); }
+.addform { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 14px; }
+.addform label { font-weight: 600; color: var(--ink); }
+.addform input, .addform select { font: inherit; min-height: 46px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+.foot { font-size: 13px; color: var(--ink-2); }
+
+#toast { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; padding: 0 max(16px, env(safe-area-inset-left, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-right, 0px)); pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity .2s, transform .2s; }
+#toast.show { opacity: 1; transform: none; }
+#toast span { background: var(--ink); color: var(--bg); padding: 12px 16px; border-radius: 12px; font-size: 14px; max-width: 520px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 380px) {
+  .opt { font-size: 14px; gap: 4px; }
+  .opt svg { display: none; }
+  .opp { font-size: 24px; }
+}
+</style>
+
+<div class="top"><div class="in">
+  <div class="board" aria-hidden="true"></div>
+  <div>
+    <h1>Logan's Pub 6</h1>
+    <p class="sub">Wie gooit er mee? Seizoen 2026-2027</p>
+  </div>
+</div></div>
+
+<main class="in">
+  <p class="note" id="note" hidden></p>
+  <div id="who"></div>
+  <div id="summary"></div>
+  <div id="list" class="group"></div>
+
+  <details class="panel" id="pastbox" hidden>
+    <summary id="pastsum">Gespeeld</summary>
+    <div class="cards" id="pastlist"></div>
+  </details>
+
+  <details class="panel" id="admin" hidden>
+    <summary>Beheer voor de captain</summary>
+    <div class="body">
+      <h3>Wedstrijden inladen</h3>
+      <p>Kies het .ics-bestand uit Teambeheer van de dartbond. Nieuwe wedstrijden worden toegevoegd en gewijzigde datums of locaties worden bijgewerkt. Antwoorden van spelers blijven staan.</p>
+      <input type="file" id="icsfile" accept=".ics,text/calendar">
+      <div id="importout"></div>
+      <h3>Spelers</h3>
+      <p>Elke speler kiest zelf zijn naam. Een verkeerde keuze maak je hier los, dan kan de speler opnieuw kiezen.</p>
+      <ul class="links" id="claimlist"></ul>
+      <form id="addform" class="addform">
+        <label for="newname">Nieuwe speler</label>
+        <input type="text" id="newname" maxlength="40" autocomplete="off" placeholder="Voor- en achternaam" required>
+        <label for="newrole">Functie</label>
+        <select id="newrole">
+          <option value="">Speler</option>
+          <option value="C">Captain (C)</option>
+          <option value="RC">Reserve-captain (RC)</option>
+        </select>
+        <button class="btn" type="submit">Speler toevoegen</button>
+      </form>
+      <h3>Wie mag beheren</h3>
+      <h3>Meldingen</h3><p>Stuurt nu een testmelding naar iedereen die meldingen heeft aangezet.</p><button class="btn" data-act="testpush">Stuur testmelding</button>
+    </div>
+  </details>
+
+  <p class="foot">Speeldata kunnen veranderen. Controleer altijd de actuele datum op <a href="https://www.pdbdarts.nl/" target="_blank" rel="noopener">pdbdarts.nl</a> of in de Teambeheer-app.</p>
+</main>
+
+<div id="toast" role="status" aria-live="polite"><span id="toasttext"></span></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+(function () {
+  'use strict';
+  var TZ = 'Europe/Amsterdam';
+  var TEAM = "Logan's Pub 6";
+  var MIN = 4;
+  var BUILTIN = [{"id":"26de6ee4eece1536a33c13c08ff2c14b","start":"2026-09-04T18:00:00Z","opp":"Oranjeburgt 12","home":false,"loc":"Café Zaal vd Burgt, Heuvelplein 21, Beek en Donk"},{"id":"3f76942bedac2f27590c2ce8ae4eedf8","start":"2026-09-10T18:00:00Z","opp":"De Duppies","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"75ba059a1b147096ae6b1909460d9010","start":"2026-09-15T18:00:00Z","opp":"De Zuipschutters","home":false,"loc":"O'Mearas Irish Pub, Havenweg 8-12, Helmond"},{"id":"5a50c1282dfd6d2f78d774c92e527c75","start":"2026-10-01T18:00:00Z","opp":"'t Vertierke De Afzwaaiers","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"2e7b476efe5e7d955752f47b0f53096e","start":"2026-10-08T18:00:00Z","opp":"Five Guys & One Shady Lady","home":false,"loc":"Café 't Vat, 2e Haagstraat 53, Helmond"},{"id":"025b99d70f5d8bec5741cd8594361e5a","start":"2026-10-15T18:00:00Z","opp":"DC In The Pocket 2","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"d8aa74975fca96db01a8e6b781eb2b31","start":"2026-10-23T18:00:00Z","opp":"Dartburgt 1","home":false,"loc":"Café Zaal vd Burgt, Heuvelplein 21, Beek en Donk"},{"id":"d25565c2c1ff018584912e3567f6984b","start":"2026-10-26T19:00:00Z","opp":"","home":null,"loc":""},{"id":"d09a281ee16d076802e333f810e08db6","start":"2026-11-05T19:00:00Z","opp":"Uit de Bocht","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"610dd2a7939105ff6704a0e1cd91398e","start":"2026-11-13T19:00:00Z","opp":"ACDC 't Viltje","home":false,"loc":"'t Viltje, Dorpstraat 22, Bakel"},{"id":"31bc1255a11c5a51df63e3c3d9a19fce","start":"2026-11-26T19:00:00Z","opp":"DC De Magikarp(er)","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"bffba81fe54508d553b501a36456b7f4","start":"2026-12-03T19:00:00Z","opp":"DC De Bonte Octopus 1","home":false,"loc":"Café de Peet, Dorpsstraat 27, Neerkant"},{"id":"5b3370a436ba0ee6dcebb2b78d6dfd94","start":"2026-12-18T19:00:00Z","opp":"Dc De Helmonders","home":false,"loc":"Café De Sport (H), Dorpsstraat 62, Helmond"},{"id":"a7a0fe29a39295490773601f842ff71c","start":"2027-01-07T19:00:00Z","opp":"DC De Zwart","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"ce1e2122fa5cf0953ed8f639c7eee2c2","start":"2027-01-14T19:00:00Z","opp":"Oranjeburgt 12","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"96321119c6b6619d2c3b89078624cd7b","start":"2027-01-21T19:00:00Z","opp":"De Duppies","home":false,"loc":"De Kroeg, Blasiusstraat 3, Deurne"},{"id":"6f0a86e2030a576e720418ee105aa6c2","start":"2027-02-04T19:00:00Z","opp":"De Zuipschutters","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"cbb4ea2c5e5b217f4fe68b4f3978579c","start":"2027-02-19T19:00:00Z","opp":"'t Vertierke De Afzwaaiers","home":false,"loc":"Sociaal Cultureel Centrum den Draai, Blasiusstraat 2, Deurne"},{"id":"bff570964450e88f2b7602b1af4abfef","start":"2027-02-25T19:00:00Z","opp":"Five Guys & One Shady Lady","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"279e34d7eb93666290d30c4eceaabb61","start":"2027-03-12T19:00:00Z","opp":"DC In The Pocket 2","home":false,"loc":"Marma Bar, Hoofdstraat 81, Liessel"},{"id":"e78abf480af4b20a315a2b9d9c90f145","start":"2027-03-15T19:00:00Z","opp":"","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"74cc9b789e0909524998315bdc80d7a1","start":"2027-03-25T19:00:00Z","opp":"Uit de Bocht","home":false,"loc":"Café De Vangrail, Dorpsstraat 35, Meijel"},{"id":"37f35dc5d6b03f3d938725e09b9bab93","start":"2027-04-08T18:00:00Z","opp":"ACDC 't Viltje","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"dcf4b6e3308d7282ccb1cbcabf875a28","start":"2027-04-15T18:00:00Z","opp":"DC De Magikarp(er)","home":false,"loc":"De Karper, Walvisstraat 34, Helmond"},{"id":"21bc3fc8b7ffd2c515cea65b2b7471c7","start":"2027-04-22T18:00:00Z","opp":"DC De Bonte Octopus 1","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"0b5e251c84a05d4eb6eaf922c2bed009","start":"2027-05-13T18:00:00Z","opp":"Dc De Helmonders","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"9b772feb1efd5b05a00d662acd9e5eae","start":"2027-05-21T18:00:00Z","opp":"DC De Zwart","home":false,"loc":"Café De Zwart, Kerkstraat2, Blitterswijck"}];
+  var BUILTIN_PLAYERS = [
+    { id: 'sander', name: 'Sander Fransen', short: 'Sander', role: 'C' },
+    { id: 'heino', name: 'Heino Egelmeers', short: 'Heino' },
+    { id: 'mark', name: 'Mark Eeuwes', short: 'Mark', role: 'RC' },
+    { id: 'egbert', name: 'Egbert Pashouwers', short: 'Egbert' },
+    { id: 'martijn', name: 'Martijn Smits', short: 'Martijn' },
+    { id: 'lars', name: 'Lars Eeuwes', short: 'Lars' },
+    { id: 'albert', name: 'Albert Janssen', short: 'Albert' }
+  ];
+  var PLAYERS = BUILTIN_PLAYERS.slice();
+  var ORDER = ['yes', 'late', 'no'];
+  var LABEL = { yes: 'Kan', late: 'Komt later', no: 'Kan niet' };
+  var ICON = {
+    yes: '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    late: '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 6.5V10l2.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    no: '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>'
+  };
+
+  var db = null;
+  var state = {
+    matches: BUILTIN.slice(),
+    claims: {},          /* account id -> { p: playerId } */
+    answers: {},         /* doc id -> { st: { matchId: { s, t } } } */
+    uid: null,
+    isCaptain: false,
+    canWrite: null,
+    dbState: 'pending',
+    claimsReady: false,
+    expanded: {},
+    proxy: false,
+    onlyLow: false,
+    confirmDel: null,
+    pending: null
+  };
+
+  /* ---------- helpers ---------- */
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function $(id) { return document.getElementById(id); }
+  function byStart(a, b) { return a.start < b.start ? -1 : a.start > b.start ? 1 : 0; }
+  function player(id) { for (var i = 0; i < PLAYERS.length; i++) if (PLAYERS[i].id === id) return PLAYERS[i]; return null; }
+
+  var fWd = new Intl.DateTimeFormat('nl-NL', { weekday: 'short', timeZone: TZ });
+  var fDay = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', timeZone: TZ });
+  var fMon = new Intl.DateTimeFormat('nl-NL', { month: 'short', timeZone: TZ });
+  var fMonLong = new Intl.DateTimeFormat('nl-NL', { month: 'long', year: 'numeric', timeZone: TZ });
+  var fTime = new Intl.DateTimeFormat('nl-NL', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: TZ });
+  function clean(s) { return s.replace(/\./g, ''); }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function locParts(m) { return (m.loc || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); }
+  function whereLine(m) {
+    var p = locParts(m);
+    if (!p.length) return 'Locatie nog niet bekend';
+    return p.length > 1 ? p[0] + ' · ' + p[p.length - 1] : p[0];
+  }
+
+  /* who is who: an account id is tied to one player name */
+  function meId() {
+    var c = state.uid && state.claims[state.uid];
+    return c && player(c.p) ? c.p : null;
+  }
+  function claimUid(pid) {
+    for (var u in state.claims) if (state.claims[u] && state.claims[u].p === pid) return u;
+    return null;
+  }
+  function docPlayer(docId) {
+    if (docId.indexOf('p_') === 0) return docId.slice(2);
+    var c = state.claims[docId];
+    return c ? c.p : null;
+  }
+  /* everyone counts as "Kan" until they say otherwise; the newest answer wins */
+  function statusOf(mid, pid) {
+    var best = null;
+    for (var id in state.answers) {
+      if (docPlayer(id) !== pid) continue;
+      var st = state.answers[id].st, e = st && st[mid];
+      if (e && typeof e.t === 'number' && ORDER.indexOf(e.s) >= 0 && (!best || e.t > best.t)) best = e;
+    }
+    return best ? best.s : 'yes';
+  }
+  function counts(mid) {
+    var c = { yes: 0, late: 0, no: 0 };
+    PLAYERS.forEach(function (p) { c[statusOf(mid, p.id)]++; });
+    return c;
+  }
+  function present(c) { return c.yes + c.late; }
+  function canEditNow() {
+    return !!db && !!state.uid && state.dbState !== 'none' && state.dbState !== 'error' && state.canWrite !== false;
+  }
+
+  var toastTimer = null;
+  function toast(msg) {
+    $('toasttext').textContent = msg;
+    $('toast').className = 'show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { $('toast').className = ''; }, 4500);
+  }
+
+  /* ---------- writing ---------- */
+  var sb = null;
+  function run(q) { return Promise.resolve(q).then(function (r) { if (r && r.error) throw r.error; return r; }); }
+  function writeFail(e) {
+    var m = (e && e.message) || '';
+    toast(/row-level|permission/i.test(m) ? 'Opslaan is geweigerd. Je mag alleen je eigen antwoord aanpassen.' : 'Opslaan is niet gelukt. Probeer het over een paar seconden nog eens.');
+  }
+  function writeAnswer(mid, pid, s) {
+    if (!sb || !state.uid) { toast('Log in om je antwoord op te slaan.'); return; }
+    if (pid !== meId() && !state.isCaptain) { toast('Je kunt alleen je eigen antwoord aanpassen.'); return; }
+    var t = Date.now(), k = 'p_' + pid;
+    (state.answers[k] = state.answers[k] || { st: {} }).st[mid] = { s: s, t: t };
+    render();
+    run(sb.from('answers').upsert({ match_id: mid, player_id: pid, status: s, updated_by: state.uid, updated_at: new Date(t).toISOString() }, { onConflict: 'match_id,player_id' }))
+      .catch(function (e) { writeFail(e); loadAll(); });
+  }
+  function claim(pid) {
+    if (!sb || !state.uid) return;
+    if (claimUid(pid)) { toast('Die naam is al gekozen. Vraag de captain om hem los te maken.'); return; }
+    run(sb.from('claims').insert({ user_id: state.uid, player_id: pid })).then(loadAll).catch(writeFail);
+  }
+  function unclaim(uid) { if (sb && uid) run(sb.from('claims').delete().eq('user_id', uid)).then(loadAll).catch(writeFail); }
+  function slug(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  function addPlayer(name, role) {
+    if (!sb || !state.isCaptain) return;
+    name = name.trim().replace(/\s+/g, ' ');
+    if (!name) { toast('Vul een naam in.'); return; }
+    var first = name.split(' ')[0], base = slug(first) || 'speler', id = base, n = 2;
+    while (player(id)) id = base + (n++);
+    run(sb.from('players').insert({ id: id, name: name, short: first, role: role || '', sort: PLAYERS.length + 1 }))
+      .then(function () { $('newname').value = ''; toast(first + ' is toegevoegd.'); return loadAll(); }).catch(writeFail);
+  }
+  function removePlayer(pid) {
+    if (!sb || !state.isCaptain) return;
+    state.confirmDel = null;
+    run(sb.from('players').delete().eq('id', pid)).then(function () { toast('Speler verwijderd.'); return loadAll(); }).catch(writeFail);
+    render();
+  }
+  $('addform').addEventListener('submit', function (ev) { ev.preventDefault(); addPlayer($('newname').value, $('newrole').value); });
+
+  /* ---------- rendering ---------- */
+  function renderNote() {
+    var n = $('note'), t = '';
+    if (state.dbState === 'none') t = 'Log in om de antwoorden te zien en in te vullen.';
+    else if (state.dbState === 'pending') t = 'Antwoorden laden...';
+    else if (state.dbState === 'slow') t = 'De antwoorden zijn nog niet opgehaald. Wat je ziet kan verouderd zijn.';
+    else if (state.dbState === 'error') t = 'De antwoorden konden niet worden geladen. Open de pagina opnieuw.';
+    else if (state.canWrite === false) t = 'Je kunt meekijken maar niet invullen. Vraag de captain om je uit te nodigen met bewerkrechten.';
+    n.hidden = !t;
+    n.textContent = t;
+  }
+
+  function renderWho() {
+    var el = $('who');
+    if (!state.uid) {
+      if (!$('authform')) el.innerHTML = '<section class="who"><h2>Inloggen</h2><p>Log in met je e-mailadres. Heb je nog geen account, kies dan Nieuw account maken.</p>' +
+        '<form id="authform" class="addform" style="border:0;padding:0"><input id="aemail" type="email" autocomplete="email" placeholder="E-mailadres" required>' +
+        '<input id="apass" type="password" minlength="6" autocomplete="current-password" placeholder="Wachtwoord (minimaal 6 tekens)" required>' +
+        '<div class="acts"><button class="btn" type="submit">Inloggen</button><button type="button" class="linkbtn" data-act="signup">Nieuw account maken</button></div></form></section>';
+      return;
+    }
+    if (!state.claimsReady) { el.innerHTML = ''; return; }
+    var me = meId(), h;
+    if (!me) {
+      h = '<section class="who"><h2>Wie ben jij?</h2><p>Kies je naam. Daarna kan alleen jij jouw antwoorden aanpassen.</p><div class="chips">' +
+        PLAYERS.map(function (p) {
+          var taken = !!claimUid(p.id);
+          return '<button class="chip" data-act="claim" data-pid="' + p.id + '" data-fk="who:' + p.id + '"' + (taken ? ' disabled' : '') + '>' + esc(p.short) + (taken ? '<small>gekozen</small>' : '') + '</button>';
+        }).join('') + '</div></section>';
+    } else {
+      h = '<div class="whoami"><span>Je vult in als <strong>' + esc(player(me).short) + '</strong>' + (state.isCaptain ? ' (captain)' : '') + '</span>' +
+        '<button class="linkbtn" data-act="unclaim-self" data-fk="unclaim-self">Dit ben ik niet</button></div>';
+    }
+    h += '<div class="acts"><button class="linkbtn" data-act="push" data-fk="push">' + (state.push ? 'Meldingen staan aan \u2713' : 'Meldingen aanzetten') + '</button><button class="linkbtn" data-act="logout" data-fk="logout">Uitloggen</button></div>';
+    el.innerHTML = h;
+  }
+
+  function split() {
+    var now = Date.now(), up = [], past = [];
+    state.matches.slice().sort(byStart).forEach(function (m) {
+      (Date.parse(m.start) + 3 * 3600e3 < now ? past : up).push(m);
+    });
+    past.reverse();
+    return { up: up, past: past };
+  }
+  function isLow(m) { return present(counts(m.id)) < MIN; }
+
+  function renderSummary(up) {
+    var el = $('summary');
+    var low = up.filter(isLow).length;
+    if (!low) {
+      el.innerHTML = '<div class="summary"><div class="txt"><strong>Alle komende wedstrijden hebben minimaal ' + MIN + ' spelers.</strong></div></div>';
+      return;
+    }
+    el.innerHTML = '<div class="summary"><div class="num">' + low + '</div><div class="txt"><strong>' +
+      (low === 1 ? 'wedstrijd heeft' : 'wedstrijden hebben') + ' te weinig spelers</strong><span>Er zijn minimaal ' + MIN + ' spelers nodig.</span>' +
+      '<button class="linkbtn" data-act="onlylow" aria-pressed="' + state.onlyLow + '" data-fk="onlylow">' +
+      (state.onlyLow ? 'Toon alle wedstrijden' : 'Toon alleen deze wedstrijden') + '</button></div></div>';
+  }
+
+  function optButtons(mid, pid, cur, mini, disabled) {
+    return ORDER.map(function (s) {
+      return '<button class="opt ' + s + (mini ? ' mini' : '') + '" data-act="status" data-mid="' + mid + '" data-pid="' + pid + '" data-s="' + s +
+        '" data-fk="' + mid + ':' + pid + ':' + s + '" aria-pressed="' + (cur === s) + '"' + (disabled ? ' disabled' : '') + '>' +
+        (mini ? '' : ICON[s]) + '<span>' + LABEL[s] + '</span></button>';
+    }).join('');
+  }
+
+  function card(m, isNext, isPast) {
+    var c = counts(m.id), pres = present(c), me = meId();
+    var low = !isPast && pres < MIN;
+    var d = new Date(m.start);
+    var tag = m.home === true ? '<span class="tag home">Thuis</span>' : m.home === false ? '<span class="tag away">Uit</span>' : '<span class="tag tbd">Nog onbekend</span>';
+    var opp = m.opp ? '<h3 class="opp">' + esc(m.opp) + '</h3>' : '<h3 class="opp muted">Tegenstander nog niet bekend</h3>';
+    var cells = [];
+    ORDER.forEach(function (k) { for (var i = 0; i < c[k]; i++) cells.push('<i class="' + k + '"></i>'); });
+    var info = '<b>' + pres + ' aanwezig</b>' + (c.late ? ' (' + c.late + ' komt later)' : '') + (c.no ? ' · ' + c.no + ' kan niet' : '');
+    var open = state.expanded[m.id];
+    if (open === undefined) open = isNext;
+    var dis = !canEditNow();
+
+    var h = '<article class="card' + (isNext ? ' next' : '') + (low ? ' low' : '') + (isPast ? ' past' : '') + '">';
+    h += '<div class="card-main"><div class="date"><span class="wd">' + esc(clean(fWd.format(d))) + '</span><span class="d">' + esc(fDay.format(d)) +
+      '</span><span class="mo">' + esc(clean(fMon.format(d))) + '</span></div><div class="info"><div class="kicker">' + tag +
+      '<span class="time">' + esc(fTime.format(d)) + '</span>' + (isNext ? '<span class="nexttag">Eerstvolgende</span>' : '') + '</div>' +
+      opp + '<p class="where">' + esc(whereLine(m)) + '</p></div></div>';
+    h += '<div class="bar" style="grid-template-columns:repeat(' + Math.max(PLAYERS.length, 1) + ',1fr)" aria-hidden="true">' + cells.join('') + '</div>';
+    if (low) {
+      h += '<p class="lowmsg"><strong>' + (pres === 0 ? 'Niemand aanwezig.' : 'Nog maar ' + pres + ' aanwezig.') + '</strong> Je hebt er minimaal ' + MIN +
+        ' nodig. Neem contact op met de tegenstander om de wedstrijd te verzetten.</p>';
+    }
+    if (me && !isPast) {
+      h += '<div class="mine"><span class="lab">Jouw antwoord</span><div class="seg">' + optButtons(m.id, me, statusOf(m.id, me), false, dis) + '</div></div>';
+    }
+    h += '<button class="more" data-act="toggle" data-mid="' + m.id + '" data-fk="t:' + m.id + '" aria-expanded="' + !!open + '"><span>' + info + '</span><span class="chev"></span></button>';
+    if (open) {
+      var p = locParts(m);
+      h += '<div class="detail"><ul class="roster">';
+      PLAYERS.forEach(function (pl) {
+        var s = statusOf(m.id, pl.id);
+        h += '<li><div class="rrow"><span class="pname">' + esc(pl.name) + (pl.role ? '<span class="badge">' + pl.role + '</span>' : '') +
+          (pl.id === me ? '<small>(jij)</small>' : '') + '</span><span class="pill ' + s + '">' + LABEL[s] + '</span></div>';
+        if (state.proxy && state.isCaptain && !isPast) h += '<div class="seg">' + optButtons(m.id, pl.id, s, true, dis) + '</div>';
+        h += '</li>';
+      });
+      h += '</ul>';
+      if (p.length > 1) h += '<p class="addr">' + esc(p.slice(1).join(', ')) + '</p>';
+      h += '<div class="acts">';
+      if (p.length) h += '<a href="https://www.google.com/maps/search/?api=1&amp;query=' + encodeURIComponent(m.loc) + '" target="_blank" rel="noopener">Route openen</a>';
+      if (state.isCaptain && !isPast) h += '<button class="linkbtn" data-act="proxy" data-fk="proxy:' + m.id + '" aria-pressed="' + state.proxy + '">' + (state.proxy ? 'Klaar met invullen voor anderen' : 'Invullen voor iemand anders') + '</button>';
+      h += '</div></div>';
+    }
+    return h + '</article>';
+  }
+
+  function renderLists() {
+    var sp = split();
+    var up = sp.up;
+    renderSummary(up);
+    var shown = state.onlyLow ? up.filter(isLow) : up;
+    var html = '', lastMonth = '', grp = false;
+    if (!shown.length) html = '<p class="note">Geen wedstrijden met te weinig spelers.</p>';
+    shown.forEach(function (m) {
+      var mk = cap(fMonLong.format(new Date(m.start)));
+      if (mk !== lastMonth) {
+        if (grp) html += '</div>';
+        html += '<h2 class="month">' + esc(mk) + '</h2><div class="group">';
+        grp = true; lastMonth = mk;
+      }
+      html += card(m, up.length && m.id === up[0].id, false);
+    });
+    if (grp) html += '</div>';
+    $('list').innerHTML = html;
+
+    var pb = $('pastbox');
+    pb.hidden = !sp.past.length;
+    $('pastsum').textContent = 'Gespeeld (' + sp.past.length + ')';
+    $('pastlist').innerHTML = sp.past.map(function (m) { return card(m, false, true); }).join('');
+  }
+
+  function renderAdmin() {
+    $('admin').hidden = !state.isCaptain;
+    if (!state.isCaptain) return;
+    $('claimlist').innerHTML = PLAYERS.map(function (p) {
+      var u = claimUid(p.id);
+      var ask = state.confirmDel === p.id;
+      return '<li><div class="lrow"><span>' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
+        ' <small>' + (u ? 'naam gekozen' : 'nog niet gekozen') + '</small></span><span class="lact">' +
+        (u ? '<button class="linkbtn" data-act="unclaim" data-uid="' + esc(u) + '" data-fk="uc:' + p.id + '">Maak los</button>' : '') +
+        (ask ? '' : '<button class="linkbtn danger" data-act="del-ask" data-pid="' + p.id + '" data-fk="da:' + p.id + '">Verwijder</button>') +
+        '</span></div>' +
+        (ask ? '<div class="confirm"><span>' + esc(p.short) + ' en alle antwoorden van die speler verwijderen?</span>' +
+          '<button class="btn small danger" data-act="del-yes" data-pid="' + p.id + '" data-fk="dy:' + p.id + '">Ja, verwijder</button>' +
+          '<button class="linkbtn" data-act="del-cancel" data-fk="dc:' + p.id + '">Annuleer</button></div>' : '') + '</li>';
+    }).join('');
+  }
+
+  function render() {
+    var ae = document.activeElement, fk = ae && ae.dataset ? ae.dataset.fk : null;
+    renderNote();
+    renderWho();
+    renderLists();
+    renderAdmin();
+    if (fk) {
+      var el = document.querySelector('[data-fk="' + fk + '"]');
+      if (el && el.focus) el.focus({ preventScroll: true });
+    }
+  }
+
+  /* ---------- clicks ---------- */
+  document.addEventListener('click', function (ev) {
+    var t = ev.target.closest ? ev.target.closest('[data-act]') : null;
+    if (!t) return;
+    var act = t.getAttribute('data-act');
+    if (act === 'claim') {
+      claim(t.getAttribute('data-pid'));
+    } else if (act === 'unclaim-self') {
+      unclaim(state.uid);
+    } else if (act === 'unclaim') {
+      unclaim(t.getAttribute('data-uid'));
+    } else if (act === 'del-ask') {
+      state.confirmDel = t.getAttribute('data-pid'); render();
+    } else if (act === 'del-cancel') {
+      state.confirmDel = null; render();
+    } else if (act === 'del-yes') {
+      removePlayer(t.getAttribute('data-pid'));
+    } else if (act === 'onlylow') {
+      state.onlyLow = !state.onlyLow; render();
+    } else if (act === 'toggle') {
+      var mid = t.getAttribute('data-mid');
+      var cur = state.expanded[mid];
+      if (cur === undefined) {
+        var up = split().up;
+        cur = up.length && up[0].id === mid;
+      }
+      state.expanded[mid] = !cur; render();
+    } else if (act === 'proxy') {
+      state.proxy = !state.proxy; render();
+    } else if (act === 'status') {
+      if (t.disabled) return;
+      var m2 = t.getAttribute('data-mid'), p2 = t.getAttribute('data-pid'), s = t.getAttribute('data-s');
+      var curS = statusOf(m2, p2);
+      if (curS === s) { if (s === 'yes') return; s = 'yes'; }
+      writeAnswer(m2, p2, s);
+    } else if (act === 'push') { enablePush();
+    } else if (act === 'logout') { sb.auth.signOut();
+    } else if (act === 'signup') { auth(true);
+    } else if (act === 'testpush') {
+      sb.functions.invoke('send-reminders', { body: { test: true } }).then(function (r) { toast(r.error ? 'Testmelding mislukt.' : 'Testmelding verstuurd.'); });
+    } else if (act === 'import-save') {
+      saveImport();
+    }
+  });
+
+  /* ---------- importing the dartbond .ics ---------- */
+  function unesc(v) {
+    return v.replace(/\\n/gi, ' ').replace(/\\([,;\\])/g, '$1')
+      .replace(/&#(\d+);/g, function (_, n) { return String.fromCharCode(+n); })
+      .replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  }
+  function amsOffset(ms) {
+    var parts = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      .formatToParts(new Date(ms)).reduce(function (o, x) { o[x.type] = x.value; return o; }, {});
+    return Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute, +parts.second) - ms;
+  }
+  function parseICS(text) {
+    var raw = text.replace(/\r\n/g, '\n').replace(/\n[ \t]/g, '');
+    var out = [];
+    raw.split('BEGIN:VEVENT').slice(1).forEach(function (blk) {
+      var body = blk.split('END:VEVENT')[0], f = {};
+      body.split('\n').forEach(function (line) {
+        var i = line.indexOf(':');
+        if (i < 1) return;
+        var k = line.slice(0, i).split(';')[0].toUpperCase();
+        if (!(k in f)) f[k] = unesc(line.slice(i + 1));
+      });
+      var mt = /^(\d{4})(\d\d)(\d\d)T(\d\d)(\d\d)(\d\d)(Z?)$/.exec((f.DTSTART || '').trim());
+      if (!mt || !f.UID) return;
+      var ms = Date.UTC(+mt[1], +mt[2] - 1, +mt[3], +mt[4], +mt[5], +mt[6]);
+      if (!mt[7]) ms -= amsOffset(ms);
+      var s = (f.SUMMARY || '').trim(), home = null, opp = s;
+      if (s.indexOf(TEAM) === 0) { home = true; opp = s.slice(TEAM.length); }
+      else if (s.length >= TEAM.length && s.lastIndexOf(TEAM) === s.length - TEAM.length) { home = false; opp = s.slice(0, s.length - TEAM.length); }
+      opp = opp.replace(/^[\s-]+|[\s-]+$/g, '');
+      var loc = (f.LOCATION || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean).join(', ');
+      if (!opp && !loc) home = null;
+      out.push({ id: f.UID.split('@')[0].replace(/[^A-Za-z0-9_.~:+-]/g, ''), start: new Date(ms).toISOString().replace('.000Z', 'Z'), opp: opp, home: home, loc: loc });
+    });
+    return out.sort(byStart);
+  }
+  function same(a, b) { return a && a.start === b.start && a.opp === b.opp && a.home === b.home && a.loc === b.loc; }
+
+  $('icsfile').addEventListener('change', function (ev) {
+    var file = ev.target.files && ev.target.files[0];
+    var out = $('importout');
+    if (!file) return;
+    file.text().then(function (txt) {
+      var list = parseICS(txt);
+      if (!list.length) { out.textContent = 'In dit bestand staan geen wedstrijden.'; state.pending = null; return; }
+      var cur = {};
+      state.matches.forEach(function (m) { cur[m.id] = m; });
+      var fresh = 0, changed = 0;
+      list.forEach(function (m) { if (!cur[m.id]) fresh++; else if (!same(cur[m.id], m)) changed++; });
+      state.pending = list;
+      out.innerHTML = '<p><strong>' + list.length + ' wedstrijden gevonden:</strong> ' + fresh + ' nieuw, ' + changed + ' gewijzigd.</p>' +
+        (db ? '<button class="btn" data-act="import-save">Opslaan voor het team</button>' : '<p>Opslaan kan alleen in de gedeelde versie van deze pagina.</p>');
+    }).catch(function () { out.textContent = 'Het bestand kon niet worden gelezen.'; });
+  });
+
+  function saveImport() {
+    var list = state.pending, out = $('importout');
+    if (!list || !sb) return;
+    var cur = {};
+    state.matches.forEach(function (m) { cur[m.id] = m; });
+    var todo = list.filter(function (m) { return !same(cur[m.id], m); });
+    if (!todo.length) { out.textContent = 'Alles was al up-to-date.'; return; }
+    out.textContent = 'Opslaan...';
+    run(sb.from('matches').upsert(todo.map(function (m) { return { id: m.id, start: m.start, opp: m.opp, home: m.home, loc: m.loc }; })))
+      .then(function () { out.textContent = 'Klaar. ' + todo.length + ' wedstrijden bijgewerkt.'; state.pending = null; toast('Wedstrijden opgeslagen.'); return loadAll(); })
+      .catch(function (e) { out.textContent = 'Opslaan is mislukt.'; writeFail(e); });
+  }
+
+  /* ---------- Supabase: laden, inloggen, meldingen ---------- */
+  var rt = null, channel = null;
+  function loadAll() {
+    return Promise.all(['matches', 'players', 'claims', 'answers'].map(function (t) { return run(sb.from(t).select('*')); })).then(function (r) {
+      var ms = r[0].data.map(function (v) { return { id: v.id, start: new Date(v.start).toISOString().replace('.000Z', 'Z'), opp: v.opp || '', home: v.home, loc: v.loc || '' }; });
+      state.matches = ms.length ? ms.sort(byStart) : BUILTIN.slice();
+      var pl = r[1].data.map(function (v) { return { id: v.id, name: v.name, short: v.short || v.name.split(' ')[0], role: v.role || '', order: v.sort || 99 }; });
+      pl.sort(function (a, b) { return a.order - b.order; });
+      PLAYERS = pl.length ? pl : BUILTIN_PLAYERS.slice();
+      var c = {}, adm = false;
+      r[2].data.forEach(function (v) { c[v.user_id] = { p: v.player_id }; if (v.user_id === state.uid) adm = !!v.is_admin; });
+      state.claims = c; state.isCaptain = adm; state.claimsReady = true;
+      var a = {};
+      r[3].data.forEach(function (v) { var k = 'p_' + v.player_id; (a[k] = a[k] || { st: {} }).st[v.match_id] = { s: v.status, t: Date.parse(v.updated_at) }; });
+      state.answers = a; state.dbState = 'ok'; state.canWrite = true;
+      render();
+    }).catch(function () { state.dbState = 'error'; render(); });
+  }
+  function auth(isNew) {
+    var email = $('aemail').value.trim(), pw = $('apass').value;
+    if (!email || pw.length < 6) { toast('Vul je e-mailadres en een wachtwoord van minimaal 6 tekens in.'); return; }
+    var p = isNew ? sb.auth.signUp({ email: email, password: pw }) : sb.auth.signInWithPassword({ email: email, password: pw });
+    p.then(function (r) {
+      if (r.error) toast(isNew ? 'Account maken is niet gelukt: ' + r.error.message : 'E-mailadres of wachtwoord klopt niet.');
+      else if (isNew && !r.data.session) toast('Account gemaakt. Bevestig je e-mail en log daarna in.');
+    });
+  }
+  document.addEventListener('submit', function (ev) { if (ev.target.id === 'authform') { ev.preventDefault(); auth(false); } });
+  function urlB64(s) {
+    var p = '='.repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/'));
+    return Uint8Array.from(b, function (ch) { return ch.charCodeAt(0); });
+  }
+  function checkPush() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); })
+      .then(function (sub) { state.push = !!sub; render(); }).catch(function () {});
+  }
+  function enablePush() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) { toast('Meldingen werken hier niet. Op iPhone: zet de app eerst op je beginscherm en open hem daarvandaan.'); return; }
+    Notification.requestPermission().then(function (perm) {
+      if (perm !== 'granted') { toast('Meldingen zijn niet toegestaan. Zet ze aan in de instellingen van je telefoon of browser.'); return; }
+      return navigator.serviceWorker.ready.then(function (reg) {
+        return reg.pushManager.getSubscription().then(function (s) { return s || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64(CFG.VAPID_PUBLIC_KEY) }); });
+      }).then(function (sub) {
+        var j = sub.toJSON();
+        return run(sb.from('push_subscriptions').upsert({ endpoint: j.endpoint, user_id: state.uid, p256dh: j.keys.p256dh, auth: j.keys.auth }, { onConflict: 'endpoint' }));
+      }).then(function () { state.push = true; toast('Meldingen staan aan.'); render(); });
+    }).catch(function () { toast('Meldingen aanzetten is niet gelukt.'); });
+  }
+
+  var CFG = window.APP_CONFIG || {};
+  render();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+  if (!CFG.SUPABASE_URL || /JOUW/.test(CFG.SUPABASE_URL)) { state.dbState = 'none'; render(); }
+  else {
+    sb = supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+    db = sb; state.dbState = 'none';
+    sb.auth.onAuthStateChange(function (ev, session) {
+      var id = session ? session.user.id : null;
+      if (id && id === state.uid) return;
+      state.uid = id;
+      if (id) {
+        state.dbState = 'pending'; render();
+        setTimeout(function () { loadAll(); checkPush(); }, 0);
+        if (!channel) channel = sb.channel('alles').on('postgres_changes', { event: '*', schema: 'public' }, function () { clearTimeout(rt); rt = setTimeout(loadAll, 300); }).subscribe();
+      } else { state.dbState = 'none'; state.claims = {}; state.claimsReady = false; state.isCaptain = false; render(); }
+    });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden && state.uid) loadAll(); });
+  }
+})();
+</script>
+
+</body></html>
