@@ -1,5 +1,6 @@
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+self.addEventListener('fetch', () => {}); // nodig zodat Chrome de app als installeerbaar ziet
 self.addEventListener('push', e => {
   let d = {}; try { d = e.data.json(); } catch (_) {}
   e.waitUntil(self.registration.showNotification(d.title || "Logan's Pub 6", {
