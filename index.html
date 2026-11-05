@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Logan's Pub 6 Teamplanner</title>
-<meta name="theme-color" content="#15493A"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Logan's Pub 6">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#15493A"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B4545"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Logan's Pub 6">
 </head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,6 +9,8 @@
    with date block, opponent, and a seven-cell bar (one cell per player). A card turns red under 4 players. */
 :root {
   --bg: #EBEFE8;
+  --page: #009999;
+  --month-ink: #0A2E2E;
   --surface: #F9FBF7;
   --surface-2: #DFE6DC;
   --ink: #14211A;
@@ -18,6 +20,7 @@
   --brand-ink: #F2F7F1;
   --accent: #15493A;
   --yes: #17683F;
+  --home: #16583C;
   --yes-bg: #CFEBD8;
   --no: #A82E24;
   --no-bg: #F5D6D2;
@@ -33,23 +36,23 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0D1612; --surface: #14211B; --surface-2: #1B2C24; --ink: #E6EFE8; --ink-2: #9BB0A3; --line: #28392F;
-    --brand: #0A2A20; --brand-ink: #E6EFE8; --accent: #7FD4AC;
-    --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
+    --page: #050E0E; --bg: #0A1A1B; --surface: #12292A; --surface-2: #1D3D3E; --ink: #F2FAF8; --ink-2: #B3CCC8; --line: #3A6061; --month-ink: #B3CCC8;
+    --brand: #0B4545; --brand-ink: #F2FAF8; --accent: #7FD4AC;
+    --home: #2E7552; --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
     --on-status: #0B1A12;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0D1612; --surface: #14211B; --surface-2: #1B2C24; --ink: #E6EFE8; --ink-2: #9BB0A3; --line: #28392F;
-  --brand: #0A2A20; --brand-ink: #E6EFE8; --accent: #7FD4AC;
-  --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
+  --page: #050E0E; --bg: #0A1A1B; --surface: #12292A; --surface-2: #1D3D3E; --ink: #F2FAF8; --ink-2: #B3CCC8; --line: #3A6061; --month-ink: #B3CCC8;
+  --brand: #0B4545; --brand-ink: #F2FAF8; --accent: #7FD4AC;
+  --home: #2E7552; --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
   --on-status: #0B1A12;
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font: 16px/1.45 var(--font-body); padding-bottom: 40px; }
+body { background: var(--page); color: var(--ink); font: 16px/1.45 var(--font-body); padding-bottom: 40px; }
 h1, h2, h3, p { margin: 0; }
 button { font: inherit; color: inherit; cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .55; }
@@ -97,7 +100,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .summary .txt strong { font-weight: 600; }
 .summary .txt span { color: var(--ink-2); font-size: 13px; }
 
-.month { font: 600 15px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); padding: 10px 2px 0; }
+.month { font: 600 15px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--month-ink); padding: 10px 2px 0; }
 .group { display: flex; flex-direction: column; gap: 12px; }
 
 /* match card */
@@ -112,15 +115,18 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .date .d { font: 700 32px/1.05 var(--font-display); font-variant-numeric: tabular-nums; }
 .info { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.tag { font: 600 13px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; padding: 5px 8px 4px; border-radius: 6px; }
-.tag.home { background: var(--brand); color: var(--brand-ink); }
-.tag.away { border: 1px solid var(--ink-2); color: var(--ink); }
+.tag { font: 700 17px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; padding: 8px 12px 7px; border-radius: 8px; }
+.tag.home { background: var(--home); color: var(--brand-ink); }
+.tag.away { background: var(--ink); color: var(--bg); }
 .tag.tbd { border: 1px dashed var(--ink-2); color: var(--ink-2); }
 .time { font: 600 18px/1 var(--font-display); font-variant-numeric: tabular-nums; }
 .nexttag { font-size: 12px; font-weight: 600; color: var(--accent); }
 .opp { font: 700 27px/1.05 var(--font-display); overflow-wrap: anywhere; text-wrap: balance; }
 .opp.muted { color: var(--ink-2); font-weight: 600; }
 .where { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+.navtile { flex: none; min-width: 72px; padding: 7px 8px 6px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: var(--brand); color: var(--brand-ink); text-decoration: none; font: 700 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
+.navtile svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.navtile:active { opacity: .8; }
 
 .bar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
 .bar i { height: 8px; border-radius: 4px; background: var(--line); }
@@ -340,6 +346,8 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
   function locParts(m) { return (m.loc || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); }
+  function navUrl(m) { return 'https://www.google.com/maps/dir/?api=1&amp;destination=' + encodeURIComponent(m.loc); }
+  var PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
   function whereLine(m) {
     var p = locParts(m);
     if (!p.length) return 'Locatie nog niet bekend';
@@ -514,7 +522,8 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     h += '<div class="card-main"><div class="date"><span class="wd">' + esc(clean(fWd.format(d))) + '</span><span class="d">' + esc(fDay.format(d)) +
       '</span><span class="mo">' + esc(clean(fMon.format(d))) + '</span></div><div class="info"><div class="kicker">' + tag +
       '<span class="time">' + esc(fTime.format(d)) + '</span>' + (isNext ? '<span class="nexttag">Eerstvolgende</span>' : '') + '</div>' +
-      opp + '<p class="where">' + esc(whereLine(m)) + '</p></div></div>';
+      opp + '<p class="where">' + esc(whereLine(m)) + '</p></div>' +
+      (m.home === false && locParts(m).length ? '<a class="navtile" href="' + navUrl(m) + '" target="_blank" rel="noopener" aria-label="Navigeer naar ' + esc(m.loc) + '" title="Navigeer">' + PIN + '<span>Navigeer</span></a>' : '') + '</div>';
     h += '<div class="bar" style="grid-template-columns:repeat(' + Math.max(PLAYERS.length, 1) + ',1fr)" aria-hidden="true">' + cells.join('') + '</div>';
     if (low) {
       h += '<p class="lowmsg"><strong>' + (pres === 0 ? 'Niemand aanwezig.' : 'Nog maar ' + pres + ' aanwezig.') + '</strong> Je hebt er minimaal ' + MIN +
@@ -537,7 +546,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
       h += '</ul>';
       if (p.length > 1) h += '<p class="addr">' + esc(p.slice(1).join(', ')) + '</p>';
       h += '<div class="acts">';
-      if (p.length) h += '<a href="https://www.google.com/maps/search/?api=1&amp;query=' + encodeURIComponent(m.loc) + '" target="_blank" rel="noopener">Route openen</a>';
+      if (p.length) h += '<a href="' + (m.home === false ? navUrl(m) : 'https://www.google.com/maps/search/?api=1&amp;query=' + encodeURIComponent(m.loc)) + '" target="_blank" rel="noopener">' + (m.home === false ? 'Navigeer naar de wedstrijd' : 'Route openen') + '</a>';
       if (state.isCaptain && !isPast) h += '<button class="linkbtn" data-act="proxy" data-fk="proxy:' + m.id + '" aria-pressed="' + state.proxy + '">' + (state.proxy ? 'Klaar met invullen voor anderen' : 'Invullen voor iemand anders') + '</button>';
       h += '</div></div>';
     }
