@@ -22,6 +22,7 @@
   --yes: #17683F;
   --home: #16583C;
   --yes-bg: #CFEBD8;
+  --bar-yes: var(--yes-bg); --bar-late: var(--late-bg); --bar-no: var(--no-bg);
   --no: #A82E24;
   --no-bg: #F5D6D2;
   --late: #8A5A00;
@@ -38,7 +39,7 @@
   :root:not([data-theme="light"]) {
     --page: #050E0E; --bg: #0A1A1B; --surface: #12292A; --surface-2: #1D3D3E; --ink: #F2FAF8; --ink-2: #B3CCC8; --line: #3A6061; --month-ink: #B3CCC8;
     --brand: #0B4545; --brand-ink: #F2FAF8; --accent: #7FD4AC;
-    --home: #2E7552; --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
+    --bar-yes: var(--yes); --bar-late: var(--late); --bar-no: var(--no); --home: #2E7552; --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
     --on-status: #0B1A12;
     color-scheme: dark;
   }
@@ -46,7 +47,7 @@
 :root[data-theme="dark"] {
   --page: #050E0E; --bg: #0A1A1B; --surface: #12292A; --surface-2: #1D3D3E; --ink: #F2FAF8; --ink-2: #B3CCC8; --line: #3A6061; --month-ink: #B3CCC8;
   --brand: #0B4545; --brand-ink: #F2FAF8; --accent: #7FD4AC;
-  --home: #2E7552; --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
+  --bar-yes: var(--yes); --bar-late: var(--late); --bar-no: var(--no); --home: #2E7552; --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
   --on-status: #0B1A12;
   color-scheme: dark;
 }
@@ -130,9 +131,9 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 
 .bar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
 .bar i { height: 8px; border-radius: 4px; background: var(--line); }
-.bar i.yes { background: var(--yes); }
-.bar i.late { background: var(--late); }
-.bar i.no { background: var(--no); }
+.bar i.yes { background: var(--bar-yes); box-shadow: inset 0 0 0 1px var(--yes); }
+.bar i.late { background: var(--bar-late); box-shadow: inset 0 0 0 1px var(--late); }
+.bar i.no { background: var(--bar-no); box-shadow: inset 0 0 0 1px var(--no); }
 .lowmsg { font-size: 14px; color: var(--no); }
 .lowmsg strong { font-weight: 700; }
 
