@@ -182,6 +182,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .confirm { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; background: var(--no-bg); border-radius: 10px; padding: 10px 12px; color: var(--ink); }
 .addform { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 14px; }
 .addform label { font-weight: 600; color: var(--ink); }
+.addform textarea { font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; box-sizing: border-box; resize: vertical; }
 .addform input, .addform select { font: inherit; min-height: 46px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
 .foot { font-size: 13px; color: var(--ink-2); }
 
@@ -201,7 +202,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
   <div class="board" aria-hidden="true"></div>
   <div>
     <h1>Logan's Pub 6</h1>
-    <p class="sub">Wie gooit er mee? Seizoen 2026-2027</p>
+    <p class="sub" id="season">Wie gooit er mee? Seizoen 2026-2027</p>
   </div>
 </div></div>
 
@@ -238,7 +239,33 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
         <button class="btn" type="submit">Speler toevoegen</button>
       </form>
       <h3>Wie mag beheren</h3>
-      <h3>Meldingen</h3><p>Stuurt nu een testmelding naar iedereen die meldingen heeft aangezet.</p><button class="btn" data-act="testpush">Stuur testmelding</button>
+      <h3>Melding sturen</h3>
+      <p>Stuurt een melding naar iedereen die meldingen heeft aangezet.</p>
+      <form id="msgform" class="addform">
+        <label for="msgtitle">Titel</label>
+        <input type="text" id="msgtitle" maxlength="60" autocomplete="off" placeholder="Bijv. Wedstrijd verzet" required>
+        <label for="msgbody">Bericht</label>
+        <textarea id="msgbody" rows="3" maxlength="200" placeholder="Schrijf je bericht" required></textarea>
+        <button class="btn" type="submit">Verstuur naar iedereen</button>
+        <button type="button" class="linkbtn" data-act="testpush">Alleen een testmelding sturen</button>
+      </form>
+      <h3>Wedstrijden beheren</h3>
+      <form id="matchform" class="addform">
+        <label id="mflabel" for="mdate">Wedstrijd toevoegen</label>
+        <input type="datetime-local" id="mdate" required>
+        <label for="mopp">Tegenstander</label>
+        <input type="text" id="mopp" maxlength="80" autocomplete="off" placeholder="Nog niet bekend">
+        <label for="mhome">Thuis of uit</label>
+        <select id="mhome"><option value="">Nog onbekend</option><option value="1">Thuis</option><option value="0">Uit</option></select>
+        <label for="mloc">Locatie</label>
+        <input type="text" id="mloc" maxlength="200" autocomplete="off" placeholder="Café, straat 1, plaats">
+        <label><input type="checkbox" id="mnotify" style="width:auto;min-height:0;margin-right:8px">Stuur het team een melding over deze wijziging</label>
+        <div class="acts"><button class="btn" type="submit" id="msave">Wedstrijd toevoegen</button><button type="button" class="linkbtn" id="mcancel" data-act="match-cancel" hidden>Annuleer wijziging</button></div>
+      </form>
+      <details id="mdet"><summary id="mdsum">Alle wedstrijden</summary><ul class="links" id="matchlist"></ul></details>
+      <h3>Nieuw seizoen</h3>
+      <p>Aan het einde van het seizoen haal je hier alle wedstrijden en alle antwoorden weg. De spelers en hun accounts blijven staan. Importeer daarna de nieuwe speelkalender hierboven.</p>
+      <div id="seasonbox"></div>
     </div>
   </details>
 
@@ -288,6 +315,9 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     proxy: false,
     onlyLow: false,
     confirmDel: null,
+    confirmMatch: null,
+    editMatch: null,
+    seasonAsk: false,
     pending: null
   };
 
@@ -448,6 +478,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
   function renderSummary(up) {
     var el = $('summary');
     var low = up.filter(isLow).length;
+    if (!up.length) { el.innerHTML = ''; return; }
     if (!low) {
       el.innerHTML = '<div class="summary"><div class="txt"><strong>Alle komende wedstrijden hebben minimaal ' + MIN + ' spelers.</strong></div></div>';
       return;
@@ -519,7 +550,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     renderSummary(up);
     var shown = state.onlyLow ? up.filter(isLow) : up;
     var html = '', lastMonth = '', grp = false;
-    if (!shown.length) html = '<p class="note">Geen wedstrijden met te weinig spelers.</p>';
+    if (!shown.length) html = '<p class="note">' + (state.onlyLow ? 'Geen wedstrijden met te weinig spelers.' : 'Er zijn nog geen komende wedstrijden.') + '</p>';
     shown.forEach(function (m) {
       var mk = cap(fMonLong.format(new Date(m.start)));
       if (mk !== lastMonth) {
@@ -555,12 +586,127 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     }).join('');
   }
 
+  function renderMatchAdmin() {
+    var ms = state.matches.slice().sort(byStart);
+    $('mdsum').textContent = 'Alle wedstrijden (' + ms.length + ')';
+    $('matchlist').innerHTML = ms.map(function (m) {
+      var d = new Date(m.start), ask = state.confirmMatch === m.id;
+      var label = cap(clean(fWd.format(d))) + ' ' + fDay.format(d) + ' ' + clean(fMon.format(d)) + ' ' + fTime.format(d) + ' · ' + (m.opp || 'Tegenstander nog niet bekend');
+      return '<li><div class="lrow"><span>' + esc(label) + '</span><span class="lact">' +
+        '<button class="linkbtn" data-act="match-edit" data-mid="' + esc(m.id) + '" data-fk="me:' + esc(m.id) + '">Wijzig</button>' +
+        (ask ? '' : '<button class="linkbtn danger" data-act="match-del-ask" data-mid="' + esc(m.id) + '" data-fk="md:' + esc(m.id) + '">Verwijder</button>') +
+        '</span></div>' +
+        (ask ? '<div class="confirm"><span>Deze wedstrijd en alle antwoorden daarvoor verwijderen?</span>' +
+          '<button class="btn small danger" data-act="match-del-yes" data-mid="' + esc(m.id) + '" data-fk="my:' + esc(m.id) + '">Ja, verwijder</button>' +
+          '<button class="linkbtn" data-act="match-del-cancel" data-fk="mc:' + esc(m.id) + '">Annuleer</button></div>' : '') + '</li>';
+    }).join('');
+    $('seasonbox').innerHTML = state.seasonAsk
+      ? '<div class="confirm"><span>Alle ' + ms.length + ' wedstrijden en alle antwoorden worden verwijderd. Dit kan niet ongedaan worden gemaakt.</span>' +
+        '<button class="btn small danger" data-act="season-yes" data-fk="season-yes">Ja, begin nieuw seizoen</button>' +
+        '<button class="linkbtn" data-act="season-cancel" data-fk="season-cancel">Annuleer</button></div>'
+      : '<button class="btn danger" data-act="season-ask" data-fk="season-ask">Seizoen afsluiten en wissen</button>';
+  }
+
+  function toLocalInput(iso) {
+    return new Intl.DateTimeFormat('sv-SE', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .format(new Date(iso)).replace(' ', 'T');
+  }
+  function fromLocalInput(v) {
+    var mt = /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)/.exec(v || '');
+    if (!mt) return null;
+    var ms = Date.UTC(+mt[1], +mt[2] - 1, +mt[3], +mt[4], +mt[5]);
+    return new Date(ms - amsOffset(ms)).toISOString().replace('.000Z', 'Z');
+  }
+  function resetMatchForm() {
+    state.editMatch = null;
+    $('matchform').reset();
+    $('mflabel').textContent = 'Wedstrijd toevoegen';
+    $('msave').textContent = 'Wedstrijd toevoegen';
+    $('mcancel').hidden = true;
+  }
+  function editMatch(mid) {
+    var m = null;
+    state.matches.forEach(function (x) { if (x.id === mid) m = x; });
+    if (!m) return;
+    state.editMatch = mid;
+    $('mdate').value = toLocalInput(m.start);
+    $('mopp').value = m.opp || '';
+    $('mhome').value = m.home === true ? '1' : m.home === false ? '0' : '';
+    $('mloc').value = m.loc || '';
+    $('mflabel').textContent = 'Wedstrijd wijzigen';
+    $('msave').textContent = 'Wijziging opslaan';
+    $('mcancel').hidden = false;
+    $('matchform').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function matchWhen(iso) {
+    var d = new Date(iso);
+    return cap(clean(fWd.format(d))) + ' ' + fDay.format(d) + ' ' + clean(fMon.format(d)) + ' ' + fTime.format(d);
+  }
+  function sendMessage(title, body) {
+    return sb.functions.invoke('send-message', { body: { title: title, body: body } }).then(function (r) {
+      if (r.error) throw r.error;
+      return r.data || {};
+    });
+  }
+  function saveMatch() {
+    if (!sb || !state.isCaptain) return;
+    var start = fromLocalInput($('mdate').value);
+    if (!start) { toast('Kies een datum en tijd.'); return; }
+    var h = $('mhome').value;
+    var isNew = !state.editMatch;
+    var rec = { id: state.editMatch || ('m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), start: start,
+      opp: $('mopp').value.trim(), home: h === '' ? null : h === '1', loc: $('mloc').value.trim() };
+    var notify = $('mnotify').checked;
+    run(sb.from('matches').upsert(rec)).then(function () {
+      toast(isNew ? 'Wedstrijd toegevoegd.' : 'Wijziging opgeslagen.');
+      resetMatchForm(); $('mnotify').checked = false;
+      if (notify) {
+        var body = matchWhen(rec.start) + (rec.opp ? ' tegen ' + rec.opp : '') + (rec.home === true ? ' (thuis)' : rec.home === false ? ' (uit)' : '');
+        return sendMessage(isNew ? 'Nieuwe wedstrijd' : 'Wedstrijd gewijzigd', body).catch(function () { toast('Opgeslagen, maar de melding is niet verstuurd.'); });
+      }
+    }).then(loadAll).catch(writeFail);
+  }
+  function deleteMatch(mid) {
+    state.confirmMatch = null;
+    run(sb.from('answers').delete().eq('match_id', mid))
+      .then(function () { return run(sb.from('matches').delete().eq('id', mid)); })
+      .then(function () { toast('Wedstrijd verwijderd.'); return loadAll(); }).catch(writeFail);
+    render();
+  }
+  function resetSeason() {
+    state.seasonAsk = false; state.expanded = {}; resetMatchForm();
+    run(sb.from('answers').delete().neq('match_id', ''))
+      .then(function () { return run(sb.from('matches').delete().neq('id', '')); })
+      .then(function () { toast('Seizoen gewist. Importeer nu de nieuwe speelkalender.'); return loadAll(); }).catch(writeFail);
+    render();
+  }
+  $('matchform').addEventListener('submit', function (ev) { ev.preventDefault(); saveMatch(); });
+  $('msgform').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (!sb || !state.isCaptain) return;
+    var t = $('msgtitle').value.trim(), b = $('msgbody').value.trim();
+    if (!t || !b) return;
+    sendMessage(t, b).then(function (r) {
+      toast(typeof r.sent === 'number' ? 'Melding verstuurd naar ' + r.sent + ' toestel(len).' : 'Melding verstuurd.');
+      $('msgform').reset();
+    }).catch(function () { toast('Melding versturen is niet gelukt.'); });
+  });
+
+  function seasonLabel() {
+    var ref = state.matches.length ? new Date(state.matches.slice().sort(byStart)[0].start) : new Date();
+    var y = +new Intl.DateTimeFormat('en-US', { year: 'numeric', timeZone: TZ }).format(ref);
+    var mo = +new Intl.DateTimeFormat('en-US', { month: 'numeric', timeZone: TZ }).format(ref);
+    return mo >= 7 ? y + '-' + (y + 1) : (y - 1) + '-' + y;
+  }
+
   function render() {
     var ae = document.activeElement, fk = ae && ae.dataset ? ae.dataset.fk : null;
+    $('season').textContent = 'Wie gooit er mee? Seizoen ' + seasonLabel();
     renderNote();
     renderWho();
     renderLists();
     renderAdmin();
+    if (state.isCaptain) renderMatchAdmin();
     if (fk) {
       var el = document.querySelector('[data-fk="' + fk + '"]');
       if (el && el.focus) el.focus({ preventScroll: true });
@@ -607,6 +753,14 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     } else if (act === 'signup') { auth(true);
     } else if (act === 'testpush') {
       sb.functions.invoke('send-reminders', { body: { test: true } }).then(function (r) { toast(r.error ? 'Testmelding mislukt.' : 'Testmelding verstuurd.'); });
+    } else if (act === 'match-edit') { editMatch(t.getAttribute('data-mid'));
+    } else if (act === 'match-cancel') { resetMatchForm();
+    } else if (act === 'match-del-ask') { state.confirmMatch = t.getAttribute('data-mid'); render();
+    } else if (act === 'match-del-cancel') { state.confirmMatch = null; render();
+    } else if (act === 'match-del-yes') { deleteMatch(t.getAttribute('data-mid'));
+    } else if (act === 'season-ask') { state.seasonAsk = true; render();
+    } else if (act === 'season-cancel') { state.seasonAsk = false; render();
+    } else if (act === 'season-yes') { resetSeason();
     } else if (act === 'import-save') {
       saveImport();
     }
@@ -685,7 +839,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
   function loadAll() {
     return Promise.all(['matches', 'players', 'claims', 'answers'].map(function (t) { return run(sb.from(t).select('*')); })).then(function (r) {
       var ms = r[0].data.map(function (v) { return { id: v.id, start: new Date(v.start).toISOString().replace('.000Z', 'Z'), opp: v.opp || '', home: v.home, loc: v.loc || '' }; });
-      state.matches = ms.length ? ms.sort(byStart) : BUILTIN.slice();
+      state.matches = ms.sort(byStart);
       var pl = r[1].data.map(function (v) { return { id: v.id, name: v.name, short: v.short || v.name.split(' ')[0], role: v.role || '', order: v.sort || 99 }; });
       pl.sort(function (a, b) { return a.order - b.order; });
       PLAYERS = pl.length ? pl : BUILTIN_PLAYERS.slice();
