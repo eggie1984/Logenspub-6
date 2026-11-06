@@ -220,13 +220,19 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
 .inbox-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); }
 .inbox-head h2 { margin: 0; font: 700 22px/1.1 var(--font-display); }
 .inbox ul { list-style: none; margin: 0; padding: 0 18px 8px; overflow-y: auto; }
-.msg { padding: 14px 0; border-bottom: 1px solid var(--line); }
-.msg:last-child { border-bottom: 0; }
+.mw { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); transition: max-height .25s ease, opacity .25s ease; max-height: 400px; }
+.mw:last-child { border-bottom: 0; }
+.mw.gone { max-height: 0; opacity: 0; border-bottom-width: 0; }
+.mdel { position: absolute; top: 0; right: 0; bottom: 0; width: 88px; border: 0; background: #C62F25; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.mdel svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.msg { position: relative; padding: 14px 0; background: var(--surface); touch-action: pan-y; transition: transform .2s ease; }
+.msg.dragging { transition: none; }
+.msg.open { transform: translateX(-88px); }
 .msg .mhead { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
 .msg small { color: var(--ink-2); white-space: nowrap; }
 .msg p { margin: 4px 0 0; overflow-wrap: anywhere; }
-.msg.new { border-left: 4px solid #E5372B; padding-left: 12px; margin-left: -4px; }
-.msg.empty { color: var(--ink-2); border: 0; }
+.msg.new { border-left: 4px solid #E5372B; padding-left: 12px; }
+.msg.empty { color: var(--ink-2); }
 @media (max-width: 380px) {
   .opt { font-size: 14px; gap: 4px; }
   .opt svg { display: none; }
@@ -382,7 +388,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     confirmDel: null,
     confirmMatch: null,
     editMatch: null,
-    messages: [], reads: {}, fresh: {},
+    messages: [], reads: {}, hidden: {}, fresh: {},
     msgTo: [],           /* leeg = iedereen */
     seasonAsk: false,
     pending: null
@@ -719,14 +725,16 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   function myPlayerId() { var c = state.uid && state.claims[state.uid]; return c ? c.p : null; }
   function inboxList() {
     var me = myPlayerId();
-    return state.messages.filter(function (m) { return !m.to_players || (me && m.to_players.indexOf(me) >= 0); });
+    return state.messages.filter(function (m) { return !state.hidden[m.id] && (!m.to_players || (me && m.to_players.indexOf(me) >= 0)); });
   }
   function unreadCount() { return inboxList().filter(function (m) { return !state.reads[m.id]; }).length; }
   function renderInbox() {
     var list = inboxList();
+    var TRASH = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>';
     $('inboxlist').innerHTML = list.length ? list.map(function (m) {
-      return '<li class="msg' + (state.fresh[m.id] ? ' new' : '') + '"><div class="mhead"><strong>' + esc(m.title) + '</strong><small>' + esc(matchWhen(m.created_at)) + '</small></div><p>' + esc(m.body) + '</p></li>';
-    }).join('') : '<li class="msg empty">Je hebt nog geen berichten.</li>';
+      return '<li class="mw" data-mid="' + esc(m.id) + '"><button type="button" class="mdel" data-del="' + esc(m.id) + '" aria-label="Verwijder bericht">' + TRASH + '</button>' +
+        '<div class="msg' + (state.fresh[m.id] ? ' new' : '') + '"><div class="mhead"><strong>' + esc(m.title) + '</strong><small>' + esc(matchWhen(m.created_at)) + '</small></div><p>' + esc(m.body) + '</p></div></li>';
+    }).join('') : '<li class="mw"><div class="msg empty">Je hebt geen berichten.</div></li>';
   }
   function renderBell() {
     var on = !!state.uid && state.dbState === 'ok';
@@ -739,12 +747,15 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   }
   function loadMessages() {
     if (!sb || !state.uid) return Promise.resolve();
+    function reads() {
+      return run(sb.from('message_reads').select('message_id,hidden')).catch(function () { return run(sb.from('message_reads').select('message_id')); });
+    }
     return Promise.all([
       run(sb.from('messages').select('*').order('created_at', { ascending: false }).limit(50)),
-      run(sb.from('message_reads').select('message_id'))
+      reads()
     ]).then(function (r) {
-      var rd = {}; r[1].data.forEach(function (v) { rd[v.message_id] = true; });
-      state.messages = r[0].data; state.reads = rd;
+      var rd = {}, hd = {}; r[1].data.forEach(function (v) { rd[v.message_id] = true; if (v.hidden) hd[v.message_id] = true; });
+      state.messages = r[0].data; state.reads = rd; state.hidden = hd;
       renderBell();
       if (wantInbox) { wantInbox = false; history.replaceState(null, '', location.pathname + location.search); openInbox(); }
     }).catch(function () {});
@@ -761,6 +772,53 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       if (sb) run(sb.from('message_reads').upsert(unread.map(function (m) { return { message_id: m.id, user_id: state.uid }; }))).catch(function () {});
     }
   }
+  /* swipe naar links toont een prullenbak; tik erop om het bericht te verwijderen */
+  var swipe = null, OPEN = 88;
+  function closeSwipes(except) {
+    Array.prototype.forEach.call($('inboxlist').querySelectorAll('.msg.open'), function (el) {
+      if (el !== except) { el.classList.remove('open'); el.style.transform = ''; }
+    });
+  }
+  function endSwipe() {
+    if (!swipe) return;
+    var sw = swipe; swipe = null;
+    sw.el.classList.remove('dragging');
+    if (sw.dir !== 'h') return;
+    var open = sw.x < -OPEN / 2;
+    sw.el.classList.toggle('open', open);
+    sw.el.style.transform = '';
+  }
+  $('inboxlist').addEventListener('pointerdown', function (ev) {
+    var el = ev.target.closest('.msg');
+    if (!el || el.classList.contains('empty')) return;
+    closeSwipes(el);
+    swipe = { el: el, x0: ev.clientX, y0: ev.clientY, base: el.classList.contains('open') ? -OPEN : 0, x: el.classList.contains('open') ? -OPEN : 0, dir: null, id: ev.pointerId };
+  });
+  $('inboxlist').addEventListener('pointermove', function (ev) {
+    if (!swipe || ev.pointerId !== swipe.id) return;
+    var dx = ev.clientX - swipe.x0, dy = ev.clientY - swipe.y0;
+    if (!swipe.dir) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      swipe.dir = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+      if (swipe.dir === 'h') { swipe.el.classList.add('dragging'); swipe.el.classList.remove('open'); try { swipe.el.setPointerCapture(ev.pointerId); } catch (e) {} }
+    }
+    if (swipe.dir !== 'h') return;
+    swipe.x = Math.max(-OPEN - 24, Math.min(0, swipe.base + dx));
+    swipe.el.style.transform = 'translateX(' + swipe.x + 'px)';
+  });
+  $('inboxlist').addEventListener('pointerup', endSwipe);
+  $('inboxlist').addEventListener('pointercancel', endSwipe);
+  function hideMessage(id) {
+    state.hidden[id] = true; state.reads[id] = true;
+    var li = $('inboxlist').querySelector('[data-mid="' + id + '"]');
+    if (li) li.classList.add('gone');
+    setTimeout(function () { renderBell(); renderInbox(); }, 260);
+    if (sb) run(sb.from('message_reads').upsert({ message_id: id, user_id: state.uid, hidden: true })).catch(function () {});
+  }
+  $('inboxlist').addEventListener('click', function (ev) {
+    var b = ev.target.closest('.mdel');
+    if (b) hideMessage(b.getAttribute('data-del'));
+  });
   $('bell').addEventListener('click', openInbox);
   $('inboxclose').addEventListener('click', function () { $('inbox').close(); });
   $('inbox').addEventListener('click', function (ev) { if (ev.target === $('inbox')) $('inbox').close(); });
