@@ -84,6 +84,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid var(--line); background: var(--bg); font-weight: 600; }
 .chip:hover:not(:disabled) { border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--brand); color: var(--brand-ink); border-color: var(--accent); }
 .chip small { font-weight: 400; color: var(--ink-2); margin-left: 4px; }
 .whoami { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; flex-wrap: wrap; }
 .linkbtn { background: none; border: 0; padding: 8px 0; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; min-height: 40px; text-align: left; }
@@ -256,13 +257,15 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
       </form>
       <h3>Wie mag beheren</h3>
       <h3>Melding sturen</h3>
-      <p>Stuurt een melding naar iedereen die meldingen heeft aangezet.</p>
+      <p>Stuurt een melding naar iedereen, of alleen naar de spelers die je kiest. Het bericht komt alleen aan bij spelers die meldingen hebben aangezet.</p>
       <form id="msgform" class="addform">
+        <label id="msgtolabel">Aan</label>
+        <div class="chips" id="msgto" role="group" aria-labelledby="msgtolabel"></div>
         <label for="msgtitle">Titel</label>
         <input type="text" id="msgtitle" maxlength="60" autocomplete="off" placeholder="Bijv. Wedstrijd verzet" required>
         <label for="msgbody">Bericht</label>
         <textarea id="msgbody" rows="3" maxlength="200" placeholder="Schrijf je bericht" required></textarea>
-        <button class="btn" type="submit">Verstuur naar iedereen</button>
+        <button class="btn" type="submit" id="msgsend">Verstuur naar iedereen</button>
         <button type="button" class="linkbtn" data-act="testpush">Alleen een testmelding sturen</button>
       </form>
       <h3>Wedstrijden beheren</h3>
@@ -350,6 +353,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     confirmDel: null,
     confirmMatch: null,
     editMatch: null,
+    msgTo: [],           /* leeg = iedereen */
     seasonAsk: false,
     pending: null
   };
@@ -609,6 +613,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     $('admin').hidden = !state.isCaptain;
     $('invitebox').hidden = !state.isCaptain;
     if (!state.isCaptain) return;
+    renderMsgTo();
     $('claimlist').innerHTML = PLAYERS.map(function (p) {
       var u = claimUid(p.id);
       var ask = state.confirmDel === p.id;
@@ -679,6 +684,32 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     var d = new Date(iso);
     return cap(clean(fWd.format(d))) + ' ' + fDay.format(d) + ' ' + clean(fMon.format(d)) + ' ' + fTime.format(d);
   }
+  function renderMsgTo() {
+    var valid = {}; PLAYERS.forEach(function (p) { valid[p.id] = 1; });
+    state.msgTo = state.msgTo.filter(function (id) { return valid[id]; });
+    var all = state.msgTo.length === 0;
+    $('msgto').innerHTML = '<button type="button" class="chip" data-act="msgto" data-pid="all" data-fk="mt:all" aria-pressed="' + all + '">Iedereen</button>' +
+      PLAYERS.map(function (p) {
+        return '<button type="button" class="chip" data-act="msgto" data-pid="' + esc(p.id) + '" data-fk="mt:' + esc(p.id) + '" aria-pressed="' + (state.msgTo.indexOf(p.id) >= 0) + '">' + esc(p.short || p.name) + '</button>';
+      }).join('');
+    var n = state.msgTo.length;
+    $('msgsend').textContent = n === 0 ? 'Verstuur naar iedereen' : n === 1 ? 'Verstuur naar ' + playerShort(state.msgTo[0]) : 'Verstuur naar ' + n + ' spelers';
+  }
+  function playerShort(id) { var r = id; PLAYERS.forEach(function (p) { if (p.id === id) r = p.short || p.name; }); return r; }
+  function toggleMsgTo(pid) {
+    if (pid === 'all') state.msgTo = [];
+    else {
+      var i = state.msgTo.indexOf(pid);
+      if (i >= 0) state.msgTo.splice(i, 1); else state.msgTo.push(pid);
+    }
+    renderMsgTo();
+  }
+  function sendToPlayers(title, body, ids) {
+    return sb.functions.invoke('send-to-players', { body: { title: title, body: body, player_ids: ids } }).then(function (r) {
+      if (r.error) throw r.error;
+      return r.data || {};
+    });
+  }
   function sendMessage(title, body) {
     return sb.functions.invoke('send-message', { body: { title: title, body: body } }).then(function (r) {
       if (r.error) throw r.error;
@@ -723,6 +754,17 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     if (!sb || !state.isCaptain) return;
     var t = $('msgtitle').value.trim(), b = $('msgbody').value.trim();
     if (!t || !b) return;
+    var ids = state.msgTo.slice();
+    if (ids.length) {
+      sendToPlayers(t, b, ids).then(function (r) {
+        var miss = (r.missing || []).map(playerShort);
+        if (!r.sent) toast((miss.length ? miss.join(', ') : 'Niemand') + ' heeft (nog) geen meldingen aanstaan. Er is niets verstuurd.');
+        else if (miss.length) toast('Verstuurd. ' + miss.join(', ') + ' heeft geen meldingen aanstaan.');
+        else toast('Melding verstuurd.');
+        $('msgform').reset(); state.msgTo = []; renderMsgTo();
+      }).catch(function () { toast('Melding versturen is niet gelukt.'); });
+      return;
+    }
     sendMessage(t, b).then(function (r) {
       toast(typeof r.sent === 'number' ? 'Melding verstuurd naar ' + r.sent + ' toestel(len).' : 'Melding verstuurd.');
       $('msgform').reset();
@@ -788,6 +830,7 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
     } else if (act === 'push') { enablePush();
     } else if (act === 'logout') { sb.auth.signOut();
     } else if (act === 'signup') { auth(true);
+    } else if (act === 'msgto') { toggleMsgTo(t.getAttribute('data-pid'));
     } else if (act === 'testpush') {
       sb.functions.invoke('send-reminders', { body: { test: true } }).then(function (r) { toast(r.error ? 'Testmelding mislukt.' : 'Testmelding verstuurd.'); });
     } else if (act === 'match-edit') { editMatch(t.getAttribute('data-mid'));
