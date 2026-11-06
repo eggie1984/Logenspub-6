@@ -174,8 +174,14 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .links li { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 40px; }
 .btn { align-self: flex-start; min-height: 46px; padding: 0 18px; border-radius: 10px; border: 0; background: var(--brand); color: var(--brand-ink); font-weight: 600; }
-.lrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.lact { display: flex; gap: 14px; }
+.lrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap; }
+.lname { flex: 1; min-width: 0; color: var(--ink); font-size: 16px; overflow-wrap: anywhere; }
+.lname .badge { margin-left: 6px; }
+.sdot { display: inline-block; width: 10px; height: 10px; margin-left: 8px; border-radius: 50%; border: 2px solid var(--ink-2); box-sizing: border-box; vertical-align: 1px; }
+.sdot.ok { background: var(--accent); border-color: var(--accent); }
+.lact { flex: none; display: grid; grid-template-columns: 5.3em auto; column-gap: 12px; align-items: center; }
+.lact .linkbtn { font-size: 15px; min-height: 36px; padding: 4px 0; white-space: nowrap; }
+.lact .slot { text-align: right; }
 .links li { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 4px; }
 .links small { color: var(--ink-2); }
 .danger { color: var(--no); }
@@ -265,7 +271,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       <input type="file" id="icsfile" accept=".ics,text/calendar">
       <div id="importout"></div>
       <h3>Spelers</h3>
-      <p>Elke speler kiest zelf zijn naam. Een verkeerde keuze maak je hier los, dan kan de speler opnieuw kiezen.</p>
+      <p>Elke speler kiest zelf zijn naam. Een verkeerde keuze maak je hier los, dan kan de speler opnieuw kiezen. Een gevuld groen bolletje betekent dat de speler zijn naam heeft gekozen, een leeg bolletje dat dit nog niet is gebeurd.</p>
       <ul class="links" id="claimlist"></ul>
       <form id="addform" class="addform">
         <label for="newname">Nieuwe speler</label>
@@ -641,9 +647,9 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     $('claimlist').innerHTML = PLAYERS.map(function (p) {
       var u = claimUid(p.id);
       var ask = state.confirmDel === p.id;
-      return '<li><div class="lrow"><span>' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
-        ' <small>' + (u ? 'naam gekozen' : 'nog niet gekozen') + '</small></span><span class="lact">' +
-        (u ? '<button class="linkbtn" data-act="unclaim" data-uid="' + esc(u) + '" data-fk="uc:' + p.id + '">Maak los</button>' : '') +
+      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
+        '<span class="sdot' + (u ? ' ok' : '') + '" role="img" aria-label="' + (u ? 'naam gekozen' : 'nog niet gekozen') + '"></span></span><span class="lact"><span class="slot">' +
+        (u ? '<button class="linkbtn" data-act="unclaim" data-uid="' + esc(u) + '" data-fk="uc:' + p.id + '">Maak los</button>' : '') + '</span><span>' +
         (ask ? '' : '<button class="linkbtn danger" data-act="del-ask" data-pid="' + p.id + '" data-fk="da:' + p.id + '">Verwijder</button>') +
         '</span></div>' +
         (ask ? '<div class="confirm"><span>' + esc(p.short) + ' en alle antwoorden van die speler verwijderen?</span>' +
