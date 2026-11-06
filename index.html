@@ -291,6 +291,8 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
         <button class="btn" type="submit">Speler toevoegen</button>
       </form>
       <h3>Wie mag beheren</h3>
+      <p>Beheerders kunnen wedstrijden en spelers beheren, antwoorden voor anderen invullen en meldingen sturen. Zij krijgen ook de melding als een wedstrijd onder de 4 spelers komt. Alleen spelers die hun naam hebben gekozen staan hier.</p>
+      <ul class="links" id="adminlist"></ul>
       <h3>Melding sturen</h3>
       <p>Stuurt een melding naar iedereen, of alleen naar de spelers die je kiest. Het bericht komt alleen aan bij spelers die meldingen hebben aangezet.</p>
       <form id="msgform" class="addform">
@@ -484,6 +486,11 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     if (claimUid(pid)) { toast('Die naam is al gekozen. Vraag de captain om hem los te maken.'); return; }
     run(sb.from('claims').insert({ user_id: state.uid, player_id: pid })).then(loadAll).catch(writeFail);
   }
+  function setAdmin(uid, v) {
+    if (!sb || !uid || uid === state.uid) return;
+    run(sb.from('claims').update({ is_admin: v }).eq('user_id', uid))
+      .then(function () { toast(v ? 'Beheerrechten gegeven.' : 'Beheerrechten weggehaald.'); return loadAll(); }).catch(writeFail);
+  }
   function unclaim(uid) { if (sb && uid) run(sb.from('claims').delete().eq('user_id', uid)).then(loadAll).catch(writeFail); }
   function slug(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
   function addPlayer(name, role) {
@@ -650,6 +657,16 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     $('invitebox').hidden = !state.isCaptain;
     if (!state.isCaptain) return;
     renderMsgTo();
+    $('adminlist').innerHTML = PLAYERS.map(function (p) {
+      var u = claimUid(p.id);
+      if (!u) return '';
+      var isAdm = !!(state.claims[u] && state.claims[u].a), me = u === state.uid;
+      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
+        (isAdm ? '<span class="badge">Beheerder</span>' : '') + '</span><span class="lact">' +
+        (me ? '<span class="note">Jij</span>' :
+          '<button class="linkbtn' + (isAdm ? ' danger' : '') + '" data-act="setadmin" data-uid="' + esc(u) + '" data-v="' + (isAdm ? '0' : '1') + '" data-fk="ad:' + esc(p.id) + '">' +
+          (isAdm ? 'Beheer weghalen' : 'Maak beheerder') + '</button>') + '</span></div></li>';
+    }).join('') || '<li><span class="note">Nog niemand heeft zijn naam gekozen.</span></li>';
     $('claimlist').innerHTML = PLAYERS.map(function (p) {
       var u = claimUid(p.id);
       var ask = state.confirmDel === p.id;
@@ -944,6 +961,8 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       claim(t.getAttribute('data-pid'));
     } else if (act === 'unclaim-self') {
       unclaim(state.uid);
+    } else if (act === 'setadmin') {
+      setAdmin(t.getAttribute('data-uid'), t.getAttribute('data-v') === '1');
     } else if (act === 'unclaim') {
       unclaim(t.getAttribute('data-uid'));
     } else if (act === 'del-ask') {
@@ -1067,7 +1086,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       pl.sort(function (a, b) { return a.order - b.order; });
       PLAYERS = pl.length ? pl : BUILTIN_PLAYERS.slice();
       var c = {}, adm = false;
-      r[2].data.forEach(function (v) { c[v.user_id] = { p: v.player_id }; if (v.user_id === state.uid) adm = !!v.is_admin; });
+      r[2].data.forEach(function (v) { c[v.user_id] = { p: v.player_id, a: !!v.is_admin }; if (v.user_id === state.uid) adm = !!v.is_admin; });
       state.claims = c; state.isCaptain = adm; state.claimsReady = true;
       var a = {};
       r[3].data.forEach(function (v) { var k = 'p_' + v.player_id; (a[k] = a[k] || { st: {} }).st[v.match_id] = { s: v.status, t: Date.parse(v.updated_at) }; });
