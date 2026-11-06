@@ -695,9 +695,13 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
           '<button class="btn small danger" data-act="match-del-yes" data-mid="' + esc(m.id) + '" data-fk="my:' + esc(m.id) + '">Ja, verwijder</button>' +
           '<button class="linkbtn" data-act="match-del-cancel" data-fk="mc:' + esc(m.id) + '">Annuleer</button></div>' : '') + '</li>';
     }).join('');
-    $('seasonbox').innerHTML = state.seasonAsk
+    $('seasonbox').innerHTML = state.seasonAsk === 2
+      ? '<div class="confirm"><span><strong>Laatste kans:</strong> weet je echt zeker dat je alle ' + ms.length + ' wedstrijden en alle antwoorden wilt wissen? Dit kan niet worden teruggedraaid.</span>' +
+        '<button class="btn small danger" data-act="season-yes" data-fk="season-yes">Ja, wis alles definitief</button>' +
+        '<button class="linkbtn" data-act="season-cancel" data-fk="season-cancel">Nee, annuleer</button></div>'
+      : state.seasonAsk
       ? '<div class="confirm"><span>Alle ' + ms.length + ' wedstrijden en alle antwoorden worden verwijderd. Dit kan niet ongedaan worden gemaakt.</span>' +
-        '<button class="btn small danger" data-act="season-yes" data-fk="season-yes">Ja, begin nieuw seizoen</button>' +
+        '<button class="btn small danger" data-act="season-next" data-fk="season-next">Ja, ga verder</button>' +
         '<button class="linkbtn" data-act="season-cancel" data-fk="season-cancel">Annuleer</button></div>'
       : '<button class="btn danger" data-act="season-ask" data-fk="season-ask">Seizoen afsluiten en wissen</button>';
   }
@@ -1001,6 +1005,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     } else if (act === 'match-del-cancel') { state.confirmMatch = null; render();
     } else if (act === 'match-del-yes') { deleteMatch(t.getAttribute('data-mid'));
     } else if (act === 'season-ask') { state.seasonAsk = true; render();
+    } else if (act === 'season-next') { state.seasonAsk = 2; render();
     } else if (act === 'season-cancel') { state.seasonAsk = false; render();
     } else if (act === 'season-yes') { resetSeason();
     } else if (act === 'import-save') {
