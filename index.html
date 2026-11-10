@@ -111,15 +111,24 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .date .d { font: 700 32px/1.05 var(--font-display); font-variant-numeric: tabular-nums; }
 .info { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.tag { font: 700 17px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; padding: 8px 12px 7px; border-radius: 8px; }
+.tag { font: 700 21px/1 var(--font-display); letter-spacing: .09em; text-transform: uppercase; padding: 9px 14px 8px; border-radius: 9px; }
 .tag.home { background: var(--home); color: var(--brand-ink); }
 .tag.away { background: var(--ink); color: var(--bg); }
 .tag.tbd { border: 1px dashed var(--ink-2); color: var(--ink-2); }
-.time { font: 600 18px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.time { font: 600 20px/1 var(--font-display); font-variant-numeric: tabular-nums; }
 .nexttag { font-size: 12px; font-weight: 600; color: var(--accent); }
 .opp { font: 700 27px/1.05 var(--font-display); overflow-wrap: anywhere; text-wrap: balance; }
 .opp.muted { color: var(--ink-2); font-weight: 600; }
-.where { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+.where { font-size: 14px; line-height: 1.3; color: var(--ink-2); overflow-wrap: anywhere; margin: -4px 0 0; display: grid; grid-template-columns: 72px minmax(0, 1fr); }
+.where .wnone { grid-column: 1 / -1; }
+.grp, .sec { border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 0 14px; }
+.grp > summary, .sec > summary { min-height: 48px; display: flex; align-items: center; font-weight: 600; color: var(--ink); cursor: pointer; }
+.grp > summary { font-size: 16px; }
+.grp[open] > summary, .sec[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.grpbody { display: flex; flex-direction: column; gap: 10px; padding-bottom: 14px; }
+.secbody { display: flex; flex-direction: column; gap: 12px; padding-bottom: 14px; }
+.sec { background: var(--surface); }
+.addform:first-child { border-top: 0; padding-top: 0; }
 .navtile { flex: none; min-width: 72px; padding: 7px 8px 6px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: var(--brand); color: var(--brand-ink); text-decoration: none; font: 700 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
 .navtile svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .navtile:active { opacity: .8; }
@@ -272,54 +281,90 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   <details class="panel" id="admin" hidden>
     <summary>Beheer voor de captain</summary>
     <div class="body">
-      <h3>Wedstrijden inladen</h3>
-      <p>Kies het .ics-bestand uit Teambeheer van de dartbond. Nieuwe wedstrijden worden toegevoegd en gewijzigde datums of locaties worden bijgewerkt. Antwoorden van spelers blijven staan.</p>
-      <input type="file" id="icsfile" accept=".ics,text/calendar">
-      <div id="importout"></div>
-      <h3>Spelers</h3>
-      <p>Elke speler kiest zelf zijn naam. Een verkeerde keuze maak je hier los, dan kan de speler opnieuw kiezen. Een gevuld groen bolletje betekent dat de speler zijn naam heeft gekozen, een leeg bolletje dat dit nog niet is gebeurd.</p>
-      <ul class="links" id="claimlist"></ul>
-      <form id="addform" class="addform">
-        <label for="newname">Nieuwe speler</label>
-        <input type="text" id="newname" maxlength="40" autocomplete="off" placeholder="Voor- en achternaam" required>
-        <label for="newrole">Functie</label>
-        <select id="newrole">
-          <option value="">Speler</option>
-          <option value="C">Captain (C)</option>
-          <option value="RC">Reserve-captain (RC)</option>
-        </select>
-        <button class="btn" type="submit">Speler toevoegen</button>
-      </form>
-      <h3>Wie mag beheren</h3>
-      <h3>Melding sturen</h3>
-      <p>Stuurt een melding naar iedereen, of alleen naar de spelers die je kiest. Het bericht komt alleen aan bij spelers die meldingen hebben aangezet.</p>
-      <form id="msgform" class="addform">
-        <label id="msgtolabel">Aan</label>
-        <div class="chips" id="msgto" role="group" aria-labelledby="msgtolabel"></div>
-        <label for="msgtitle">Titel</label>
-        <input type="text" id="msgtitle" maxlength="60" autocomplete="off" placeholder="Bijv. Wedstrijd verzet" required>
-        <label for="msgbody">Bericht</label>
-        <textarea id="msgbody" rows="3" maxlength="200" placeholder="Schrijf je bericht" required></textarea>
-        <button class="btn" type="submit" id="msgsend">Verstuur naar iedereen</button>
-        <button type="button" class="linkbtn" data-act="testpush">Alleen een testmelding sturen</button>
-      </form>
-      <h3>Wedstrijden beheren</h3>
-      <form id="matchform" class="addform">
-        <label id="mflabel" for="mdate">Wedstrijd toevoegen</label>
-        <input type="datetime-local" id="mdate" required>
-        <label for="mopp">Tegenstander</label>
-        <input type="text" id="mopp" maxlength="80" autocomplete="off" placeholder="Nog niet bekend">
-        <label for="mhome">Thuis of uit</label>
-        <select id="mhome"><option value="">Nog onbekend</option><option value="1">Thuis</option><option value="0">Uit</option></select>
-        <label for="mloc">Locatie</label>
-        <input type="text" id="mloc" maxlength="200" autocomplete="off" placeholder="Café, straat 1, plaats">
-        <label><input type="checkbox" id="mnotify" style="width:auto;min-height:0;margin-right:8px">Stuur het team een melding over deze wijziging</label>
-        <div class="acts"><button class="btn" type="submit" id="msave">Wedstrijd toevoegen</button><button type="button" class="linkbtn" id="mcancel" data-act="match-cancel" hidden>Annuleer wijziging</button></div>
-      </form>
-      <details id="mdet"><summary id="mdsum">Alle wedstrijden</summary><ul class="links" id="matchlist"></ul></details>
-      <h3>Nieuw seizoen</h3>
-      <p>Aan het einde van het seizoen haal je hier alle wedstrijden en alle antwoorden weg. De spelers en hun accounts blijven staan. Importeer daarna de nieuwe speelkalender hierboven.</p>
-      <div id="seasonbox"></div>
+      <details class="grp" name="adm-top">
+        <summary>Agenda</summary>
+        <div class="grpbody">
+        <details class="sec" name="adm-agenda">
+          <summary>Wedstrijden inladen</summary>
+          <div class="secbody">
+          <p>Kies het .ics-bestand uit Teambeheer van de dartbond. Nieuwe wedstrijden worden toegevoegd en gewijzigde datums of locaties worden bijgewerkt. Antwoorden van spelers blijven staan.</p>
+          <input type="file" id="icsfile" accept=".ics,text/calendar">
+          <div id="importout"></div>
+          </div>
+        </details>
+        <details class="sec" name="adm-agenda">
+          <summary>Wedstrijden toevoegen of wijzigen</summary>
+          <div class="secbody">
+          <form id="matchform" class="addform">
+            <label id="mflabel" for="mdate">Wedstrijd toevoegen of wijzigen</label>
+            <input type="datetime-local" id="mdate" required>
+            <label for="mopp">Tegenstander</label>
+            <input type="text" id="mopp" maxlength="80" autocomplete="off" placeholder="Nog niet bekend">
+            <label for="mhome">Thuis of uit</label>
+            <select id="mhome"><option value="">Nog onbekend</option><option value="1">Thuis</option><option value="0">Uit</option></select>
+            <label for="mloc">Locatie</label>
+            <input type="text" id="mloc" maxlength="200" autocomplete="off" placeholder="Café, straat 1, plaats">
+            <label><input type="checkbox" id="mnotify" style="width:auto;min-height:0;margin-right:8px">Stuur het team een melding over deze wijziging</label>
+            <div class="acts"><button class="btn" type="submit" id="msave">Wedstrijd toevoegen</button><button type="button" class="linkbtn" id="mcancel" data-act="match-cancel" hidden>Annuleer wijziging</button></div>
+          </form>
+          <details id="mdet"><summary id="mdsum">Alle wedstrijden</summary><ul class="links" id="matchlist"></ul></details>
+          </div>
+        </details>
+        <details class="sec" name="adm-agenda">
+          <summary>Seizoen afsluiten</summary>
+          <div class="secbody">
+          <p>Aan het einde van het seizoen haal je hier alle wedstrijden en alle antwoorden weg. De spelers en hun accounts blijven staan. Importeer daarna de nieuwe speelkalender hierboven.</p>
+          <div id="seasonbox"></div>
+          </div>
+        </details>
+        </div>
+      </details>
+      <details class="grp" name="adm-top">
+        <summary>Spelers</summary>
+        <div class="grpbody">
+        <details class="sec" name="adm-spelers">
+          <summary>Spelers beheren</summary>
+          <div class="secbody">
+          <p>Elke speler kiest zelf zijn naam. Een verkeerde keuze maak je hier los, dan kan de speler opnieuw kiezen. Een gevuld groen bolletje betekent dat de speler zijn naam heeft gekozen, een leeg bolletje dat dit nog niet is gebeurd.</p>
+          <ul class="links" id="claimlist"></ul>
+          <form id="addform" class="addform">
+            <label for="newname">Nieuwe speler</label>
+            <input type="text" id="newname" maxlength="40" autocomplete="off" placeholder="Voor- en achternaam" required>
+            <label for="newrole">Functie</label>
+            <select id="newrole">
+              <option value="">Speler</option>
+              <option value="C">Captain (C)</option>
+              <option value="RC">Reserve-captain (RC)</option>
+            </select>
+            <button class="btn" type="submit">Speler toevoegen</button>
+          </form>
+          </div>
+        </details>
+        <details class="sec" name="adm-spelers">
+          <summary>Wie mag beheren</summary>
+          <div class="secbody">
+          <p>Beheerders kunnen wedstrijden en spelers beheren, antwoorden voor anderen invullen en meldingen sturen. Alleen spelers die hun naam hebben gekozen staan hier.</p>
+          <ul class="links" id="adminlist"></ul>
+          </div>
+        </details>
+        </div>
+      </details>
+      <details class="grp" name="adm-top">
+        <summary>Berichten sturen</summary>
+        <div class="grpbody">
+          <p>Stuurt een melding naar iedereen, of alleen naar de spelers die je kiest. Het bericht komt alleen aan bij spelers die meldingen hebben aangezet.</p>
+          <form id="msgform" class="addform">
+            <label id="msgtolabel">Aan</label>
+            <div class="chips" id="msgto" role="group" aria-labelledby="msgtolabel"></div>
+            <label for="msgtitle">Titel</label>
+            <input type="text" id="msgtitle" maxlength="60" autocomplete="off" placeholder="Bijv. Wedstrijd verzet" required>
+            <label for="msgbody">Bericht</label>
+            <textarea id="msgbody" rows="3" maxlength="200" placeholder="Schrijf je bericht" required></textarea>
+            <button class="btn" type="submit" id="msgsend">Verstuur naar iedereen</button>
+            <button type="button" class="linkbtn" data-act="testpush">Alleen een testmelding sturen</button>
+          </form>
+        </div>
+      </details>
     </div>
   </details>
 
@@ -418,7 +463,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   function whereLine(m) {
     var p = locParts(m);
     if (!p.length) return 'Locatie nog niet bekend';
-    return p.length > 1 ? p[0] + ' · ' + p[p.length - 1] : p[0];
+    return 'Locatie: ' + (p.length > 1 ? p[0] + ' · ' + p[p.length - 1] : p[0]);
   }
 
   /* who is who: an account id is tied to one player name */
@@ -484,6 +529,14 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     if (claimUid(pid)) { toast('Die naam is al gekozen. Vraag de captain om hem los te maken.'); return; }
     run(sb.from('claims').insert({ user_id: state.uid, player_id: pid })).then(loadAll).catch(writeFail);
   }
+  function setAdmin(uid, v) {
+    if (!sb || !uid || uid === state.uid) return;
+    run(sb.from('claims').update({ is_admin: v }).eq('user_id', uid).select())
+      .then(function (r) {
+        if (!r.data || !r.data.length) { toast('Dat mocht niet of is niet gelukt.'); return; }
+        toast(v ? 'Beheerrechten gegeven.' : 'Beheerrechten weggehaald.'); return loadAll();
+      }).catch(writeFail);
+  }
   function unclaim(uid) { if (sb && uid) run(sb.from('claims').delete().eq('user_id', uid)).then(loadAll).catch(writeFail); }
   function slug(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
   function addPlayer(name, role) {
@@ -540,9 +593,15 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     el.innerHTML = h;
   }
 
+  /* Tegenstander telt als onbekend als hij leeg is of een tijdelijke tekst bevat (onbekend, vrije week, ntb, ...) */
+  function oppKnown(o) {
+    o = String(o || '').trim();
+    return !!o && !/^(onbekend|nog onbekend|nog niet bekend|niet bekend|ntb|n\.t\.b\.?|vrij|vrije week|bye|-+|\?+)$/i.test(o);
+  }
   function split() {
     var now = Date.now(), up = [], past = [];
     state.matches.slice().sort(byStart).forEach(function (m) {
+      if (!oppKnown(m.opp)) return; /* geen tegenstander (vrije week): niet tonen, de captain ziet hem wel onder beheer */
       (Date.parse(m.start) + 3 * 3600e3 < now ? past : up).push(m);
     });
     past.reverse();
@@ -589,8 +648,11 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     h += '<div class="card-main"><div class="date"><span class="wd">' + esc(clean(fWd.format(d))) + '</span><span class="d">' + esc(fDay.format(d)) +
       '</span><span class="mo">' + esc(clean(fMon.format(d))) + '</span></div><div class="info"><div class="kicker">' + tag +
       '<span class="time">' + esc(fTime.format(d)) + '</span>' + (isNext ? '<span class="nexttag">Eerstvolgende</span>' : '') + '</div>' +
-      opp + '<p class="where">' + esc(whereLine(m)) + '</p></div>' +
+      opp + '</div>' +
       (m.home === false && locParts(m).length ? '<a class="navtile" href="' + navUrl(m) + '" target="_blank" rel="noopener" aria-label="Navigeer naar ' + esc(m.loc) + '" title="Navigeer">' + PIN + '<span>Navigeer</span></a>' : '') + '</div>';
+    var wl = locParts(m);
+    h += wl.length ? '<p class="where"><span class="wlab">Locatie:</span><span>' + esc(wl.length > 1 ? wl[0] + ' · ' + wl[wl.length - 1] : wl[0]) + '</span></p>'
+      : '<p class="where"><span class="wnone">' + esc(whereLine(m)) + '</span></p>';
     h += '<div class="bar" style="grid-template-columns:repeat(' + Math.max(PLAYERS.length, 1) + ',1fr)" aria-hidden="true">' + cells.join('') + '</div>';
     if (low) {
       h += '<p class="lowmsg"><strong>' + (pres === 0 ? 'Niemand aanwezig.' : 'Nog maar ' + pres + ' aanwezig.') + '</strong> Je hebt er minimaal ' + MIN +
@@ -662,6 +724,16 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
           '<button class="btn small danger" data-act="del-yes" data-pid="' + p.id + '" data-fk="dy:' + p.id + '">Ja, verwijder</button>' +
           '<button class="linkbtn" data-act="del-cancel" data-fk="dc:' + p.id + '">Annuleer</button></div>' : '') + '</li>';
     }).join('');
+    $('adminlist').innerHTML = PLAYERS.map(function (p) {
+      var u = claimUid(p.id);
+      if (!u) return '';
+      var isAdm = !!(state.claims[u] && state.claims[u].a), me = u === state.uid;
+      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
+        (isAdm ? '<span class="badge">Beheerder</span>' : '') + '</span><span class="lact">' +
+        (me ? '<span class="note">Jij</span>' :
+          '<button class="linkbtn' + (isAdm ? ' danger' : '') + '" data-act="setadmin" data-uid="' + esc(u) + '" data-v="' + (isAdm ? '0' : '1') + '" data-fk="ad:' + esc(p.id) + '">' +
+          (isAdm ? 'Beheer weghalen' : 'Maak beheerder') + '</button>') + '</span></div></li>';
+    }).join('') || '<li><span class="note">Nog niemand heeft zijn naam gekozen.</span></li>';
   }
 
   function renderMatchAdmin() {
@@ -678,9 +750,13 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
           '<button class="btn small danger" data-act="match-del-yes" data-mid="' + esc(m.id) + '" data-fk="my:' + esc(m.id) + '">Ja, verwijder</button>' +
           '<button class="linkbtn" data-act="match-del-cancel" data-fk="mc:' + esc(m.id) + '">Annuleer</button></div>' : '') + '</li>';
     }).join('');
-    $('seasonbox').innerHTML = state.seasonAsk
+    $('seasonbox').innerHTML = state.seasonAsk === 2
+      ? '<div class="confirm"><span><strong>Laatste kans:</strong> weet je echt zeker dat je alle ' + ms.length + ' wedstrijden en alle antwoorden wilt wissen? Dit kan niet worden teruggedraaid.</span>' +
+        '<button class="btn small danger" data-act="season-yes" data-fk="season-yes">Ja, wis alles definitief</button>' +
+        '<button class="linkbtn" data-act="season-cancel" data-fk="season-cancel">Nee, annuleer</button></div>'
+      : state.seasonAsk
       ? '<div class="confirm"><span>Alle ' + ms.length + ' wedstrijden en alle antwoorden worden verwijderd. Dit kan niet ongedaan worden gemaakt.</span>' +
-        '<button class="btn small danger" data-act="season-yes" data-fk="season-yes">Ja, begin nieuw seizoen</button>' +
+        '<button class="btn small danger" data-act="season-next" data-fk="season-next">Ja, ga verder</button>' +
         '<button class="linkbtn" data-act="season-cancel" data-fk="season-cancel">Annuleer</button></div>'
       : '<button class="btn danger" data-act="season-ask" data-fk="season-ask">Seizoen afsluiten en wissen</button>';
   }
@@ -866,13 +942,15 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     var isNew = !state.editMatch;
     var rec = { id: state.editMatch || ('m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), start: start,
       opp: $('mopp').value.trim(), home: h === '' ? null : h === '1', loc: $('mloc').value.trim() };
-    var notify = $('mnotify').checked;
+    var before = null; state.matches.forEach(function (x) { if (x.id === rec.id) before = x; });
+    var nowKnown = oppKnown(rec.opp) && !(before && oppKnown(before.opp)); /* tegenstander net bekend geworden */
+    var notify = $('mnotify').checked || nowKnown;
     run(sb.from('matches').upsert(rec)).then(function () {
       toast(isNew ? 'Wedstrijd toegevoegd.' : 'Wijziging opgeslagen.');
       resetMatchForm(); $('mnotify').checked = false;
       if (notify) {
         var body = matchWhen(rec.start) + (rec.opp ? ' tegen ' + rec.opp : '') + (rec.home === true ? ' (thuis)' : rec.home === false ? ' (uit)' : '');
-        return sendMessage(isNew ? 'Nieuwe wedstrijd' : 'Wedstrijd gewijzigd', body).catch(function () { toast('Opgeslagen, maar de melding is niet verstuurd.'); });
+        return sendMessage(nowKnown ? 'Wedstrijd bekend' : isNew ? 'Nieuwe wedstrijd' : 'Wedstrijd gewijzigd', body).catch(function () { toast('Opgeslagen, maar de melding is niet verstuurd.'); });
       }
     }).then(loadAll).catch(writeFail);
   }
@@ -935,6 +1013,15 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     }
   }
 
+  /* accordion: per niveau blijft maar een kopje open */
+  document.addEventListener('toggle', function (ev) {
+    var d = ev.target;
+    if (!d.open || !d.matches || !d.matches('details.grp, details.sec')) return;
+    Array.prototype.forEach.call(d.parentNode.children, function (o) {
+      if (o !== d && o.tagName === 'DETAILS' && o.open) o.open = false;
+    });
+  }, true);
+
   /* ---------- clicks ---------- */
   document.addEventListener('click', function (ev) {
     var t = ev.target.closest ? ev.target.closest('[data-act]') : null;
@@ -970,6 +1057,8 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       var curS = statusOf(m2, p2);
       if (curS === s) { if (s === 'yes') return; s = 'yes'; }
       writeAnswer(m2, p2, s);
+    } else if (act === 'setadmin') {
+      setAdmin(t.getAttribute('data-uid'), t.getAttribute('data-v') === '1');
     } else if (act === 'push') { enablePush();
     } else if (act === 'logout') { sb.auth.signOut();
     } else if (act === 'signup') { auth(true);
@@ -983,6 +1072,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     } else if (act === 'match-del-yes') { deleteMatch(t.getAttribute('data-mid'));
     } else if (act === 'season-ask') { state.seasonAsk = true; render();
     } else if (act === 'season-cancel') { state.seasonAsk = false; render();
+    } else if (act === 'season-next') { state.seasonAsk = 2; render();
     } else if (act === 'season-yes') { resetSeason();
     } else if (act === 'import-save') {
       saveImport();
@@ -1067,7 +1157,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       pl.sort(function (a, b) { return a.order - b.order; });
       PLAYERS = pl.length ? pl : BUILTIN_PLAYERS.slice();
       var c = {}, adm = false;
-      r[2].data.forEach(function (v) { c[v.user_id] = { p: v.player_id }; if (v.user_id === state.uid) adm = !!v.is_admin; });
+      r[2].data.forEach(function (v) { c[v.user_id] = { p: v.player_id, a: !!v.is_admin }; if (v.user_id === state.uid) adm = !!v.is_admin; });
       state.claims = c; state.isCaptain = adm; state.claimsReady = true;
       var a = {};
       r[3].data.forEach(function (v) { var k = 'p_' + v.player_id; (a[k] = a[k] || { st: {} }).st[v.match_id] = { s: v.status, t: Date.parse(v.updated_at) }; });
