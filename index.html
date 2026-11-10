@@ -1,5 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Wie gooit er mee?</title>
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#15493A"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B4545"><link rel="icon" type="image/png" href="icon-192.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Wie gooit er mee?">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Logan's Pub 6 Teamplanner</title>
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#15493A"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B4545"><link rel="icon" type="image/png" href="icon-192.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Logan's Pub 6">
 </head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,13 +35,6 @@
   --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
   --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
-/* teamkleur: elk team kiest een tint (--h). Zonder tint blijft het klassieke groen. */
-:root[data-hue] {
-  --brand: hsl(var(--h) 50% 22%); --accent: hsl(var(--h) 50% 22%); --home: hsl(var(--h) 50% 25%);
-  --page: hsl(var(--h) 50% 64%); --month-ink: hsl(var(--h) 60% 12%);
-  --bg: hsl(var(--h) 20% 93%); --surface: hsl(var(--h) 25% 98%); --surface-2: hsl(var(--h) 18% 88%); --line: hsl(var(--h) 14% 80%);
-  --ink: hsl(var(--h) 25% 10%); --ink-2: hsl(var(--h) 10% 33%);
-}
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --page: #050E0E; --bg: #0A1A1B; --surface: #12292A; --surface-2: #1D3D3E; --ink: #F2FAF8; --ink-2: #B3CCC8; --line: #3A6061; --month-ink: #B3CCC8;
@@ -57,19 +50,6 @@
   --bar-yes: var(--yes); --bar-late: var(--late); --bar-no: var(--no); --home: #2E7552; --yes: #58C98B; --yes-bg: #173A29; --no: #F28B80; --no-bg: #432320; --late: #E6B94C; --late-bg: #3E3112;
   --on-status: #0B1A12;
   color-scheme: dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root[data-hue]:not([data-theme="light"]) {
-    --page: hsl(var(--h) 45% 4%); --bg: hsl(var(--h) 40% 7%); --surface: hsl(var(--h) 35% 12%); --surface-2: hsl(var(--h) 32% 19%); --line: hsl(var(--h) 22% 30%);
-    --ink: hsl(var(--h) 30% 96%); --ink-2: hsl(var(--h) 20% 75%); --month-ink: hsl(var(--h) 20% 75%);
-    --brand: hsl(var(--h) 55% 20%); --brand-ink: hsl(var(--h) 30% 96%); --accent: hsl(var(--h) 60% 72%); --home: hsl(var(--h) 40% 32%);
-  }
-}
-:root[data-hue][data-theme="dark"] {
-  --page: hsl(var(--h) 45% 4%); --bg: hsl(var(--h) 40% 7%); --surface: hsl(var(--h) 35% 12%); --surface-2: hsl(var(--h) 32% 19%); --line: hsl(var(--h) 22% 30%);
-  --ink: hsl(var(--h) 30% 96%); --ink-2: hsl(var(--h) 20% 75%); --month-ink: hsl(var(--h) 20% 75%);
-  --brand: hsl(var(--h) 55% 20%); --brand-ink: hsl(var(--h) 30% 96%); --accent: hsl(var(--h) 60% 72%); --home: hsl(var(--h) 40% 32%);
 }
 
 * { box-sizing: border-box; }
@@ -131,15 +111,15 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .date .d { font: 700 32px/1.05 var(--font-display); font-variant-numeric: tabular-nums; }
 .info { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.tag { font: 700 21px/1 var(--font-display); letter-spacing: .09em; text-transform: uppercase; padding: 9px 14px 8px; border-radius: 9px; }
+.tag { font: 700 17px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; padding: 8px 12px 7px; border-radius: 8px; }
 .tag.home { background: var(--home); color: var(--brand-ink); }
 .tag.away { background: var(--ink); color: var(--bg); }
 .tag.tbd { border: 1px dashed var(--ink-2); color: var(--ink-2); }
-.time { font: 600 20px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.time { font: 600 18px/1 var(--font-display); font-variant-numeric: tabular-nums; }
 .nexttag { font-size: 12px; font-weight: 600; color: var(--accent); }
 .opp { font: 700 27px/1.05 var(--font-display); overflow-wrap: anywhere; text-wrap: balance; }
 .opp.muted { color: var(--ink-2); font-weight: 600; }
-.where { font-size: 14px; line-height: 1.3; color: var(--ink-2); overflow-wrap: anywhere; margin: -4px 0 0 72px; }
+.where { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
 .navtile { flex: none; min-width: 72px; padding: 7px 8px 6px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: var(--brand); color: var(--brand-ink); text-decoration: none; font: 700 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
 .navtile svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .navtile:active { opacity: .8; }
@@ -183,13 +163,6 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .addr { font-size: 14px; color: var(--ink-2); }
 .acts { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
 
-.viewbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 16px; background: #7A5A00; color: #fff; font-weight: 600; }
-.viewbar[hidden] { display: none; }
-.viewbar .linkbtn { color: #fff; }
-.viewbar .vb { display: flex; gap: 4px 16px; flex-wrap: wrap; align-items: center; }
-.olist { list-style: none; margin: 0; padding: 0; }
-.olist .hit { font-size: 14px; color: var(--ink-2); }
-.msg .macts { margin-top: 6px; }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 0 16px; }
 .panel[hidden] { display: none; }
 .panel > summary { min-height: 52px; display: flex; align-items: center; font-weight: 600; cursor: pointer; }
@@ -236,9 +209,6 @@ main { padding-top: 18px; display: flex; flex-direction: column; gap: 16px; }
 .invite-url { align-self: center; font-weight: 600; color: var(--ink); overflow-wrap: anywhere; text-align: center; }
 .invite-text { width: 100%; min-height: 190px; font: inherit; font-size: 14px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); resize: vertical; box-sizing: border-box; }
 .invite-acts { display: flex; flex-wrap: wrap; gap: 10px; }
-.switchlink { margin-left: auto; flex: none; border: 1px solid rgba(255,255,255,.4); color: var(--brand-ink); border-radius: 999px; padding: 8px 14px; font: 600 14px var(--font-body); text-decoration: none; white-space: nowrap; }
-.switchlink[hidden] { display: none; }
-.switchlink + .bell { margin-left: 0; }
 .bell { position: relative; margin-left: auto; flex: none; width: 46px; height: 46px; border-radius: 50%; border: 0; background: rgba(255,255,255,.14); color: var(--brand-ink); display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .bell[hidden] { display: none; }
 .bell svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -263,36 +233,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
 .msg p { margin: 4px 0 0; overflow-wrap: anywhere; }
 .msg.new { border-left: 4px solid #E5372B; padding-left: 12px; }
 .msg.empty { color: var(--ink-2); }
-.noteam #summary, .noteam #list, .noteam #pastbox { display: none; }
-.joinbox { display: flex; flex-direction: column; gap: 10px; }
-.joinbox input { text-transform: uppercase; letter-spacing: .12em; font-weight: 700; }
-.chk { display: flex; align-items: center; gap: 10px; }
-.chk input { width: auto; min-height: 0; flex: none; }
-.huerow { display: flex; align-items: center; gap: 12px; }
-.huerow input[type=range] { flex: 1; min-height: 32px; padding: 0; }
-.huedot { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); }
-.teamitem { padding: 12px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
-.teamitem:first-child { border-top: 0; }
-.teamitem .th { display: flex; align-items: center; gap: 10px; }
-.teamitem .tcodes { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
-.teamitem .tcodes b { color: var(--ink); letter-spacing: .08em; }
-.teamitem .tacts { display: flex; flex-wrap: wrap; gap: 4px 16px; }
-.teamitem.off .tn { opacity: .55; text-decoration: line-through; }
-.codeout { background: var(--surface-2); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-.codeout textarea { width: 100%; min-height: 150px; font: inherit; font-size: 14px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); box-sizing: border-box; }
-.grp, .sec { border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 0 14px; }
-.grp > summary, .sec > summary { min-height: 48px; display: flex; align-items: center; font-weight: 600; color: var(--ink); cursor: pointer; }
-.grp > summary { font-size: 16px; }
-.grp[open] > summary, .sec[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 12px; }
-.grpbody { display: flex; flex-direction: column; gap: 10px; padding-bottom: 14px; }
-.secbody { display: flex; flex-direction: column; gap: 12px; padding-bottom: 14px; }
-.sec { background: var(--surface); }
-.addform:first-child { border-top: 0; padding-top: 0; }
-.filebtn { cursor: pointer; }
-.qrpanel { display: flex; flex-direction: column; gap: 8px; padding: 6px 0; }
-.qrpanel[hidden] { display: none; }
-.qrpanel .qrwrap { background: #fff; padding: 10px; border-radius: 12px; line-height: 0; align-self: flex-start; }
-.qrpanel .qrwrap svg { width: 190px; height: 190px; display: block; }
 @media (max-width: 380px) {
   .opt { font-size: 14px; gap: 4px; }
   .opt svg { display: none; }
@@ -303,42 +243,16 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
 <div class="top"><div class="in">
   <img class="board" alt="" width="54" height="54" src="data:image/png;base64,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">
   <div>
-    <h1 id="teamname">Wie gooit er mee?</h1>
+    <h1>Logan's Pub 6</h1>
     <p class="sub" id="season">Wie gooit er mee? Seizoen 2026-2027</p>
   </div>
-  <a class="switchlink" id="switchapp" href="kroeg.html" hidden>Thuiswedstrijden</a>
   <button type="button" class="bell" id="bell" hidden aria-label="Berichten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="badge" id="bellbadge" hidden></span></button>
 </div></div>
 <dialog class="inbox" id="inbox" aria-labelledby="inboxtitle">
   <div class="inbox-head"><h2 id="inboxtitle">Berichten</h2><button type="button" class="linkbtn" id="inboxclose">Sluiten</button></div>
   <ul id="inboxlist"></ul>
 </dialog>
-<dialog class="inbox" id="amdlg" aria-labelledby="amtitle">
-  <div class="inbox-head"><h2 id="amtitle">Wedstrijd toevoegen</h2><button type="button" class="linkbtn" id="amclose">Sluiten</button></div>
-  <form id="amform" class="addform" style="padding:14px 18px 18px;overflow-y:auto">
-    <label for="amdate">Datum en tijd</label>
-    <input type="datetime-local" id="amdate" required>
-    <label for="amopp">Tegenstander</label>
-    <input type="text" id="amopp" maxlength="80" autocomplete="off" placeholder="Nog niet bekend">
-    <label for="amhome">Thuis of uit</label>
-    <select id="amhome"><option value="">Nog onbekend</option><option value="1">Thuis</option><option value="0">Uit</option></select>
-    <label for="amloc">Locatie</label>
-    <input type="text" id="amloc" maxlength="200" autocomplete="off" placeholder="Café, straat 1, plaats">
-    <div class="acts"><button class="btn" type="submit">Wedstrijd toevoegen</button></div>
-  </form>
-</dialog>
 
-<dialog class="inbox" id="reqdlg" aria-labelledby="reqtitle">
-  <div class="inbox-head"><h2 id="reqtitle">Stuur de captain een bericht</h2><button type="button" class="linkbtn" id="reqclose">Sluiten</button></div>
-  <form id="reqform" class="addform" style="padding:14px 18px 18px;overflow-y:auto">
-    <p>Aan de captain(s) van <strong id="reqto"></strong>. Zij zien je bericht onder het belletje.</p>
-    <label for="reqbody">Bericht</label>
-    <textarea id="reqbody" rows="4" maxlength="300" placeholder="Schrijf je bericht" required></textarea>
-    <div class="acts"><button class="btn" type="submit" id="reqsend">Versturen</button></div>
-  </form>
-</dialog>
-
-<div class="viewbar" id="viewbar" hidden><span>Je bekijkt <b id="viewname"></b> (alleen kijken)</span><span class="vb"><button type="button" class="linkbtn" id="vbreq" data-act="req-open" data-tid="" hidden>Stuur de captain een bericht</button><button type="button" class="linkbtn" data-act="t-back">Terug naar mijn team</button></span></div>
 <main class="in">
   <p class="note" id="note" hidden></p>
   <div class="installbar" id="installbar" hidden>
@@ -358,156 +272,58 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   <details class="panel" id="admin" hidden>
     <summary>Beheer voor de captain</summary>
     <div class="body">
-      <details class="grp" name="adm-top">
-        <summary>Agenda</summary>
-        <div class="grpbody">
-        <details class="sec" name="adm-agenda">
-          <summary>Wedstrijden inladen</summary>
-          <div class="secbody">
-          <p>Kies het .ics-bestand uit Teambeheer van de dartbond. Nieuwe wedstrijden worden toegevoegd en gewijzigde datums of locaties worden bijgewerkt. Antwoorden van spelers blijven staan.</p>
-          <input type="file" id="icsfile" accept=".ics,text/calendar">
-          <div id="importout"></div>
-          </div>
-        </details>
-        <details class="sec" name="adm-agenda">
-          <summary>Wedstrijden toevoegen of wijzigen</summary>
-          <div class="secbody">
-          <form id="matchform" class="addform">
-            <label id="mflabel" for="mdate">Wedstrijd toevoegen of wijzigen</label>
-            <input type="datetime-local" id="mdate" required>
-            <label for="mopp">Tegenstander</label>
-            <input type="text" id="mopp" maxlength="80" autocomplete="off" placeholder="Nog niet bekend">
-            <label for="mhome">Thuis of uit</label>
-            <select id="mhome"><option value="">Nog onbekend</option><option value="1">Thuis</option><option value="0">Uit</option></select>
-            <label for="mloc">Locatie</label>
-            <input type="text" id="mloc" maxlength="200" autocomplete="off" placeholder="Café, straat 1, plaats">
-            <label><input type="checkbox" id="mnotify" style="width:auto;min-height:0;margin-right:8px">Stuur het team een melding over deze wijziging</label>
-            <div class="acts"><button class="btn" type="submit" id="msave">Wedstrijd toevoegen</button><button type="button" class="linkbtn" id="mcancel" data-act="match-cancel" hidden>Annuleer wijziging</button></div>
-          </form>
-          <details id="mdet"><summary id="mdsum">Alle wedstrijden</summary><ul class="links" id="matchlist"></ul></details>
-          </div>
-        </details>
-        <details class="sec" name="adm-agenda">
-          <summary>Seizoen afsluiten</summary>
-          <div class="secbody">
-          <p>Aan het einde van het seizoen haal je hier alle wedstrijden en alle antwoorden weg. De spelers en hun accounts blijven staan. Importeer daarna de nieuwe speelkalender hierboven.</p>
-          <div id="seasonbox"></div>
-          </div>
-        </details>
-        </div>
-      </details>
-      <details class="grp" name="adm-top">
-        <summary>Spelers</summary>
-        <div class="grpbody">
-        <details class="sec" name="adm-spelers">
-          <summary>Spelers beheren</summary>
-          <div class="secbody">
-          <p>Elke speler kiest zelf zijn naam. Een verkeerde keuze maak je hier los, dan kan de speler opnieuw kiezen. Een gevuld groen bolletje betekent dat de speler zijn naam heeft gekozen, een leeg bolletje dat dit nog niet is gebeurd.</p>
-          <ul class="links" id="claimlist"></ul>
-          <form id="addform" class="addform">
-            <label for="newname">Nieuwe speler</label>
-            <input type="text" id="newname" maxlength="40" autocomplete="off" placeholder="Voor- en achternaam" required>
-            <label for="newrole">Functie</label>
-            <select id="newrole">
-              <option value="">Speler</option>
-              <option value="C">Captain (C)</option>
-              <option value="RC">Reserve-captain (RC)</option>
-            </select>
-            <button class="btn" type="submit">Speler toevoegen</button>
-          </form>
-          </div>
-        </details>
-        <details class="sec" name="adm-spelers">
-          <summary>Wie mag beheren</summary>
-          <div class="secbody">
-          <p>Beheerders kunnen wedstrijden en spelers beheren, antwoorden voor anderen invullen en meldingen sturen. Zij krijgen ook de melding als een wedstrijd onder het minimum aantal spelers van het team komt. Alleen spelers die hun naam hebben gekozen staan hier.</p>
-          <ul class="links" id="adminlist"></ul>
-          </div>
-        </details>
-        </div>
-      </details>
-      <details class="grp" name="adm-top">
-        <summary>Berichten sturen</summary>
-        <div class="grpbody">
-          <p>Stuurt een melding naar iedereen, of alleen naar de spelers die je kiest. Het bericht komt alleen aan bij spelers die meldingen hebben aangezet.</p>
-          <form id="msgform" class="addform">
-            <label id="msgtolabel">Aan</label>
-            <div class="chips" id="msgto" role="group" aria-labelledby="msgtolabel"></div>
-            <label for="msgtitle">Titel</label>
-            <input type="text" id="msgtitle" maxlength="60" autocomplete="off" placeholder="Bijv. Wedstrijd verzet" required>
-            <label for="msgbody">Bericht</label>
-            <textarea id="msgbody" rows="3" maxlength="200" placeholder="Schrijf je bericht" required></textarea>
-            <button class="btn" type="submit" id="msgsend">Verstuur naar iedereen</button>
-            <button type="button" class="linkbtn" data-act="testpush">Alleen een testmelding sturen</button>
-          </form>
-        </div>
-      </details>
-      <details class="grp" name="adm-top">
-        <summary>Team</summary>
-        <div class="grpbody">
-        <details class="sec" name="adm-team">
-          <summary>Teamnaam en minimum</summary>
-          <div class="secbody">
-          <form id="teamform" class="addform">
-            <label for="tname">Teamnaam (komt in de koptekst)</label>
-            <input id="tname" maxlength="60" required>
-            <p class="note">Gebruik de naam zoals die in Teambeheer staat. Anders herkent het inladen van wedstrijden niet wat thuis en uit is.</p>
-            <label for="tmin">Minimaal aantal spelers per wedstrijd</label>
-            <input id="tmin" type="number" min="1" max="20" required>
-            <button class="btn" type="submit">Opslaan</button>
-          </form>
-          </div>
-        </details>
-        <details class="sec" name="adm-team">
-          <summary>Teamcode</summary>
-          <div class="secbody">
-          <p>Nieuwe spelers sluiten aan met deze code, of met de QR-code onder "Nieuwe speler uitnodigen".</p>
-          <p id="teamcode"></p>
-          <button type="button" class="linkbtn" id="newcode">Nieuwe teamcode maken</button>
-          </div>
-        </details>
-        <details class="sec" name="adm-team">
-          <summary>Zichtbaarheid</summary>
-          <div class="secbody">
-          <label class="chk"><input id="tshare" type="checkbox"> Spelers van andere teams mogen meekijken</label>
-          <p class="note">Ze zien alleen de wedstrijden en wie er gooit. Teamcodes en berichten blijven privé.</p>
-          </div>
-        </details>
-        </div>
-      </details>
+      <h3>Wedstrijden inladen</h3>
+      <p>Kies het .ics-bestand uit Teambeheer van de dartbond. Nieuwe wedstrijden worden toegevoegd en gewijzigde datums of locaties worden bijgewerkt. Antwoorden van spelers blijven staan.</p>
+      <input type="file" id="icsfile" accept=".ics,text/calendar">
+      <div id="importout"></div>
+      <h3>Spelers</h3>
+      <p>Elke speler kiest zelf zijn naam. Een verkeerde keuze maak je hier los, dan kan de speler opnieuw kiezen. Een gevuld groen bolletje betekent dat de speler zijn naam heeft gekozen, een leeg bolletje dat dit nog niet is gebeurd.</p>
+      <ul class="links" id="claimlist"></ul>
+      <form id="addform" class="addform">
+        <label for="newname">Nieuwe speler</label>
+        <input type="text" id="newname" maxlength="40" autocomplete="off" placeholder="Voor- en achternaam" required>
+        <label for="newrole">Functie</label>
+        <select id="newrole">
+          <option value="">Speler</option>
+          <option value="C">Captain (C)</option>
+          <option value="RC">Reserve-captain (RC)</option>
+        </select>
+        <button class="btn" type="submit">Speler toevoegen</button>
+      </form>
+      <h3>Wie mag beheren</h3>
+      <h3>Melding sturen</h3>
+      <p>Stuurt een melding naar iedereen, of alleen naar de spelers die je kiest. Het bericht komt alleen aan bij spelers die meldingen hebben aangezet.</p>
+      <form id="msgform" class="addform">
+        <label id="msgtolabel">Aan</label>
+        <div class="chips" id="msgto" role="group" aria-labelledby="msgtolabel"></div>
+        <label for="msgtitle">Titel</label>
+        <input type="text" id="msgtitle" maxlength="60" autocomplete="off" placeholder="Bijv. Wedstrijd verzet" required>
+        <label for="msgbody">Bericht</label>
+        <textarea id="msgbody" rows="3" maxlength="200" placeholder="Schrijf je bericht" required></textarea>
+        <button class="btn" type="submit" id="msgsend">Verstuur naar iedereen</button>
+        <button type="button" class="linkbtn" data-act="testpush">Alleen een testmelding sturen</button>
+      </form>
+      <h3>Wedstrijden beheren</h3>
+      <form id="matchform" class="addform">
+        <label id="mflabel" for="mdate">Wedstrijd toevoegen</label>
+        <input type="datetime-local" id="mdate" required>
+        <label for="mopp">Tegenstander</label>
+        <input type="text" id="mopp" maxlength="80" autocomplete="off" placeholder="Nog niet bekend">
+        <label for="mhome">Thuis of uit</label>
+        <select id="mhome"><option value="">Nog onbekend</option><option value="1">Thuis</option><option value="0">Uit</option></select>
+        <label for="mloc">Locatie</label>
+        <input type="text" id="mloc" maxlength="200" autocomplete="off" placeholder="Café, straat 1, plaats">
+        <label><input type="checkbox" id="mnotify" style="width:auto;min-height:0;margin-right:8px">Stuur het team een melding over deze wijziging</label>
+        <div class="acts"><button class="btn" type="submit" id="msave">Wedstrijd toevoegen</button><button type="button" class="linkbtn" id="mcancel" data-act="match-cancel" hidden>Annuleer wijziging</button></div>
+      </form>
+      <details id="mdet"><summary id="mdsum">Alle wedstrijden</summary><ul class="links" id="matchlist"></ul></details>
+      <h3>Nieuw seizoen</h3>
+      <p>Aan het einde van het seizoen haal je hier alle wedstrijden en alle antwoorden weg. De spelers en hun accounts blijven staan. Importeer daarna de nieuwe speelkalender hierboven.</p>
+      <div id="seasonbox"></div>
     </div>
   </details>
 
   <p class="foot">Speeldata kunnen veranderen. Controleer altijd de actuele datum op <a href="https://www.pdbdarts.nl/" target="_blank" rel="noopener">pdbdarts.nl</a> of in de Teambeheer-app.</p>
-  <details class="panel" id="othersbox" hidden>
-    <summary>Andere teams bekijken</summary>
-    <div class="body">
-      <p>Kijk mee bij een ander team of zoek een speler. Je kunt alleen kijken, niets aanpassen.</p>
-      <div class="addform" style="border:0;padding:0"><input type="search" id="osearch" maxlength="60" autocomplete="off" placeholder="Zoek een team of speler"></div>
-      <ul class="olist" id="otherlist"></ul>
-    </div>
-  </details>
-
-  <details class="panel" id="superbox" hidden>
-    <summary>Beheerder: alle teams</summary>
-    <div class="body">
-      <h3>Nieuw team</h3>
-      <form id="newteam" class="addform">
-        <label for="ntname">Teamnaam</label>
-        <input id="ntname" maxlength="60" required>
-        <label for="nthue">Kleurtint</label>
-        <div class="huerow"><input id="nthue" type="range" min="0" max="359" value="210"><span class="huedot" id="nthuedot"></span></div>
-        <label class="chk"><input id="ntclassic" type="checkbox"> Klassiek groen (alleen voor mijn eigen team)</label>
-        <label for="ntmin">Minimaal aantal spelers</label>
-        <input id="ntmin" type="number" min="1" max="20" value="4">
-        <button class="btn" type="submit">Team aanmaken</button>
-      </form>
-      <div id="newteamout"></div>
-      <h3>Alle teams</h3>
-      <ul class="links" id="teamlist"></ul>
-    </div>
-  </details>
-
   <details class="panel" id="invitebox" hidden>
     <summary>Nieuwe speler uitnodigen</summary>
     <div class="body">
@@ -525,35 +341,28 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     </div>
   </details>
 
-  <details class="panel" id="kasteleinbox" hidden>
-    <summary>Kastelein: Thuiswedstrijden installeren</summary>
-    <div class="body">
-      <p>Voor een kastelein die zelf niet darts. Hij scant deze code met de camera van zijn telefoon en tikt op de knop <strong>App downloaden</strong>. Dan staat alleen Thuiswedstrijden op zijn telefoon, zonder deze app.</p>
-      <div class="qrbox" id="kqr"></div>
-      <div class="invite-url" id="kurl"></div>
-      <textarea id="ktext" class="invite-text" readonly></textarea>
-      <div class="invite-acts">
-        <button type="button" class="btn small" id="kshare" hidden>Delen</button>
-        <button type="button" class="btn small" id="kcopy">Tekst kopiëren</button>
-      </div>
-    </div>
-  </details>
-
 </main>
 
 <div id="toast" role="status" aria-live="polite"><span id="toasttext"></span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
 <script src="config.js"></script>
-<script src="wissel.js"></script>
 <script>
 (function () {
   'use strict';
   var TZ = 'Europe/Amsterdam';
-  var TEAM = '';           /* teamnaam, komt uit de database */
-  var MIN = 4;             /* minimum aantal spelers, komt uit de database */
-  var BUILTIN = [];
-  var BUILTIN_PLAYERS = [];
+  var TEAM = "Logan's Pub 6";
+  var MIN = 4;
+  var BUILTIN = [{"id":"26de6ee4eece1536a33c13c08ff2c14b","start":"2026-09-04T18:00:00Z","opp":"Oranjeburgt 12","home":false,"loc":"Café Zaal vd Burgt, Heuvelplein 21, Beek en Donk"},{"id":"3f76942bedac2f27590c2ce8ae4eedf8","start":"2026-09-10T18:00:00Z","opp":"De Duppies","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"75ba059a1b147096ae6b1909460d9010","start":"2026-09-15T18:00:00Z","opp":"De Zuipschutters","home":false,"loc":"O'Mearas Irish Pub, Havenweg 8-12, Helmond"},{"id":"5a50c1282dfd6d2f78d774c92e527c75","start":"2026-10-01T18:00:00Z","opp":"'t Vertierke De Afzwaaiers","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"2e7b476efe5e7d955752f47b0f53096e","start":"2026-10-08T18:00:00Z","opp":"Five Guys & One Shady Lady","home":false,"loc":"Café 't Vat, 2e Haagstraat 53, Helmond"},{"id":"025b99d70f5d8bec5741cd8594361e5a","start":"2026-10-15T18:00:00Z","opp":"DC In The Pocket 2","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"d8aa74975fca96db01a8e6b781eb2b31","start":"2026-10-23T18:00:00Z","opp":"Dartburgt 1","home":false,"loc":"Café Zaal vd Burgt, Heuvelplein 21, Beek en Donk"},{"id":"d25565c2c1ff018584912e3567f6984b","start":"2026-10-26T19:00:00Z","opp":"","home":null,"loc":""},{"id":"d09a281ee16d076802e333f810e08db6","start":"2026-11-05T19:00:00Z","opp":"Uit de Bocht","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"610dd2a7939105ff6704a0e1cd91398e","start":"2026-11-13T19:00:00Z","opp":"ACDC 't Viltje","home":false,"loc":"'t Viltje, Dorpstraat 22, Bakel"},{"id":"31bc1255a11c5a51df63e3c3d9a19fce","start":"2026-11-26T19:00:00Z","opp":"DC De Magikarp(er)","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"bffba81fe54508d553b501a36456b7f4","start":"2026-12-03T19:00:00Z","opp":"DC De Bonte Octopus 1","home":false,"loc":"Café de Peet, Dorpsstraat 27, Neerkant"},{"id":"5b3370a436ba0ee6dcebb2b78d6dfd94","start":"2026-12-18T19:00:00Z","opp":"Dc De Helmonders","home":false,"loc":"Café De Sport (H), Dorpsstraat 62, Helmond"},{"id":"a7a0fe29a39295490773601f842ff71c","start":"2027-01-07T19:00:00Z","opp":"DC De Zwart","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"ce1e2122fa5cf0953ed8f639c7eee2c2","start":"2027-01-14T19:00:00Z","opp":"Oranjeburgt 12","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"96321119c6b6619d2c3b89078624cd7b","start":"2027-01-21T19:00:00Z","opp":"De Duppies","home":false,"loc":"De Kroeg, Blasiusstraat 3, Deurne"},{"id":"6f0a86e2030a576e720418ee105aa6c2","start":"2027-02-04T19:00:00Z","opp":"De Zuipschutters","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"cbb4ea2c5e5b217f4fe68b4f3978579c","start":"2027-02-19T19:00:00Z","opp":"'t Vertierke De Afzwaaiers","home":false,"loc":"Sociaal Cultureel Centrum den Draai, Blasiusstraat 2, Deurne"},{"id":"bff570964450e88f2b7602b1af4abfef","start":"2027-02-25T19:00:00Z","opp":"Five Guys & One Shady Lady","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"279e34d7eb93666290d30c4eceaabb61","start":"2027-03-12T19:00:00Z","opp":"DC In The Pocket 2","home":false,"loc":"Marma Bar, Hoofdstraat 81, Liessel"},{"id":"e78abf480af4b20a315a2b9d9c90f145","start":"2027-03-15T19:00:00Z","opp":"","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"74cc9b789e0909524998315bdc80d7a1","start":"2027-03-25T19:00:00Z","opp":"Uit de Bocht","home":false,"loc":"Café De Vangrail, Dorpsstraat 35, Meijel"},{"id":"37f35dc5d6b03f3d938725e09b9bab93","start":"2027-04-08T18:00:00Z","opp":"ACDC 't Viltje","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"dcf4b6e3308d7282ccb1cbcabf875a28","start":"2027-04-15T18:00:00Z","opp":"DC De Magikarp(er)","home":false,"loc":"De Karper, Walvisstraat 34, Helmond"},{"id":"21bc3fc8b7ffd2c515cea65b2b7471c7","start":"2027-04-22T18:00:00Z","opp":"DC De Bonte Octopus 1","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"0b5e251c84a05d4eb6eaf922c2bed009","start":"2027-05-13T18:00:00Z","opp":"Dc De Helmonders","home":true,"loc":"Logan's Pub, Berglarenstraat 53, Gemert"},{"id":"9b772feb1efd5b05a00d662acd9e5eae","start":"2027-05-21T18:00:00Z","opp":"DC De Zwart","home":false,"loc":"Café De Zwart, Kerkstraat2, Blitterswijck"}];
+  var BUILTIN_PLAYERS = [
+    { id: 'sander', name: 'Sander Fransen', short: 'Sander', role: 'C' },
+    { id: 'heino', name: 'Heino Egelmeers', short: 'Heino' },
+    { id: 'mark', name: 'Mark Eeuwes', short: 'Mark', role: 'RC' },
+    { id: 'egbert', name: 'Egbert Pashouwers', short: 'Egbert' },
+    { id: 'martijn', name: 'Martijn Smits', short: 'Martijn' },
+    { id: 'lars', name: 'Lars Eeuwes', short: 'Lars' },
+    { id: 'albert', name: 'Albert Janssen', short: 'Albert' }
+  ];
   var PLAYERS = BUILTIN_PLAYERS.slice();
   var ORDER = ['yes', 'late', 'no'];
   var LABEL = { yes: 'Kan', late: 'Komt later', no: 'Kan niet' };
@@ -581,7 +390,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     editMatch: null,
     messages: [], reads: {}, hidden: {}, fresh: {},
     msgTo: [],           /* leeg = iedereen */
-    requests: [], otherTeams: [], myTeam: null, myAdmin: false, oq: '', playerHits: [], reqTo: null,
     seasonAsk: false,
     pending: null
   };
@@ -610,7 +418,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   function whereLine(m) {
     var p = locParts(m);
     if (!p.length) return 'Locatie nog niet bekend';
-    return 'Locatie: ' + (p.length > 1 ? p[0] + ' · ' + p[p.length - 1] : p[0]);
+    return p.length > 1 ? p[0] + ' · ' + p[p.length - 1] : p[0];
   }
 
   /* who is who: an account id is tied to one player name */
@@ -658,40 +466,33 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   /* ---------- writing ---------- */
   var sb = null;
   function run(q) { return Promise.resolve(q).then(function (r) { if (r && r.error) throw r.error; return r; }); }
-  function rpcFail(e) { toast((e && e.message) ? e.message : 'Dat is niet gelukt. Probeer het later nog eens.'); }
   function writeFail(e) {
     var m = (e && e.message) || '';
     toast(/row-level|permission/i.test(m) ? 'Opslaan is geweigerd. Je mag alleen je eigen antwoord aanpassen.' : 'Opslaan is niet gelukt. Probeer het over een paar seconden nog eens.');
   }
   function writeAnswer(mid, pid, s) {
     if (!sb || !state.uid) { toast('Log in om je antwoord op te slaan.'); return; }
-    if (state.viewTeam) { toast('Je bekijkt een ander team.'); return; }
     if (pid !== meId() && !state.isCaptain) { toast('Je kunt alleen je eigen antwoord aanpassen.'); return; }
     var t = Date.now(), k = 'p_' + pid;
     (state.answers[k] = state.answers[k] || { st: {} }).st[mid] = { s: s, t: t };
     render();
-    run(sb.from('answers').upsert({ match_id: mid, player_id: pid, team_id: state.team.id, status: s, updated_by: state.uid, updated_at: new Date(t).toISOString() }, { onConflict: 'match_id,player_id' }))
+    run(sb.from('answers').upsert({ match_id: mid, player_id: pid, status: s, updated_by: state.uid, updated_at: new Date(t).toISOString() }, { onConflict: 'match_id,player_id' }))
       .catch(function (e) { writeFail(e); loadAll(); });
   }
   function claim(pid) {
     if (!sb || !state.uid) return;
-    if (state.viewTeam) { toast('Je bekijkt een ander team.'); return; }
     if (claimUid(pid)) { toast('Die naam is al gekozen. Vraag de captain om hem los te maken.'); return; }
-    run(sb.rpc('claim_player', { p_player: pid })).then(loadAll).catch(rpcFail);
+    run(sb.from('claims').insert({ user_id: state.uid, player_id: pid })).then(loadAll).catch(writeFail);
   }
-  function setAdmin(uid, v) {
-    if (!sb || !uid || uid === state.uid) return;
-    run(sb.rpc('set_admin', { p_user: uid, p_value: v }))
-      .then(function () { toast(v ? 'Beheerrechten gegeven.' : 'Beheerrechten weggehaald.'); return loadAll(); }).catch(writeFail);
-  }
-  function unclaim(uid) { if (sb && uid) run(sb.rpc('release_player', { p_user: uid })).then(loadAll).catch(rpcFail); }
+  function unclaim(uid) { if (sb && uid) run(sb.from('claims').delete().eq('user_id', uid)).then(loadAll).catch(writeFail); }
   function slug(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
   function addPlayer(name, role) {
     if (!sb || !state.isCaptain) return;
     name = name.trim().replace(/\s+/g, ' ');
     if (!name) { toast('Vul een naam in.'); return; }
-    var first = name.split(' ')[0], base = slug(first) || 'speler', id = base + '-' + Math.random().toString(36).slice(2, 7);
-    run(sb.from('players').insert({ id: id, team_id: state.team.id, name: name, short: first, role: role || '', sort: PLAYERS.length + 1 }))
+    var first = name.split(' ')[0], base = slug(first) || 'speler', id = base, n = 2;
+    while (player(id)) id = base + (n++);
+    run(sb.from('players').insert({ id: id, name: name, short: first, role: role || '', sort: PLAYERS.length + 1 }))
       .then(function () { $('newname').value = ''; toast(first + ' is toegevoegd.'); return loadAll(); }).catch(writeFail);
   }
   function removePlayer(pid) {
@@ -724,15 +525,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       return;
     }
     if (!state.claimsReady) { el.innerHTML = ''; return; }
-    if (!state.team) {
-      var saved = ''; try { saved = localStorage.getItem('joincode') || ''; } catch (e) {}
-      el.innerHTML = '<section class="who"><h2>Sluit aan bij je team</h2><p>Vul de teamcode in die je van je captain hebt gekregen.</p>' +
-        '<form id="joinform" class="joinbox"><input id="joincode" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" placeholder="Teamcode" value="' + esc(saved) + '" required>' +
-        '<div class="acts"><button class="btn" type="submit">Aansluiten</button></div></form></section>' +
-        '<div class="acts"><button class="linkbtn" data-act="logout" data-fk="logout">Uitloggen</button></div>';
-      return;
-    }
-    if (state.viewTeam) { el.innerHTML = ''; return; }
     var me = meId(), h;
     if (!me) {
       h = '<section class="who"><h2>Wie ben jij?</h2><p>Kies je naam. Daarna kan alleen jij jouw antwoorden aanpassen.</p><div class="chips">' +
@@ -748,15 +540,9 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     el.innerHTML = h;
   }
 
-  /* Tegenstander telt als onbekend als hij leeg is of een tijdelijke tekst bevat (onbekend, vrije week, ntb, ...) */
-  function oppKnown(o) {
-    o = String(o || '').trim();
-    return !!o && !/^(onbekend|nog onbekend|nog niet bekend|niet bekend|ntb|n\.t\.b\.?|vrij|vrije week|bye|-+|\?+)$/i.test(o);
-  }
   function split() {
     var now = Date.now(), up = [], past = [];
     state.matches.slice().sort(byStart).forEach(function (m) {
-      if (!oppKnown(m.opp)) return; /* geen tegenstander (vrije week): niet tonen, de captain ziet hem wel onder beheer */
       (Date.parse(m.start) + 3 * 3600e3 < now ? past : up).push(m);
     });
     past.reverse();
@@ -803,9 +589,8 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     h += '<div class="card-main"><div class="date"><span class="wd">' + esc(clean(fWd.format(d))) + '</span><span class="d">' + esc(fDay.format(d)) +
       '</span><span class="mo">' + esc(clean(fMon.format(d))) + '</span></div><div class="info"><div class="kicker">' + tag +
       '<span class="time">' + esc(fTime.format(d)) + '</span>' + (isNext ? '<span class="nexttag">Eerstvolgende</span>' : '') + '</div>' +
-      opp + '</div>' +
+      opp + '<p class="where">' + esc(whereLine(m)) + '</p></div>' +
       (m.home === false && locParts(m).length ? '<a class="navtile" href="' + navUrl(m) + '" target="_blank" rel="noopener" aria-label="Navigeer naar ' + esc(m.loc) + '" title="Navigeer">' + PIN + '<span>Navigeer</span></a>' : '') + '</div>';
-    h += '<p class="where">' + esc(whereLine(m)) + '</p>';
     h += '<div class="bar" style="grid-template-columns:repeat(' + Math.max(PLAYERS.length, 1) + ',1fr)" aria-hidden="true">' + cells.join('') + '</div>';
     if (low) {
       h += '<p class="lowmsg"><strong>' + (pres === 0 ? 'Niemand aanwezig.' : 'Nog maar ' + pres + ' aanwezig.') + '</strong> Je hebt er minimaal ' + MIN +
@@ -865,22 +650,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     $('invitebox').hidden = !state.isCaptain;
     if (!state.isCaptain) return;
     renderMsgTo();
-    if (state.team) {
-      if (document.activeElement !== $('tname')) $('tname').value = state.team.name;
-      if (document.activeElement !== $('tmin')) $('tmin').value = state.team.min_players;
-      if ($('tshare')) $('tshare').checked = state.team.share !== false;
-      $('teamcode').innerHTML = state.codes ? 'Teamcode voor nieuwe spelers: <strong>' + esc(state.codes.join_code) + '</strong>' : '';
-    }
-    $('adminlist').innerHTML = PLAYERS.map(function (p) {
-      var u = claimUid(p.id);
-      if (!u) return '';
-      var isAdm = !!(state.claims[u] && state.claims[u].a), me = u === state.uid;
-      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
-        (isAdm ? '<span class="badge">Beheerder</span>' : '') + '</span><span class="lact">' +
-        (me ? '<span class="note">Jij</span>' :
-          '<button class="linkbtn' + (isAdm ? ' danger' : '') + '" data-act="setadmin" data-uid="' + esc(u) + '" data-v="' + (isAdm ? '0' : '1') + '" data-fk="ad:' + esc(p.id) + '">' +
-          (isAdm ? 'Beheer weghalen' : 'Maak beheerder') + '</button>') + '</span></div></li>';
-    }).join('') || '<li><span class="note">Nog niemand heeft zijn naam gekozen.</span></li>';
     $('claimlist').innerHTML = PLAYERS.map(function (p) {
       var u = claimUid(p.id);
       var ask = state.confirmDel === p.id;
@@ -909,13 +678,9 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
           '<button class="btn small danger" data-act="match-del-yes" data-mid="' + esc(m.id) + '" data-fk="my:' + esc(m.id) + '">Ja, verwijder</button>' +
           '<button class="linkbtn" data-act="match-del-cancel" data-fk="mc:' + esc(m.id) + '">Annuleer</button></div>' : '') + '</li>';
     }).join('');
-    $('seasonbox').innerHTML = state.seasonAsk === 2
-      ? '<div class="confirm"><span><strong>Laatste kans:</strong> weet je echt zeker dat je alle ' + ms.length + ' wedstrijden en alle antwoorden wilt wissen? Dit kan niet worden teruggedraaid.</span>' +
-        '<button class="btn small danger" data-act="season-yes" data-fk="season-yes">Ja, wis alles definitief</button>' +
-        '<button class="linkbtn" data-act="season-cancel" data-fk="season-cancel">Nee, annuleer</button></div>'
-      : state.seasonAsk
+    $('seasonbox').innerHTML = state.seasonAsk
       ? '<div class="confirm"><span>Alle ' + ms.length + ' wedstrijden en alle antwoorden worden verwijderd. Dit kan niet ongedaan worden gemaakt.</span>' +
-        '<button class="btn small danger" data-act="season-next" data-fk="season-next">Ja, ga verder</button>' +
+        '<button class="btn small danger" data-act="season-yes" data-fk="season-yes">Ja, begin nieuw seizoen</button>' +
         '<button class="linkbtn" data-act="season-cancel" data-fk="season-cancel">Annuleer</button></div>'
       : '<button class="btn danger" data-act="season-ask" data-fk="season-ask">Seizoen afsluiten en wissen</button>';
   }
@@ -960,11 +725,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   function myPlayerId() { var c = state.uid && state.claims[state.uid]; return c ? c.p : null; }
   function inboxList() {
     var me = myPlayerId();
-    var l = state.messages.filter(function (m) { return !state.hidden[m.id] && (!m.to_players || (me && m.to_players.indexOf(me) >= 0)); });
-    var q = (state.requests || []).map(function (r) {
-      return { id: 'r:' + r.id, title: 'Bericht van ' + r.from_team_name, body: (r.from_name ? r.from_name + ': ' : '') + r.body, created_at: r.created_at, req: r };
-    }).filter(function (m) { return !state.hidden[m.id]; });
-    return l.concat(q).sort(function (a, b) { return Date.parse(b.created_at) - Date.parse(a.created_at); });
+    return state.messages.filter(function (m) { return !state.hidden[m.id] && (!m.to_players || (me && m.to_players.indexOf(me) >= 0)); });
   }
   function unreadCount() { return inboxList().filter(function (m) { return !state.reads[m.id]; }).length; }
   function renderInbox() {
@@ -972,8 +733,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     var TRASH = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>';
     $('inboxlist').innerHTML = list.length ? list.map(function (m) {
       return '<li class="mw" data-mid="' + esc(m.id) + '"><button type="button" class="mdel" data-del="' + esc(m.id) + '" aria-label="Verwijder bericht">' + TRASH + '</button>' +
-        '<div class="msg' + (state.fresh[m.id] ? ' new' : '') + '"><div class="mhead"><strong>' + esc(m.title) + '</strong><small>' + esc(matchWhen(m.created_at)) + '</small></div><p>' + esc(m.body) + '</p>' +
-        (m.req ? '<div class="macts"><button type="button" class="linkbtn" data-act="req-reply" data-tid="' + esc(m.req.from_team) + '" data-tname="' + esc(m.req.from_team_name) + '">Antwoord</button></div>' : '') + '</div></li>';
+        '<div class="msg' + (state.fresh[m.id] ? ' new' : '') + '"><div class="mhead"><strong>' + esc(m.title) + '</strong><small>' + esc(matchWhen(m.created_at)) + '</small></div><p>' + esc(m.body) + '</p></div></li>';
     }).join('') : '<li class="mw"><div class="msg empty">Je hebt geen berichten.</div></li>';
   }
   function renderBell() {
@@ -990,21 +750,11 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     function reads() {
       return run(sb.from('message_reads').select('message_id,hidden')).catch(function () { return run(sb.from('message_reads').select('message_id')); });
     }
-    function reqs() {
-      if (!state.myAdmin || !state.myTeam) return Promise.resolve({ r: [], rd: [] });
-      return Promise.all([
-        run(sb.from('team_requests').select('*').eq('to_team', state.myTeam).order('created_at', { ascending: false }).limit(30)),
-        run(sb.from('team_request_reads').select('request_id,hidden'))
-      ]).then(function (x) { return { r: x[0].data || [], rd: x[1].data || [] }; }).catch(function () { return { r: [], rd: [] }; });
-    }
     return Promise.all([
       run(sb.from('messages').select('*').order('created_at', { ascending: false }).limit(50)),
-      reads(),
-      reqs()
+      reads()
     ]).then(function (r) {
       var rd = {}, hd = {}; r[1].data.forEach(function (v) { rd[v.message_id] = true; if (v.hidden) hd[v.message_id] = true; });
-      state.requests = r[2].r;
-      r[2].rd.forEach(function (v) { rd['r:' + v.request_id] = true; if (v.hidden) hd['r:' + v.request_id] = true; });
       state.messages = r[0].data; state.reads = rd; state.hidden = hd;
       renderBell();
       if (wantInbox) { wantInbox = false; history.replaceState(null, '', location.pathname + location.search); openInbox(); }
@@ -1019,7 +769,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     if (unread.length) {
       unread.forEach(function (m) { state.reads[m.id] = true; });
       renderBell();
-      if (sb) persistReads(unread, false);
+      if (sb) run(sb.from('message_reads').upsert(unread.map(function (m) { return { message_id: m.id, user_id: state.uid }; }))).catch(function () {});
     }
   }
   /* swipe naar links toont een prullenbak; tik erop om het bericht te verwijderen */
@@ -1063,7 +813,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     var li = $('inboxlist').querySelector('[data-mid="' + id + '"]');
     if (li) li.classList.add('gone');
     setTimeout(function () { renderBell(); renderInbox(); }, 260);
-    if (sb) persistReads([{ id: id }], true);
+    if (sb) run(sb.from('message_reads').upsert({ message_id: id, user_id: state.uid, hidden: true })).catch(function () {});
   }
   $('inboxlist').addEventListener('click', function (ev) {
     var b = ev.target.closest('.mdel');
@@ -1114,17 +864,15 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     if (!start) { toast('Kies een datum en tijd.'); return; }
     var h = $('mhome').value;
     var isNew = !state.editMatch;
-    var rec = { id: state.editMatch || ('m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), team_id: state.team.id, start: start,
+    var rec = { id: state.editMatch || ('m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), start: start,
       opp: $('mopp').value.trim(), home: h === '' ? null : h === '1', loc: $('mloc').value.trim() };
-    var before = null; state.matches.forEach(function (x) { if (x.id === rec.id) before = x; });
-    var nowKnown = oppKnown(rec.opp) && !(before && oppKnown(before.opp)); /* tegenstander net bekend geworden */
-    var notify = $('mnotify').checked || nowKnown;
+    var notify = $('mnotify').checked;
     run(sb.from('matches').upsert(rec)).then(function () {
       toast(isNew ? 'Wedstrijd toegevoegd.' : 'Wijziging opgeslagen.');
       resetMatchForm(); $('mnotify').checked = false;
       if (notify) {
         var body = matchWhen(rec.start) + (rec.opp ? ' tegen ' + rec.opp : '') + (rec.home === true ? ' (thuis)' : rec.home === false ? ' (uit)' : '');
-        return sendMessage(nowKnown ? 'Wedstrijd bekend' : isNew ? 'Nieuwe wedstrijd' : 'Wedstrijd gewijzigd', body).catch(function () { toast('Opgeslagen, maar de melding is niet verstuurd.'); });
+        return sendMessage(isNew ? 'Nieuwe wedstrijd' : 'Wedstrijd gewijzigd', body).catch(function () { toast('Opgeslagen, maar de melding is niet verstuurd.'); });
       }
     }).then(loadAll).catch(writeFail);
   }
@@ -1165,74 +913,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     }).catch(function () { toast('Melding versturen is niet gelukt.'); });
   });
 
-
-  /* ---------- andere teams bekijken en een extra speler vragen ---------- */
-  function persistReads(list, hide) {
-    var a = [], b = [];
-    list.forEach(function (m) {
-      if (String(m.id).indexOf('r:') === 0) b.push({ request_id: m.id.slice(2), user_id: state.uid, hidden: !!hide });
-      else { var o = { message_id: m.id, user_id: state.uid }; if (hide) o.hidden = true; a.push(o); }
-    });
-    if (a.length) run(sb.from('message_reads').upsert(a)).catch(function () {});
-    if (b.length) run(sb.from('team_request_reads').upsert(b)).catch(function () {});
-  }
-  function otherTeamById(id) { return state.otherTeams.filter(function (t) { return t.id === id; })[0]; }
-  function renderOthers() {
-    var box = $('othersbox'); if (!box) return;
-    var on = !!state.myTeam && !state.isSuper && !state.viewTeam && state.dbState === 'ok';
-    box.hidden = !on; if (!on) return;
-    var q = (state.oq || '').trim().toLowerCase();
-    var h = '';
-    state.otherTeams.filter(function (t) { return !q || t.name.toLowerCase().indexOf(q) >= 0; }).forEach(function (t) {
-      h += '<li class="teamitem"><div class="th"><span class="huedot" style="width:18px;height:18px;background:' + hueColor(t.hue) + '"></span><strong class="tn">' + esc(t.name) + '</strong></div>' +
-        '<div class="tacts"><button type="button" class="linkbtn" data-act="t-view" data-tid="' + esc(t.id) + '">Bekijk team</button>' +
-        (state.myAdmin ? '<button type="button" class="linkbtn" data-act="req-open" data-tid="' + esc(t.id) + '" data-tname="' + esc(t.name) + '">Stuur de captain een bericht</button>' : '') + '</div></li>';
-    });
-    if (q.length >= 2) state.playerHits.forEach(function (p) {
-      var t = otherTeamById(p.team_id); if (!t) return;
-      h += '<li class="teamitem"><div class="hit"><strong>' + esc(p.name) + '</strong> · ' + esc(t.name) + '</div>' +
-        '<div class="tacts"><button type="button" class="linkbtn" data-act="t-view" data-tid="' + esc(t.id) + '">Bekijk team</button></div></li>';
-    });
-    $('otherlist').innerHTML = h || '<li><span class="note">' + (state.otherTeams.length ? 'Niets gevonden.' : 'Er zijn nog geen andere teams die meekijken toestaan.') + '</span></li>';
-  }
-  var oTimer = null;
-  $('osearch').addEventListener('input', function () {
-    state.oq = this.value;
-    var q = state.oq.trim();
-    clearTimeout(oTimer);
-    if (q.length < 2 || !sb) { state.playerHits = []; renderOthers(); return; }
-    renderOthers();
-    oTimer = setTimeout(function () {
-      run(sb.from('players').select('id,name,team_id').ilike('name', '%' + q.replace(/[%_,()]/g, ' ') + '%').neq('team_id', state.myTeam).limit(15))
-        .then(function (r) { if (state.oq.trim() === q) { state.playerHits = r.data || []; renderOthers(); } }).catch(function () {});
-    }, 300);
-  });
-  function openRequest(tid, name) {
-    if (!tid) return;
-    var tm = otherTeamById(tid);
-    state.reqTo = tid;
-    $('reqto').textContent = name || (tm ? tm.name : 'het team');
-    var d = $('reqdlg');
-    if (!d.open) { if (d.showModal) d.showModal(); else d.setAttribute('open', ''); }
-  }
-  $('reqclose').addEventListener('click', function () { $('reqdlg').close(); });
-  $('reqform').addEventListener('submit', function (ev) {
-    ev.preventDefault();
-    var b = $('reqbody').value.trim();
-    if (!sb || !state.reqTo || !b) return;
-    $('reqsend').disabled = true;
-    run(sb.rpc('send_team_request', { p_to_team: state.reqTo, p_body: b })).then(function () {
-      toast('Bericht verstuurd naar de captain(s).'); $('reqbody').value = ''; $('reqdlg').close();
-    }).catch(rpcFail).then(function () { $('reqsend').disabled = false; });
-  });
-  document.addEventListener('change', function (ev) {
-    if (ev.target.id !== 'tshare' || !sb || !state.team || !state.isCaptain) return;
-    var v = ev.target.checked;
-    run(sb.rpc('set_share', { p_team: state.team.id, p_share: v })).then(function () {
-      toast(v ? 'Andere teams mogen nu meekijken.' : 'Je team is nu privé.'); return loadAll();
-    }).catch(function (e) { ev.target.checked = !v; rpcFail(e); });
-  });
-
   function seasonLabel() {
     var ref = state.matches.length ? new Date(state.matches.slice().sort(byStart)[0].start) : new Date();
     var y = +new Intl.DateTimeFormat('en-US', { year: 'numeric', timeZone: TZ }).format(ref);
@@ -1240,26 +920,13 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     return mo >= 7 ? y + '-' + (y + 1) : (y - 1) + '-' + y;
   }
 
-  var SWITCH_MAILS = (window.WISSEL_MAILS || []).map(function (m) { return String(m).toLowerCase(); });
-  function updateSwitch() {
-    var a = $('switchapp'); if (!a) return;
-    a.hidden = !(state.uid && (state.isSuper || SWITCH_MAILS.indexOf((state.email || '').toLowerCase()) > -1));
-  }
   function render() {
-    updateSwitch();
     var ae = document.activeElement, fk = ae && ae.dataset ? ae.dataset.fk : null;
-    $('season').textContent = state.team ? 'Wie gooit er mee? Seizoen ' + seasonLabel() : 'Voor darts-teams';
-    $('teamname').textContent = state.team ? state.team.name : 'Wie gooit er mee?';
-    $('viewbar').hidden = !state.viewTeam; $('viewname').textContent = state.team ? state.team.name : '';
-    var vbr = $('vbreq'); if (vbr) { vbr.hidden = !(state.viewTeam && state.myAdmin); vbr.setAttribute('data-tid', state.viewTeam || ''); vbr.setAttribute('data-tname', state.team ? state.team.name : ''); }
-    document.title = state.team ? state.team.name : 'Wie gooit er mee?';
-    document.documentElement.classList.toggle('noteam', state.dbState === 'ok' && !state.team);
+    $('season').textContent = 'Wie gooit er mee? Seizoen ' + seasonLabel();
     renderNote();
     renderWho();
     renderLists();
     renderAdmin();
-    renderSuper();
-    renderOthers();
     renderBell();
     if (state.isCaptain) renderMatchAdmin();
     if (fk) {
@@ -1267,15 +934,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       if (el && el.focus) el.focus({ preventScroll: true });
     }
   }
-
-  /* accordion: per niveau blijft maar een kopje open */
-  document.addEventListener('toggle', function (ev) {
-    var d = ev.target;
-    if (!d.open || !d.matches || !d.matches('details.grp, details.sec')) return;
-    Array.prototype.forEach.call(d.parentNode.children, function (o) {
-      if (o !== d && o.tagName === 'DETAILS' && o.open) o.open = false;
-    });
-  }, true);
 
   /* ---------- clicks ---------- */
   document.addEventListener('click', function (ev) {
@@ -1286,35 +944,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       claim(t.getAttribute('data-pid'));
     } else if (act === 'unclaim-self') {
       unclaim(state.uid);
-    } else if (act === 't-join' || act === 't-cap') {
-      run(sb.rpc('reset_code', { p_team: t.getAttribute('data-tid'), p_which: act === 't-join' ? 'join' : 'captain' })).then(function () { toast('Nieuwe code gemaakt.'); loadTeams(); }).catch(rpcFail);
-    } else if (act === 't-view') {
-      state.viewTeam = t.getAttribute('data-tid'); state.expanded = {};
-      window.scrollTo(0, 0); loadAll();
-    } else if (act === 'req-open') {
-      openRequest(t.getAttribute('data-tid'), t.getAttribute('data-tname'));
-    } else if (act === 'req-reply') {
-      if ($('inbox').open) $('inbox').close();
-      openRequest(t.getAttribute('data-tid'), t.getAttribute('data-tname'));
-    } else if (act === 't-back') {
-      state.viewTeam = null; state.expanded = {};
-      window.scrollTo(0, 0); loadAll();
-    } else if (act === 't-addmatch') {
-      openAddMatch(t.getAttribute('data-tid'));
-    } else if (act === 't-qr') {
-      toggleTeamQr(t.getAttribute('data-tid'));
-    } else if (act === 't-rename') {
-      var tr = teamById(t.getAttribute('data-tid'));
-      var nn = tr && window.prompt('Nieuwe naam voor het team (komt in de koptekst):', tr.name);
-      if (nn && nn.trim() && nn.trim() !== tr.name) run(sb.rpc('set_team', { p_team: tr.id, p_name: nn.trim(), p_hue: null, p_min: null, p_active: null })).then(function () { toast('Naam gewijzigd.'); loadTeams(); }).catch(rpcFail);
-    } else if (act === 't-active') {
-      var tt = teamById(t.getAttribute('data-tid'));
-      run(sb.rpc('set_team', { p_team: tt.id, p_name: null, p_hue: null, p_min: null, p_active: t.getAttribute('data-v') === '1' })).then(loadTeams).catch(rpcFail);
-    } else if (act === 't-del') {
-      var td = teamById(t.getAttribute('data-tid'));
-      if (td && window.confirm('Team "' + td.name + '" en alle gegevens van dat team definitief verwijderen?')) run(sb.rpc('delete_team', { p_team: td.id })).then(function () { toast('Team verwijderd.'); loadTeams(); }).catch(rpcFail);
-    } else if (act === 'setadmin') {
-      setAdmin(t.getAttribute('data-uid'), t.getAttribute('data-v') === '1');
     } else if (act === 'unclaim') {
       unclaim(t.getAttribute('data-uid'));
     } else if (act === 'del-ask') {
@@ -1353,7 +982,6 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     } else if (act === 'match-del-cancel') { state.confirmMatch = null; render();
     } else if (act === 'match-del-yes') { deleteMatch(t.getAttribute('data-mid'));
     } else if (act === 'season-ask') { state.seasonAsk = true; render();
-    } else if (act === 'season-next') { state.seasonAsk = 2; render();
     } else if (act === 'season-cancel') { state.seasonAsk = false; render();
     } else if (act === 'season-yes') { resetSeason();
     } else if (act === 'import-save') {
@@ -1372,8 +1000,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       .formatToParts(new Date(ms)).reduce(function (o, x) { o[x.type] = x.value; return o; }, {});
     return Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute, +parts.second) - ms;
   }
-  function parseICS(text, teamName, teamId) {
-    var TEAM_NAME = teamName === undefined ? TEAM : teamName;
+  function parseICS(text) {
     var raw = text.replace(/\r\n/g, '\n').replace(/\n[ \t]/g, '');
     var out = [];
     raw.split('BEGIN:VEVENT').slice(1).forEach(function (blk) {
@@ -1389,12 +1016,12 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       var ms = Date.UTC(+mt[1], +mt[2] - 1, +mt[3], +mt[4], +mt[5], +mt[6]);
       if (!mt[7]) ms -= amsOffset(ms);
       var s = (f.SUMMARY || '').trim(), home = null, opp = s;
-      if (s.indexOf(TEAM_NAME) === 0) { home = true; opp = s.slice(TEAM_NAME.length); }
-      else if (s.length >= TEAM_NAME.length && s.lastIndexOf(TEAM_NAME) === s.length - TEAM_NAME.length) { home = false; opp = s.slice(0, s.length - TEAM_NAME.length); }
+      if (s.indexOf(TEAM) === 0) { home = true; opp = s.slice(TEAM.length); }
+      else if (s.length >= TEAM.length && s.lastIndexOf(TEAM) === s.length - TEAM.length) { home = false; opp = s.slice(0, s.length - TEAM.length); }
       opp = opp.replace(/^[\s-]+|[\s-]+$/g, '');
       var loc = (f.LOCATION || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean).join(', ');
       if (!opp && !loc) home = null;
-      out.push({ uid: f.UID.split('@')[0].replace(/[^A-Za-z0-9_.~:+-]/g, ''), id: (teamId || state.team.id).slice(0, 8) + '-' + f.UID.split('@')[0].replace(/[^A-Za-z0-9_.~:+-]/g, ''), start: new Date(ms).toISOString().replace('.000Z', 'Z'), opp: opp, home: home, loc: loc });
+      out.push({ id: f.UID.split('@')[0].replace(/[^A-Za-z0-9_.~:+-]/g, ''), start: new Date(ms).toISOString().replace('.000Z', 'Z'), opp: opp, home: home, loc: loc });
     });
     return out.sort(byStart);
   }
@@ -1407,229 +1034,48 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     file.text().then(function (txt) {
       var list = parseICS(txt);
       if (!list.length) { out.textContent = 'In dit bestand staan geen wedstrijden.'; state.pending = null; return; }
+      var cur = {};
+      state.matches.forEach(function (m) { cur[m.id] = m; });
+      var fresh = 0, changed = 0;
+      list.forEach(function (m) { if (!cur[m.id]) fresh++; else if (!same(cur[m.id], m)) changed++; });
       state.pending = list;
-      out.innerHTML = '<p><strong>' + list.length + ' wedstrijden gevonden.</strong></p><p class="note">Wedstrijden die niet veranderd zijn blijven zoals ze zijn, met hun antwoorden. Is de datum of tijd gewijzigd, dan wordt die aangepast. Nieuwe wedstrijden worden toegevoegd en wedstrijden die al geweest zijn worden verwijderd.</p>' +
+      out.innerHTML = '<p><strong>' + list.length + ' wedstrijden gevonden:</strong> ' + fresh + ' nieuw, ' + changed + ' gewijzigd.</p>' +
         (db ? '<button class="btn" data-act="import-save">Opslaan voor het team</button>' : '<p>Opslaan kan alleen in de gedeelde versie van deze pagina.</p>');
     }).catch(function () { out.textContent = 'Het bestand kon niet worden gelezen.'; });
   });
 
   function saveImport() {
     var list = state.pending, out = $('importout');
-    if (!list || !sb || !state.team) return;
+    if (!list || !sb) return;
+    var cur = {};
+    state.matches.forEach(function (m) { cur[m.id] = m; });
+    var todo = list.filter(function (m) { return !same(cur[m.id], m); });
+    if (!todo.length) { out.textContent = 'Alles was al up-to-date.'; return; }
     out.textContent = 'Opslaan...';
-    run(sb.rpc('sync_matches', { p_team: state.team.id, p_matches: list.map(function (m) { return { uid: m.uid, start: m.start, opp: m.opp, home: m.home, loc: m.loc }; }) }))
-      .then(function (r) { out.textContent = 'Klaar. ' + syncText(r.data || {}); state.pending = null; toast('Wedstrijden bijgewerkt.'); return loadAll(); })
+    run(sb.from('matches').upsert(todo.map(function (m) { return { id: m.id, start: m.start, opp: m.opp, home: m.home, loc: m.loc }; })))
+      .then(function () { out.textContent = 'Klaar. ' + todo.length + ' wedstrijden bijgewerkt.'; state.pending = null; toast('Wedstrijden opgeslagen.'); return loadAll(); })
       .catch(function (e) { out.textContent = 'Opslaan is mislukt.'; writeFail(e); });
   }
 
   /* ---------- Supabase: laden, inloggen, meldingen ---------- */
   var rt = null, channel = null;
-  function applyTheme() {
-    var h = state.team && state.team.hue;
-    var root = document.documentElement;
-    if (h === null || h === undefined) {
-      root.removeAttribute('data-hue'); root.style.removeProperty('--h');
-      var l = '#15493A', d = '#0B4545';
-    } else {
-      root.setAttribute('data-hue', h); root.style.setProperty('--h', h);
-      l = 'hsl(' + h + ' 50% 22%)'; d = 'hsl(' + h + ' 55% 20%)';
-    }
-    Array.prototype.forEach.call(document.querySelectorAll('meta[name="theme-color"]'), function (m) {
-      m.setAttribute('content', m.getAttribute('media') && /dark/.test(m.getAttribute('media')) ? d : l);
-    });
-  }
-  function resetTeamState() {
-    state.team = null; state.claims = {}; state.claimsReady = false; state.isCaptain = false; state.isSuper = false; state.viewTeam = null;
-    state.myTeam = null; state.myAdmin = false; state.otherTeams = []; state.requests = [];
-    state.matches = []; state.answers = {}; state.codes = null; PLAYERS = []; TEAM = ''; MIN = 4;
-    applyTheme();
-  }
   function loadAll() {
-    return Promise.all([run(sb.from('members').select('*')), run(sb.from('teams').select('*')), run(sb.from('super_admins').select('user_id'))]).then(function (r) {
-      var mine = r[0].data.filter(function (v) { return v.user_id === state.uid; })[0];
-      state.isSuper = r[2].data.length > 0;
-      state.myTeam = mine ? mine.team_id : null; state.myAdmin = !!(mine && mine.is_admin);
-      if (!state.isSuper && !mine) state.viewTeam = null;
-      if (mine && state.viewTeam === mine.team_id) state.viewTeam = null;
-      state.otherTeams = r[1].data.filter(function (t) { return t.id !== state.myTeam && t.active !== false; }).sort(function (a, b) { return a.name.localeCompare(b.name, 'nl'); });
-      var vt = state.viewTeam || null;           /* beheerder van de hele app bekijkt een ander team */
-      if (!mine && !vt) {
-        resetTeamState(); state.isSuper = r[2].data.length > 0;
-        state.claimsReady = true; state.dbState = 'ok'; state.canWrite = true;
-        render(); if (state.isSuper) loadTeams();
-        return;
-      }
-      var tid = vt || mine.team_id;
-      state.team = r[1].data.filter(function (t) { return t.id === tid; })[0] || null;
-      TEAM = state.team ? state.team.name : ''; MIN = state.team ? state.team.min_players : 4;
-      applyTheme();
-      var c = {};
-      r[0].data.forEach(function (v) { if (v.team_id === tid) c[v.user_id] = { p: v.player_id, a: !!v.is_admin }; });
-      state.claims = c; state.isCaptain = vt ? false : !!mine.is_admin; state.claimsReady = true;
-      var q = [run(sb.from('matches').select('*').eq('team_id', tid)), run(sb.from('players').select('*').eq('team_id', tid)), run(sb.from('answers').select('*').eq('team_id', tid))];
-      if (state.isCaptain) q.push(run(sb.from('team_codes').select('*').eq('team_id', tid)));
-      return Promise.all(q).then(function (x) {
-        state.matches = x[0].data.map(function (v) { return { id: v.id, start: new Date(v.start).toISOString().replace('.000Z', 'Z'), opp: v.opp || '', home: v.home, loc: v.loc || '' }; }).sort(byStart);
-        var pl = x[1].data.map(function (v) { return { id: v.id, name: v.name, short: v.short || v.name.split(' ')[0], role: v.role || '', order: v.sort || 99 }; });
-        pl.sort(function (a, b) { return a.order - b.order; });
-        PLAYERS = pl;
-        var a = {};
-        x[2].data.forEach(function (v) { var k = 'p_' + v.player_id; (a[k] = a[k] || { st: {} }).st[v.match_id] = { s: v.status, t: Date.parse(v.updated_at) }; });
-        state.answers = a; state.dbState = 'ok'; state.canWrite = true;
-        state.codes = x[3] && x[3].data[0] ? x[3].data[0] : null;
-        render();
-        if (window.setInvite) window.setInvite(state.team, state.codes);
-        if (state.isSuper) loadTeams();
-        loadMessages();
-      });
+    return Promise.all(['matches', 'players', 'claims', 'answers'].map(function (t) { return run(sb.from(t).select('*')); })).then(function (r) {
+      var ms = r[0].data.map(function (v) { return { id: v.id, start: new Date(v.start).toISOString().replace('.000Z', 'Z'), opp: v.opp || '', home: v.home, loc: v.loc || '' }; });
+      state.matches = ms.sort(byStart);
+      var pl = r[1].data.map(function (v) { return { id: v.id, name: v.name, short: v.short || v.name.split(' ')[0], role: v.role || '', order: v.sort || 99 }; });
+      pl.sort(function (a, b) { return a.order - b.order; });
+      PLAYERS = pl.length ? pl : BUILTIN_PLAYERS.slice();
+      var c = {}, adm = false;
+      r[2].data.forEach(function (v) { c[v.user_id] = { p: v.player_id }; if (v.user_id === state.uid) adm = !!v.is_admin; });
+      state.claims = c; state.isCaptain = adm; state.claimsReady = true;
+      var a = {};
+      r[3].data.forEach(function (v) { var k = 'p_' + v.player_id; (a[k] = a[k] || { st: {} }).st[v.match_id] = { s: v.status, t: Date.parse(v.updated_at) }; });
+      state.answers = a; state.dbState = 'ok'; state.canWrite = true;
+      render();
+      loadMessages();
     }).catch(function () { state.dbState = 'error'; render(); });
   }
-
-  /* ---------- aansluiten bij een team ---------- */
-  function joinTeam() {
-    var code = ($('joincode').value || '').trim();
-    if (!code) { toast('Vul de teamcode in.'); return; }
-    run(sb.rpc('join_team', { p_code: code })).then(function (r) {
-      try { localStorage.removeItem('joincode'); } catch (e) {}
-      toast(r.data && r.data.captain ? 'Je bent aangesloten als beheerder van het team.' : 'Je bent aangesloten bij het team.');
-      return loadAll();
-    }).catch(rpcFail);
-  }
-  document.addEventListener('submit', function (ev) { if (ev.target.id === 'joinform') { ev.preventDefault(); joinTeam(); } });
-  try {
-    var qp = new URLSearchParams(location.search).get('team');
-    if (qp) { localStorage.setItem('joincode', qp.trim().toUpperCase()); history.replaceState(null, '', location.pathname + location.hash); }
-  } catch (e) {}
-
-  /* ---------- teaminstellingen (beheerder van het team) ---------- */
-  document.addEventListener('submit', function (ev) {
-    if (ev.target.id !== 'teamform') return;
-    ev.preventDefault();
-    run(sb.rpc('update_team_settings', { p_name: $('tname').value, p_min: parseInt($('tmin').value, 10) }))
-      .then(function () { toast('Team bijgewerkt.'); return loadAll(); }).catch(rpcFail);
-  });
-  $('newcode').addEventListener('click', function () {
-    if (!state.team) return;
-    run(sb.rpc('reset_code', { p_team: state.team.id, p_which: 'join' })).then(function () { toast('Nieuwe teamcode gemaakt. De oude code werkt niet meer.'); return loadAll(); }).catch(rpcFail);
-  });
-
-  /* ---------- beheerder van de hele app: alle teams ---------- */
-  function baseUrl() { return location.origin + location.pathname.replace(/index\.html$/, ''); }
-  function hueColor(h) { return h === null || h === undefined ? '#15493A' : 'hsl(' + h + ' 50% 30%)'; }
-  function loadTeams() {
-    run(sb.rpc('admin_list_teams')).then(function (r) { state.teams = r.data || []; renderSuper(); }).catch(function () {});
-  }
-  function renderSuper() {
-    $('superbox').hidden = !state.isSuper;
-    if ($('kasteleinbox')) $('kasteleinbox').hidden = !state.isSuper;
-    if (!state.isSuper) return;
-    $('teamlist').innerHTML = (state.teams || []).map(function (t) {
-      return '<li class="teamitem' + (t.active ? '' : ' off') + '"><div class="th"><span class="huedot" style="width:18px;height:18px;background:' + hueColor(t.hue) + '"></span><strong class="tn">' + esc(t.name) + '</strong><span class="note">' + t.members + ' leden' + (t.active ? '' : ' · uit') + (t.share === false ? ' · niet gedeeld' : '') + '</span></div>' +
-        '<div class="tcodes">Teamcode: <b>' + esc(t.join_code || '') + '</b>' + (t.captain_code ? '<br>Code voor beheerder: <b>' + esc(t.captain_code) + '</b>' : '<br>Beheerder is aangesloten') + '</div>' +
-        '<div class="tacts"><button class="linkbtn" data-act="t-view" data-tid="' + t.id + '">Bekijk team</button>' +
-        '<button class="linkbtn" data-act="t-rename" data-tid="' + t.id + '">Naam wijzigen</button>' +
-        '<button class="linkbtn" data-act="t-qr" data-tid="' + t.id + '">QR beheerder</button>' +
-        '<label class="linkbtn filebtn">Wedstrijden inladen<input type="file" accept=".ics,text/calendar" data-ics="' + t.id + '" hidden></label>' +
-        '<button class="linkbtn" data-act="t-addmatch" data-tid="' + t.id + '">Wedstrijd toevoegen</button>' +
-        '<button class="linkbtn" data-act="t-join" data-tid="' + t.id + '">Nieuwe teamcode</button>' +
-        '<button class="linkbtn" data-act="t-cap" data-tid="' + t.id + '">Nieuwe beheerderscode</button>' +
-        '<button class="linkbtn" data-act="t-active" data-tid="' + t.id + '" data-v="' + (t.active ? '0' : '1') + '">' + (t.active ? 'Zet uit' : 'Zet aan') + '</button>' +
-        '<button class="linkbtn danger" data-act="t-del" data-tid="' + t.id + '">Verwijder</button></div>' +
-        '<div class="qrpanel" id="qr-' + t.id + '" hidden></div></li>';
-    }).join('') || '<li><span class="note">Nog geen teams.</span></li>';
-  }
-  function toggleTeamQr(id) {
-    var box = $('qr-' + id), tm = teamById(id);
-    if (!box || !tm) return;
-    if (!box.hidden) { box.hidden = true; return; }
-    if (!tm.captain_code) {
-      box.innerHTML = '<p class="note">De beheerder van dit team is al aangesloten. Maak eerst een nieuwe beheerderscode als je een nieuwe QR-code wilt.</p>';
-    } else {
-      var link = baseUrl() + '?team=' + tm.captain_code;
-      box.innerHTML = '<div class="qrwrap">' + (window.qrSvg ? window.qrSvg(link) : '') + '</div><p class="tcodes">Laat de beheerder van <b>' + esc(tm.name) + '</b> deze code scannen. Hij wordt dan beheerder van het team.<br>Code: <b>' + esc(tm.captain_code) + '</b></p>';
-    }
-    box.hidden = false;
-  }
-  function syncText(r) {
-    var t = r.new + ' nieuw, ' + r.updated + ' gewijzigd, ' + r.unchanged + ' ongewijzigd';
-    if (r.past_removed) t += ', ' + r.past_removed + ' verwijderd omdat ze geweest zijn';
-    if (r.not_in_file) t += '. ' + r.not_in_file + ' komende wedstrijd(en) staan niet in het bestand en zijn blijven staan';
-    return t + '.';
-  }
-  function importIcsForTeam(tid, file) {
-    var tm = teamById(tid); if (!tm || !file) return;
-    var rd = new FileReader();
-    rd.onload = function () {
-      var list = parseICS(String(rd.result), tm.name, tm.id);
-      if (!list.length) { toast('Geen wedstrijden gevonden in dit bestand.'); return; }
-      var known = list.filter(function (m) { return m.home !== null; }).length;
-      var msg = list.length + ' wedstrijden gevonden voor ' + tm.name + (known === 0 ? '. Let op: de teamnaam komt niet in het bestand voor, dus thuis/uit is onbekend' : '') + '.\n\n' +
-        'Wedstrijden die niet veranderd zijn blijven zoals ze zijn (met hun antwoorden). Is de datum of tijd gewijzigd, dan wordt die aangepast. Nieuwe wedstrijden worden toegevoegd en wedstrijden die al geweest zijn worden verwijderd. Doorgaan?';
-      if (!window.confirm(msg)) return;
-      run(sb.rpc('sync_matches', { p_team: tm.id, p_matches: list.map(function (m) { return { uid: m.uid, start: m.start, opp: m.opp, home: m.home, loc: m.loc }; }) }))
-        .then(function (r) { toast(tm.name + ': ' + syncText(r.data || {})); loadTeams(); }).catch(rpcFail);
-    };
-    rd.readAsText(file);
-  }
-  document.addEventListener('change', function (ev) {
-    var inp = ev.target; if (!inp || !inp.getAttribute) return;
-    var tid = inp.getAttribute('data-ics');
-    if (tid && inp.files && inp.files[0]) { importIcsForTeam(tid, inp.files[0]); inp.value = ''; }
-  });
-  /* beheerder van de hele app: losse wedstrijd toevoegen voor een team */
-  var amTeam = null;
-  function openAddMatch(tid) {
-    var tm = teamById(tid); if (!tm) return;
-    amTeam = tm.id;
-    $('amform').reset();
-    $('amtitle').textContent = 'Wedstrijd toevoegen \u00B7 ' + tm.name;
-    var d = $('amdlg');
-    if (!d.open) { if (d.showModal) d.showModal(); else d.setAttribute('open', ''); }
-  }
-  $('amclose').addEventListener('click', function () { $('amdlg').close(); });
-  $('amdlg').addEventListener('click', function (ev) { if (ev.target === $('amdlg')) $('amdlg').close(); });
-  $('amform').addEventListener('submit', function (ev) {
-    ev.preventDefault();
-    var tm = teamById(amTeam);
-    if (!sb || !state.isSuper || !tm) return;
-    var start = fromLocalInput($('amdate').value);
-    if (!start) { toast('Kies een datum en tijd.'); return; }
-    var h = $('amhome').value;
-    var rec = { id: 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), team_id: tm.id, start: start,
-      opp: $('amopp').value.trim(), home: h === '' ? null : h === '1', loc: $('amloc').value.trim() };
-    run(sb.from('matches').insert(rec)).then(function () {
-      toast(tm.name + ': wedstrijd toegevoegd.' + (oppKnown(rec.opp) ? '' : ' Hij staat pas in de lijst als er een tegenstander is ingevuld.'));
-      $('amdlg').close();
-      return loadAll();
-    }).catch(writeFail);
-  });
-  function teamById(id) { return (state.teams || []).filter(function (t) { return t.id === id; })[0]; }
-  function showNewTeam(name, j, c) {
-    var link = baseUrl() + '?team=' + c;
-    var txt = 'Hoi! Je bent beheerder (captain) van ' + name + ' in de dartapp.\n\n1. Open deze link: ' + link + '\n2. Maak een account met je e-mailadres en een wachtwoord.\n3. Je wordt automatisch beheerder van ' + name + '. Kies daarna je eigen naam.\n4. Voeg je spelers toe en laad de wedstrijden in. Spelers sluiten aan met teamcode ' + j + ' (of met de QR-code in het beheerpaneel).';
-    $('newteamout').innerHTML = '<div class="codeout"><strong>' + esc(name) + ' is aangemaakt.</strong><span>Teamcode: <b>' + esc(j) + '</b> · Code voor beheerder: <b>' + esc(c) + '</b></span>' +
-      '<textarea id="newteamtxt" readonly></textarea><button class="btn small" type="button" id="newteamcopy">Tekst kopiëren</button></div>';
-    $('newteamtxt').value = txt;
-    $('newteamcopy').addEventListener('click', function () {
-      var b = this; function ok() { var o = b.textContent; b.textContent = 'Gekopieerd \u2713'; setTimeout(function () { b.textContent = o; }, 1800); }
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function () {}); else { $('newteamtxt').select(); try { document.execCommand('copy'); ok(); } catch (e) {} }
-    });
-  }
-  $('nthue').addEventListener('input', function () { $('nthuedot').style.background = hueColor(parseInt($('nthue').value, 10)); });
-  $('nthuedot').style.background = hueColor(210);
-  $('ntclassic').addEventListener('change', function () { $('nthue').disabled = $('ntclassic').checked; $('nthuedot').style.background = $('ntclassic').checked ? hueColor(null) : hueColor(parseInt($('nthue').value, 10)); });
-  document.addEventListener('submit', function (ev) {
-    if (ev.target.id !== 'newteam') return;
-    ev.preventDefault();
-    var name = $('ntname').value.trim();
-    var hue = $('ntclassic').checked ? -1 : parseInt($('nthue').value, 10);
-    run(sb.rpc('create_team', { p_name: name, p_hue: hue, p_min: parseInt($('ntmin').value, 10) || 4 })).then(function (r) {
-      showNewTeam(name, r.data.join_code, r.data.captain_code);
-      $('newteam').reset(); $('nthue').disabled = false; $('nthuedot').style.background = hueColor(210);
-      loadTeams();
-    }).catch(rpcFail);
-  });
-
   function auth(isNew) {
     var email = $('aemail').value.trim(), pw = $('apass').value;
     if (!email || pw.length < 6) { toast('Vul je e-mailadres en een wachtwoord van minimaal 6 tekens in.'); return; }
@@ -1672,12 +1118,12 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     sb.auth.onAuthStateChange(function (ev, session) {
       var id = session ? session.user.id : null;
       if (id && id === state.uid) return;
-      state.uid = id; state.email = session ? (session.user.email || '') : '';
+      state.uid = id;
       if (id) {
         state.dbState = 'pending'; render();
         setTimeout(function () { loadAll(); checkPush(); }, 0);
         if (!channel) channel = sb.channel('alles').on('postgres_changes', { event: '*', schema: 'public' }, function () { clearTimeout(rt); rt = setTimeout(loadAll, 300); }).subscribe();
-      } else { state.dbState = 'none'; resetTeamState(); render(); }
+      } else { state.dbState = 'none'; state.claims = {}; state.claimsReady = false; state.isCaptain = false; render(); }
     });
     document.addEventListener('visibilitychange', function () { if (!document.hidden && state.uid) loadAll(); });
   }
@@ -2876,7 +2322,6 @@ return R("index");})();
   function $(id) { return document.getElementById(id); }
 
   /* ---------- QR ---------- */
-  window.qrSvg = qrSvg;
   function qrSvg(text) {
     var q = new QRLib(-1, 0); /* niveau M */
     q.addData(text); q.make();
@@ -2893,49 +2338,22 @@ return R("index");})();
     var t = n + 2 * b;
     return '<svg viewBox="0 0 ' + t + ' ' + t + '" shape-rendering="crispEdges" role="img" aria-label="QR-code naar de app"><rect width="' + t + '" height="' + t + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
   }
-  /* ---------- uitnodiging (per team) ---------- */
-  var msg = '', teamName = '';
-  window.setInvite = function (team, codes) {
-    if (!team || !codes) return;
-    teamName = team.name;
-    var link = url + '?team=' + codes.join_code;
-    try { $('qrbox').innerHTML = qrSvg(link); } catch (e) { $('qrbox').textContent = link; }
-    $('inviteurl').innerHTML = 'Teamcode: <strong>' + codes.join_code + '</strong>';
-    msg = "Hoi! Je bent uitgenodigd voor de dartapp van " + team.name + ". Daar geef je door of je erbij bent.\n\n" +
-      "1. Open deze link:\n" + link + "\n\n" +
-      "2. Installeer de app op je telefoon:\n" +
-      "- Android (Chrome): tik op \"App installeren\" in de app, of op de drie puntjes en dan \"App installeren\".\n" +
-      "- iPhone (Safari): tik op het deel-icoon en dan \"Zet op beginscherm\".\n\n" +
-      "3. Maak een account met je e-mailadres en een wachtwoord. De teamcode " + codes.join_code + " staat al ingevuld. Kies daarna je eigen naam.\n\n" +
-      "4. Tik op \"Meldingen aanzetten\". Dan krijg je een herinnering voor de wedstrijd en ook de wijzigingen en berichten van de captain.";
-    $('invitetext').value = msg;
-  };
-  /* ---------- kastelein: alleen Thuiswedstrijden installeren ---------- */
-  (function () {
-    var link = url + 'kroeg.html?installeren=1';
-    try { $('kqr').innerHTML = qrSvg(link); } catch (e) { $('kqr').textContent = link; }
-    $('kurl').textContent = link;
-    var ktxt = "Hoi! Hier kun je de app Thuiswedstrijden op je telefoon zetten.\n\n" +
-      "1. Open deze link:\n" + link + "\n\n" +
-      "2. Tik op de knop \"App downloaden\" en bevestig.\n" +
-      "- iPhone (Safari): tik op het deel-icoon en dan \"Zet op beginscherm\".\n\n" +
-      "3. Open de app vanaf je beginscherm en log in met het account dat je hebt gekregen.";
-    $('ktext').value = ktxt;
-    if (navigator.share) {
-      $('kshare').hidden = false;
-      $('kshare').addEventListener('click', function () { navigator.share({ title: 'Thuiswedstrijden', text: ktxt }).catch(function () {}); });
-    }
-    $('kcopy').addEventListener('click', function () {
-      var b = this, ta = $('ktext');
-      function ok() { var o = b.textContent; b.textContent = 'Gekopieerd \u2713'; setTimeout(function () { b.textContent = o; }, 1800); }
-      function fb() { ta.focus(); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) {} }
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ktxt).then(ok, fb); else fb();
-    });
-  })();
+  try { $('qrbox').innerHTML = qrSvg(url); } catch (e) { $('qrbox').textContent = url; }
+  $('inviteurl').textContent = url;
+
+  /* ---------- uitnodiging ---------- */
+  var msg = "Hoi! Je bent uitgenodigd voor de dartapp van Logan's Pub 6. Daar geef je door of je erbij bent.\n\n" +
+    "1. Open deze link:\n" + url + "\n\n" +
+    "2. Installeer de app op je telefoon:\n" +
+    "- Android (Chrome): tik op \"App installeren\" in de app, of op de drie puntjes en dan \"App installeren\".\n" +
+    "- iPhone (Safari): tik op het deel-icoon en dan \"Zet op beginscherm\".\n\n" +
+    "3. Maak een account met je e-mailadres en een wachtwoord, en kies je eigen naam.\n\n" +
+    "4. Tik op \"Meldingen aanzetten\". Dan krijg je een herinnering voor de wedstrijd en ook de wijzigingen en berichten van de captain.";
+  $('invitetext').value = msg;
   if (navigator.share) {
     $('invshare').hidden = false;
     $('invshare').addEventListener('click', function () {
-      if (msg) navigator.share({ title: teamName || 'Wie gooit er mee?', text: msg }).catch(function () {});
+      navigator.share({ title: "Logan's Pub 6", text: msg }).catch(function () {});
     });
   }
   $('invcopy').addEventListener('click', function () {
