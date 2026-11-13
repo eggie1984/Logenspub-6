@@ -701,6 +701,13 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   }
 
   function renderLists() {
+    if (!state.uid) {
+      $('summary').innerHTML = '';
+      $('list').innerHTML = '';
+      $('pastbox').hidden = true;
+      $('pastlist').innerHTML = '';
+      return;
+    }
     var sp = split();
     var up = sp.up;
     renderSummary(up);
@@ -1282,7 +1289,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
         state.dbState = 'pending'; render();
         setTimeout(function () { loadAll(); checkPush(); }, 0);
         if (!channel) channel = sb.channel('alles').on('postgres_changes', { event: '*', schema: 'public' }, function () { clearTimeout(rt); rt = setTimeout(loadAll, 300); }).subscribe();
-      } else { state.recovery = false; state.dbState = 'none'; state.claims = {}; state.claimsReady = false; state.isCaptain = false; render(); }
+      } else { state.recovery = false; state.dbState = 'none'; state.claims = {}; state.claimsReady = false; state.isCaptain = false; state.answers = {}; state.matches = BUILTIN.slice(); state.messages = []; state.reads = {}; state.hidden = {}; state.fresh = {}; state.expanded = {}; state.proxy = false; state.canWrite = null; if (channel) { try { sb.removeChannel(channel); } catch (e) {} channel = null; } render(); }
     });
     document.addEventListener('visibilitychange', function () { if (!document.hidden && state.uid && !state.recovery) loadAll(); });
   }
