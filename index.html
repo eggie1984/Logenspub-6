@@ -313,7 +313,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
             <select id="mhome"><option value="">Nog onbekend</option><option value="1">Thuis</option><option value="0">Uit</option></select>
             <label for="mloc">Locatie</label>
             <input type="text" id="mloc" maxlength="200" autocomplete="off" placeholder="Café, straat 1, plaats">
-            <label><input type="checkbox" id="mnotify" style="width:auto;min-height:0;margin-right:8px">Stuur het team een melding over deze wijziging</label>
+            <label><input type="checkbox" id="mnotify" checked style="width:auto;min-height:0;margin-right:8px">Stuur het team een melding over deze wijziging</label>
             <div class="acts"><button class="btn" type="submit" id="msave">Wedstrijd toevoegen</button><button type="button" class="linkbtn" id="mcancel" data-act="match-cancel" hidden>Annuleer wijziging</button></div>
           </form>
           <details id="mdet"><summary id="mdsum">Alle wedstrijden</summary><ul class="links" id="matchlist"></ul></details>
@@ -685,7 +685,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       h += '<div class="detail"><ul class="roster">';
       PLAYERS.forEach(function (pl) {
         var s = statusOf(m.id, pl.id);
-        h += '<li><div class="rrow"><span class="pname">' + esc(pl.name) + (pl.role ? '<span class="badge">' + pl.role + '</span>' : '') +
+        h += '<li><div class="rrow"><span class="pname">' + esc(pl.name) + (pl.role ? '<span class="badge">' + esc(pl.role) + '</span>' : '') +
           (pl.id === me ? '<small>(jij)</small>' : '') + '</span><span class="pill ' + s + '">' + LABEL[s] + '</span></div>';
         if (state.proxy && state.isCaptain && !isPast) h += '<div class="seg">' + optButtons(m.id, pl.id, s, true, dis) + '</div>';
         h += '</li>';
@@ -740,7 +740,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     $('claimlist').innerHTML = PLAYERS.map(function (p) {
       var u = claimUid(p.id);
       var ask = state.confirmDel === p.id;
-      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
+      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + esc(p.role) + '</span>' : '') +
         '<span class="sdot' + (u ? ' ok' : '') + '" role="img" aria-label="' + (u ? 'naam gekozen' : 'nog niet gekozen') + '"></span></span><span class="lact"><span class="slot">' +
         (u ? '<button class="linkbtn" data-act="unclaim" data-uid="' + esc(u) + '" data-fk="uc:' + p.id + '">Maak los</button>' : '') + '</span><span>' +
         (ask ? '' : '<button class="linkbtn danger" data-act="del-ask" data-pid="' + p.id + '" data-fk="da:' + p.id + '">Verwijder</button>') +
@@ -753,7 +753,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
       var u = claimUid(p.id);
       if (!u) return '';
       var isAdm = !!(state.claims[u] && state.claims[u].a), me = u === state.uid;
-      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + p.role + '</span>' : '') +
+      return '<li><div class="lrow"><span class="lname">' + esc(p.name) + (p.role ? '<span class="badge">' + esc(p.role) + '</span>' : '') +
         (isAdm ? '<span class="badge">Beheerder</span>' : '') + '</span><span class="lact">' +
         (me ? '<span class="note">Jij</span>' :
           '<button class="linkbtn' + (isAdm ? ' danger' : '') + '" data-act="setadmin" data-uid="' + esc(u) + '" data-v="' + (isAdm ? '0' : '1') + '" data-fk="ad:' + esc(p.id) + '">' +
@@ -947,14 +947,27 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     }
     renderMsgTo();
   }
+  /* Edge Function aanroepen met een verse inlogsleutel. Is de sleutel toch verlopen (401),
+     dan eerst vernieuwen en het nog één keer proberen. */
+  function callFn(name, body) {
+    function go(session) {
+      var h = session && session.access_token ? { Authorization: 'Bearer ' + session.access_token } : undefined;
+      return sb.functions.invoke(name, { body: body, headers: h });
+    }
+    return sb.auth.getSession().then(function (s) { return go(s.data && s.data.session); }).then(function (r) {
+      var st = r.error && r.error.context && r.error.context.status;
+      if (st !== 401) return r;
+      return sb.auth.refreshSession().then(function (s) { return go(s.data && s.data.session); });
+    });
+  }
   function sendToPlayers(title, body, ids) {
-    return sb.functions.invoke('send-to-players', { body: { title: title, body: body, player_ids: ids } }).then(function (r) {
+    return callFn('send-to-players', { title: title, body: body, player_ids: ids }).then(function (r) {
       if (r.error) throw r.error;
       return r.data || {};
     });
   }
   function sendMessage(title, body) {
-    return sb.functions.invoke('send-message', { body: { title: title, body: body } }).then(function (r) {
+    return callFn('send-message', { title: title, body: body }).then(function (r) {
       if (r.error) throw r.error;
       return r.data || {};
     });
@@ -972,7 +985,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     var notify = $('mnotify').checked || nowKnown;
     run(sb.from('matches').upsert(rec)).then(function () {
       toast(isNew ? 'Wedstrijd toegevoegd.' : 'Wijziging opgeslagen.');
-      resetMatchForm(); $('mnotify').checked = false;
+      resetMatchForm(); $('mnotify').checked = true;
       if (notify) {
         var body = matchWhen(rec.start) + (rec.opp ? ' tegen ' + rec.opp : '') + (rec.home === true ? ' (thuis)' : rec.home === false ? ' (uit)' : '');
         return sendMessage(nowKnown ? 'Wedstrijd bekend' : isNew ? 'Nieuwe wedstrijd' : 'Wedstrijd gewijzigd', body).catch(function () { toast('Opgeslagen, maar de melding is niet verstuurd.'); });
@@ -1086,13 +1099,13 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     } else if (act === 'setadmin') {
       setAdmin(t.getAttribute('data-uid'), t.getAttribute('data-v') === '1');
     } else if (act === 'push') { enablePush();
-    } else if (act === 'logout') { sb.auth.signOut();
+    } else if (act === 'logout') { logout();
     } else if (act === 'signup') { auth(true);
     } else if (act === 'forgot') { forgotPassword();
     } else if (act === 'recovery-cancel') { state.recovery = false; clearHash(); sb.auth.signOut();
     } else if (act === 'msgto') { toggleMsgTo(t.getAttribute('data-pid'));
     } else if (act === 'testpush') {
-      sb.functions.invoke('send-reminders', { body: { test: true } }).then(function (r) { toast(r.error ? 'Testmelding mislukt.' : 'Testmelding verstuurd.'); });
+      callFn('send-reminders', { test: true }).then(function (r) { toast(r.error ? 'Testmelding mislukt.' : 'Testmelding verstuurd.'); });
     } else if (act === 'match-edit') { editMatch(t.getAttribute('data-mid'));
     } else if (act === 'match-cancel') { resetMatchForm();
     } else if (act === 'match-del-ask') { state.confirmMatch = t.getAttribute('data-mid'); render();
@@ -1249,22 +1262,47 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     var p = '='.repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/'));
     return Uint8Array.from(b, function (ch) { return ch.charCodeAt(0); });
   }
+  /* Na inloggen: heeft deze telefoon al eens toestemming gegeven voor meldingen,
+     dan meldingen meteen (stil) aanzetten voor het account dat nu is ingelogd. */
   function checkPush() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    if (window.Notification && Notification.permission === 'granted') { enablePush(true); return; }
     navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); })
       .then(function (sub) { state.push = !!sub; render(); }).catch(function () {});
   }
-  function enablePush() {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) { toast('Meldingen werken hier niet. Op iPhone: zet de app eerst op je beginscherm en open hem daarvandaan.'); return; }
-    Notification.requestPermission().then(function (perm) {
-      if (perm !== 'granted') { toast('Meldingen zijn niet toegestaan. Zet ze aan in de instellingen van je telefoon of browser.'); return; }
+  function enablePush(silent) {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) { if (!silent) toast('Meldingen werken hier niet. Op iPhone: zet de app eerst op je beginscherm en open hem daarvandaan.'); return; }
+    (silent ? Promise.resolve(Notification.permission) : Notification.requestPermission()).then(function (perm) {
+      if (perm !== 'granted') { if (!silent) toast('Meldingen zijn niet toegestaan. Zet ze aan in de instellingen van je telefoon of browser.'); return; }
       return navigator.serviceWorker.ready.then(function (reg) {
         return reg.pushManager.getSubscription().then(function (s) { return s || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64(CFG.VAPID_PUBLIC_KEY) }); });
       }).then(function (sub) {
-        var j = sub.toJSON();
-        return run(sb.from('push_subscriptions').upsert({ endpoint: j.endpoint, user_id: state.uid, p256dh: j.keys.p256dh, auth: j.keys.auth }, { onConflict: 'endpoint' }));
-      }).then(function () { state.push = true; toast('Meldingen staan aan.'); render(); });
-    }).catch(function () { toast('Meldingen aanzetten is niet gelukt.'); });
+        /* Lukt opslaan niet (bijvoorbeeld omdat dit toestel nog bij een ander account hoort),
+           dan het toestel opnieuw aanmelden en nog eens proberen. */
+        return savePushSub(sub).catch(function () {
+          return sub.unsubscribe().then(function () {
+            return navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64(CFG.VAPID_PUBLIC_KEY) }); });
+          }).then(savePushSub);
+        });
+      }).then(function () { state.push = true; if (!silent) toast('Meldingen staan aan.'); render(); });
+    }).catch(function () { state.push = false; render(); if (!silent) toast('Meldingen aanzetten is niet gelukt.'); });
+  }
+  function savePushSub(sub) {
+    var j = sub.toJSON();
+    return run(sb.from('push_subscriptions').upsert({ endpoint: j.endpoint, user_id: state.uid, p256dh: j.keys.p256dh, auth: j.keys.auth }, { onConflict: 'endpoint' }));
+  }
+  /* Bij uitloggen dit toestel afmelden, zodat de volgende gebruiker geen meldingen van jouw account krijgt. */
+  function logout() {
+    if (!sb) return;
+    var done = false;
+    function out() { if (done) return; done = true; state.push = false; sb.auth.signOut(); }
+    setTimeout(out, 4000); /* nooit blijven hangen */
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) { out(); return; }
+    navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+      if (!sub) return;
+      return Promise.resolve(sb.from('push_subscriptions').delete().eq('endpoint', sub.endpoint)).catch(function () {})
+        .then(function () { return sub.unsubscribe(); });
+    }).catch(function () {}).then(out);
   }
 
   var CFG = window.APP_CONFIG || {};
