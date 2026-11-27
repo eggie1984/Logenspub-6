@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thuiswedstrijden</title>
+<meta name="theme-color" content="#15493A">
+<link rel="manifest" href="kroeg.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Thuiswedstrijden">
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #EBEFE8; --surface: #F9FBF7; --surface-2: #DFE6DC; --line: #C4CFC2;
+  --ink: #14211A; --ink-2: #4A5A51;
+  --brand: #15493A; --brand-ink: #F2F7F1;
+  --yes: #17683F; --yes-bg: #BDE3CB;
+  --late: #7A5000; --late-bg: #F0DDA0;
+  --no: #A82E24; --no-bg: #F0C4BE;
+  --new: #C8372D;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E1713; --surface: #16231D; --surface-2: #1E2F27; --line: #2B3F35;
+    --ink: #E6EFE8; --ink-2: #9FB1A6;
+    --brand: #0B4545; --brand-ink: #F2F7F1;
+    --yes: #8FE0B0; --yes-bg: #1D4A33;
+    --late: #F0D27A; --late-bg: #4A3A0C;
+    --no: #F2A59D; --no-bg: #5A211B;
+    --new: #FF8A80;
+  }
+}
+* { box-sizing: border-box; }
+html { height: 100%; }
+body {
+  margin: 0; min-height: 100%; background: var(--bg); color: var(--ink);
+  font: 16px/1.45 var(--font-body);
+  padding: 0 0 env(safe-area-inset-bottom, 0px);
+}
+header {
+  background: var(--brand); color: var(--brand-ink);
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px;
+  position: sticky; top: 0; z-index: 5;
+}
+.bar { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.acts:not(:has(.ibtn:not([hidden]))) { display: none; }
+.bar h1 { margin: 0; font: 700 28px/1 var(--font-display); letter-spacing: .02em; text-transform: uppercase; }
+.bar small { display: block; font: 400 12px/1.3 var(--font-body); letter-spacing: 0; text-transform: none; opacity: .8; margin-top: 3px; }
+.ibtn {
+  appearance: none; border: 1px solid rgba(255,255,255,.4); background: transparent; color: inherit;
+  border-radius: 999px; padding: 8px 14px; font: 600 14px var(--font-body); min-height: 40px; cursor: pointer;
+}
+a.ibtn { text-decoration: none; display: inline-flex; align-items: center; }
+.ibtn[hidden] { display: none; }
+.ibtn[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+main { max-width: 720px; margin: 0 auto; padding: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.card h2 { margin: 0 0 10px; font: 700 22px/1.1 var(--font-display); letter-spacing: .02em; text-transform: uppercase; }
+.muted { color: var(--ink-2); }
+.small { font-size: 14px; }
+.btn {
+  appearance: none; border: 0; background: var(--brand); color: var(--brand-ink); border-radius: 10px;
+  padding: 12px 18px; font: 600 16px var(--font-body); min-height: 46px; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+input[type=email], input[type=password] {
+  width: 100%; padding: 12px; font: 16px var(--font-body); color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; margin: 4px 0 12px;
+}
+label { font-weight: 600; font-size: 14px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.login { max-width: 420px; margin: 32px auto; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+/* wijzigingen */
+.changes { margin-bottom: 16px; }
+.cw { position: relative; overflow: hidden; border-top: 1px solid var(--line); max-height: 300px; transition: max-height .25s ease, opacity .25s ease; }
+.cw:first-of-type { border-top: 0; }
+.cw.gone { max-height: 0; opacity: 0; border-top-width: 0; }
+.cdel { position: absolute; top: 0; right: 0; bottom: 0; width: 88px; border: 0; background: #C62F25; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.cdel svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chg { position: relative; display: flex; gap: 10px; padding: 10px 0; background: var(--surface); touch-action: pan-y; transition: transform .2s ease; }
+.chg.dragging { transition: none; }
+.chg.open { transform: translateX(-88px); }
+.tag { flex: none; align-self: flex-start; font: 700 12px/1 var(--font-body); padding: 5px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: .03em; }
+.tag.added { background: var(--yes-bg); color: var(--yes); }
+.tag.changed { background: var(--late-bg); color: var(--late); }
+.tag.removed { background: var(--no-bg); color: var(--no); }
+.newdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--new); margin-left: 6px; vertical-align: middle; }
+
+/* filter */
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 12px; }
+.chip {
+  flex: none; appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 999px; padding: 8px 14px; font: 600 14px var(--font-body); min-height: 40px; cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
+
+/* wedstrijden */
+.day { margin: 18px 0 8px; font: 700 20px/1 var(--font-display); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); }
+details.match { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+details.match > summary { list-style: none; cursor: pointer; padding: 14px; display: flex; gap: 14px; align-items: center; }
+details.match > summary::-webkit-details-marker { display: none; }
+.time { font: 700 30px/1 var(--font-display); min-width: 64px; }
+.mid { flex: 1; min-width: 0; }
+.team { font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+.opp { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+.att { text-align: right; flex: none; }
+.att b { display: block; font: 700 26px/1 var(--font-display); }
+.att span { font-size: 12px; color: var(--ink-2); display: block; max-width: 96px; }
+.chev { flex: none; color: var(--ink-2); transition: transform .15s; }
+details[open] .chev { transform: rotate(90deg); }
+.who { padding: 0 14px 14px; border-top: 1px solid var(--line); }
+.who h3 { margin: 12px 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-2); }
+.names { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { padding: 5px 10px; border-radius: 999px; font-size: 14px; font-weight: 600; background: var(--surface-2); }
+.pill.yes { background: var(--yes-bg); color: var(--yes); }
+.pill.late { background: var(--late-bg); color: var(--late); }
+.pill.no { background: var(--no-bg); color: var(--no); text-decoration: line-through; }
+.banner { background: var(--no-bg); color: var(--no); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-weight: 600; }
+.hint { background: var(--surface-2); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 14px; }
+.dlwrap { max-width: 720px; margin: 0 auto; padding: 16px 16px 0; }
+.dl { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
+.dl p { margin: 0; flex: 1 1 200px; font-size: 14px; color: var(--ink-2); }
+.dl p strong { display: block; font-size: 16px; color: var(--ink); }
+.dl .dlacts { display: flex; align-items: center; gap: 4px; }
+.dlbtn { appearance: none; border: 0; background: var(--brand); color: var(--brand-ink); border-radius: 10px; padding: 10px 16px; font: 700 15px var(--font-body); min-height: 44px; cursor: pointer; }
+.dlx { appearance: none; border: 0; background: none; color: var(--ink-2); padding: 10px 8px; font: 500 14px var(--font-body); min-height: 44px; cursor: pointer; text-decoration: underline; }
+.dl .dlhelp { flex-basis: 100%; color: var(--ink); }
+/* bericht aan spelers */
+.cmp label { display: block; margin-top: 12px; }
+.cmp input[type=text], .cmp textarea {
+  width: 100%; padding: 12px; font: 16px var(--font-body); color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; margin-top: 4px;
+}
+.cmp textarea { min-height: 120px; resize: vertical; }
+.cnt { font-size: 12px; color: var(--ink-2); text-align: right; }
+.pick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.pick .chip { display: inline-flex; align-items: center; gap: 6px; }
+.imgbox { margin-top: 6px; }
+.imgbox img { display: block; max-width: 100%; max-height: 360px; border-radius: 10px; border: 1px solid var(--line); margin-bottom: 8px; }
+.filebtn { position: relative; overflow: hidden; display: inline-flex; align-items: center; }
+.filebtn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.sent { list-style: none; margin: 0; padding: 0; }
+.sent li { border-top: 1px solid var(--line); padding: 12px 0; display: flex; gap: 12px; align-items: flex-start; }
+.sent li:first-child { border-top: 0; }
+.sent img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; flex: none; }
+.sent .sx { flex: 1; min-width: 0; }
+.sent .sx p { margin: 2px 0 0; font-size: 14px; color: var(--ink-2); white-space: pre-line; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.sent .del { appearance: none; border: 0; background: none; color: var(--no); font: 600 14px var(--font-body); text-decoration: underline; cursor: pointer; padding: 8px 0; min-height: 40px; }
+.okbox { background: var(--yes-bg); color: var(--yes); border-radius: 10px; padding: 10px 14px; margin-top: 12px; font-weight: 600; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>Thuiswedstrijden<small id="sub">Alleen kijken</small></h1>
+    <div class="acts">
+      <a class="ibtn" id="switchapp" href="index.html" hidden>Wie gooit er mee?</a>
+      <button class="ibtn" id="compose" type="button" hidden aria-pressed="false">Bericht aan spelers</button>
+      <button class="ibtn" id="bell" type="button" hidden aria-pressed="false">Meldingen</button>
+      <button class="ibtn" id="testalert" type="button" hidden>Testmelding wijzigingen</button>
+      <button class="ibtn" id="logout" type="button" hidden>Uitloggen</button>
+      <small class="app-versie" style="opacity:.6;align-self:center;font-size:12px"></small>
+    </div>
+  </div>
+</header>
+<div class="dlwrap" id="dlapp" hidden>
+  <div class="dl">
+    <p><strong id="dltitle">Download de app</strong><span id="dltext">Zet Thuiswedstrijden op je telefoon, dan open je hem met één tik.</span></p>
+    <div class="dlacts"><button type="button" class="dlbtn" id="dlgo">App downloaden</button><button type="button" class="dlx" id="dlno">Niet nu</button></div>
+    <p class="dlhelp" id="dlhelp" hidden></p>
+  </div>
+</div>
+<main id="main"><p class="muted">Laden…</p></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="wissel.js"></script>
+<script>
+(function () {
+  'use strict';
+  var TZ = 'Europe/Amsterdam';
+  var CFG = window.APP_CONFIG || {};
+  var $ = function (id) { return document.getElementById(id); };
+  var S = { uid: null, email: '', data: null, filter: null, push: false, state: 'start', err: '', loaded: null, signup: false };
+  var sb = null, timer = null;
+
+  /* ---------- kleine hulpjes ---------- */
+  function el(tag, props) {
+    var e = document.createElement(tag);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === 'class') e.className = v;
+      else if (k === 'text') e.textContent = v;
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v === true ? '' : v);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var kids = [].concat(arguments[i]);
+      kids.forEach(function (c) { if (c === null || c === undefined || c === false) return; e.appendChild(c.nodeType ? c : document.createTextNode(c)); });
+    }
+    return e;
+  }
+  var fDay = new Intl.DateTimeFormat('nl-NL', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' });
+  var fTime = new Intl.DateTimeFormat('nl-NL', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  var fShort = new Intl.DateTimeFormat('nl-NL', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  var fKey = new Intl.DateTimeFormat('sv-SE', { timeZone: TZ });
+  function dayLabel(iso) {
+    var k = fKey.format(new Date(iso)), now = Date.now();
+    if (k === fKey.format(now)) return 'Vandaag';
+    if (k === fKey.format(now + 864e5)) return 'Morgen';
+    var s = fDay.format(new Date(iso));
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+  function hueColor(h) { return h === null || h === undefined ? '#2F8F5B' : 'hsl(' + h + ' 55% 45%)'; }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  /* Tegenstander telt als onbekend als hij leeg is of een tijdelijke tekst bevat (onbekend, vrije week, ntb, ...) */
+  function oppKnown(o) {
+    o = String(o || '').trim();
+    return !!o && !/^(onbekend|nog onbekend|nog niet bekend|niet bekend|ntb|n\.t\.b\.?|vrij|vrije week|bye|-+|\?+)$/i.test(o);
+  }
+
+  /* ---------- wijzigingen samenvoegen (zelfde regel als de melding) ---------- */
+  function collapse(rows) {
+    var by = {}, order = [];
+    rows.slice().sort(function (a, b) { return a.id - b.id; }).forEach(function (r) {
+      if (!by[r.match_id]) { by[r.match_id] = []; order.push(r.match_id); }
+      by[r.match_id].push(r);
+    });
+    var out = [];
+    order.forEach(function (id) {
+      var l = by[id], f = l[0], z = l[l.length - 1], o = f.old_start, n = z.new_start;
+      if (!o && !n) return;
+      if (o && n && Date.parse(o) === Date.parse(n) && (f.old_loc || '') === (z.new_loc || '')) return;
+      var opp = z.opp || f.opp;
+      if (!oppKnown(opp)) return; /* tegenstander nog onbekend: nog niet tonen */
+      if (n && o && !oppKnown(f.opp)) o = null; /* de kastelein zag de oude datum nooit: dit is voor hem een nieuwe wedstrijd */
+      out.push({ kind: !o ? 'added' : !n ? 'removed' : 'changed', team: z.team_name || f.team_name || 'Team', opp: opp,
+        old_start: o, new_start: n, at: z.created_at });
+    });
+    return out.sort(function (a, b) { return Date.parse(b.at) - Date.parse(a.at); });
+  }
+  function chgText(c) {
+    if (c.kind === 'added') return fShort.format(new Date(c.new_start));
+    if (c.kind === 'removed') return 'Was ' + fShort.format(new Date(c.old_start));
+    if (Date.parse(c.old_start) !== Date.parse(c.new_start)) return fShort.format(new Date(c.old_start)) + ' \u2192 ' + fShort.format(new Date(c.new_start));
+    return fShort.format(new Date(c.new_start)) + ' (locatie of tegenstander gewijzigd)';
+  }
+  var KIND = { added: 'Nieuw', changed: 'Verzet', removed: 'Vervalt' };
+
+  /* ---------- laden ---------- */
+  var SWITCH_MAILS = (window.WISSEL_MAILS || []).map(function (m) { return String(m).toLowerCase(); });
+  function checkSwitch() {
+    if (!sb || !S.uid || S.switchFor === S.uid) return;
+    S.switchFor = S.uid; S.isSuper = false; S.canSwitch = SWITCH_MAILS.indexOf((S.email || '').toLowerCase()) > -1;
+    var uid = S.uid;
+    sb.from('super_admins').select('user_id').then(function (r) {
+      if (uid === S.uid && r.data && r.data.length > 0) { S.canSwitch = true; S.isSuper = true; render(); }
+    }, function () {});
+  }
+  function load() {
+    if (!sb || !S.uid) return;
+    checkSwitch();
+    sb.rpc('venue_overview').then(function (r) {
+      if (r.error) {
+        if (/Geen toegang/i.test(r.error.message || '')) { S.state = 'noaccess'; S.err = ''; }
+        else { S.err = 'Laden is niet gelukt. Controleer je verbinding.'; if (S.state === 'start') S.state = 'ready'; }
+      } else { S.data = r.data; S.state = 'ready'; S.err = ''; S.loaded = new Date(); }
+      render();
+    }).catch(function () { S.err = 'Laden is niet gelukt. Controleer je verbinding.'; if (S.state === 'start') S.state = 'ready'; render(); });
+  }
+
+  /* ---------- tekenen ---------- */
+  function render() {
+    var main = $('main');
+    main.textContent = '';
+    $('logout').hidden = !S.uid;
+    $('compose').hidden = !(S.uid && S.state === 'ready');
+    $('compose').setAttribute('aria-pressed', S.view === 'compose' ? 'true' : 'false');
+    $('compose').textContent = S.view === 'compose' ? 'Terug naar wedstrijden' : 'Bericht aan spelers';
+    $('switchapp').hidden = !(S.uid && S.canSwitch);
+    $('testalert').hidden = !(S.uid && S.isSuper);
+    $('bell').hidden = !(S.uid && S.state === 'ready');
+    $('bell').setAttribute('aria-pressed', S.push ? 'true' : 'false');
+    $('bell').textContent = S.push ? 'Meldingen aan' : 'Meldingen aanzetten';
+    $('sub').textContent = S.loaded ? 'Alleen kijken \u00B7 bijgewerkt ' + fTime.format(S.loaded) : 'Alleen kijken';
+
+    if (!CFG.SUPABASE_URL || /JOUW/.test(CFG.SUPABASE_URL)) { main.appendChild(el('div', { class: 'card' }, el('p', { text: 'De app is nog niet gekoppeld aan Supabase (config.js).' }))); return; }
+    if (!S.uid) { main.appendChild(loginView()); return; }
+    if (S.state === 'start') { main.appendChild(el('p', { class: 'muted', text: 'Laden\u2026' })); return; }
+    if (S.state === 'noaccess') {
+      main.appendChild(el('div', { class: 'card' },
+        el('h2', { text: 'Nog geen toegang' }),
+        el('p', { text: 'Dit account (' + S.email + ') mag deze pagina nog niet openen. Geef dit e-mailadres door aan Egbert; die zet je erbij.' }),
+        el('button', { class: 'btn ghost', type: 'button', onclick: load }, 'Opnieuw proberen')));
+      return;
+    }
+    if (S.err) main.appendChild(el('div', { class: 'banner', role: 'alert' }, S.err + ' ', el('button', { class: 'btn ghost', type: 'button', onclick: load }, 'Opnieuw')));
+    if (isIOS() && !standalone()) main.appendChild(el('div', { class: 'hint', text: 'Meldingen op iPhone werken alleen als je deze pagina eerst op je beginscherm zet (deel-knop, dan \u201CZet op beginscherm\u201D) en hem daarvandaan opent.' }));
+    if (S.view === 'compose') { main.appendChild(composeView()); return; }
+    if (!S.data) return;
+
+    main.appendChild(changesView());
+
+    /* wedstrijden zonder bekende tegenstander blijven verborgen tot die is ingevuld */
+    var matches = (S.data.matches || []).filter(function (m) { return oppKnown(m.opp); });
+    var teams = {};
+    matches.forEach(function (m) { teams[m.team_id] = { name: m.team_name, hue: m.hue }; });
+    var ids = Object.keys(teams);
+    if (S.filter && !teams[S.filter]) S.filter = null;
+    if (ids.length > 1) {
+      var chips = el('div', { class: 'chips' }, el('button', { class: 'chip', type: 'button', 'aria-pressed': S.filter ? 'false' : 'true', onclick: function () { S.filter = null; render(); } }, 'Alle teams'));
+      ids.forEach(function (id) {
+        chips.appendChild(el('button', { class: 'chip', type: 'button', 'aria-pressed': S.filter === id ? 'true' : 'false', onclick: function () { S.filter = id; render(); } }, teams[id].name));
+      });
+      main.appendChild(chips);
+    }
+
+    var shown = matches.filter(function (m) { return !S.filter || m.team_id === S.filter; });
+    if (!shown.length) { main.appendChild(el('div', { class: 'card' }, el('p', { text: 'Er staan op dit moment geen thuiswedstrijden gepland.' }))); return; }
+    var lastDay = '';
+    shown.forEach(function (m) {
+      var k = fKey.format(new Date(m.start));
+      if (k !== lastDay) { main.appendChild(el('div', { class: 'day', text: dayLabel(m.start) })); lastDay = k; }
+      main.appendChild(matchView(m));
+    });
+  }
+
+  function changesView() {
+    var allRaw = collapse(S.data.changes || []);
+    var gone = dismissed();
+    var all = allRaw.filter(function (c) { return !gone[chgKey(c)]; });
+    var seen = parseInt(store('kroeg-seen') || '0', 10);
+    var isNew = function (c) { return Date.parse(c.at) > seen; };
+    var fresh = all.filter(isNew).length, old = all.length - fresh;
+    var list = S.showOld ? all : all.filter(isNew);
+    var box = el('section', { class: 'card changes', 'aria-labelledby': 'chg-h' });
+    box.appendChild(el('h2', { id: 'chg-h' }, 'Wijzigingen', fresh ? el('span', { class: 'newdot', title: fresh + ' nieuw' }) : null));
+    if (!allRaw.length) { box.appendChild(el('p', { class: 'muted small', text: 'De afgelopen drie weken is er niets gewijzigd.' })); return box; }
+    if (!all.length) { box.appendChild(el('p', { class: 'muted small', text: 'Geen wijzigingen.' })); return box; }
+    if (!list.length) box.appendChild(el('p', { class: 'muted small', text: 'Geen nieuwe wijzigingen.' }));
+    var cap = S.showAll ? list.length : 5;
+    list.slice(0, cap).forEach(function (c) {
+      var del = el('button', { class: 'cdel', type: 'button', 'data-key': chgKey(c), 'aria-label': 'Verwijder wijziging' });
+      del.innerHTML = TRASH;
+      box.appendChild(el('div', { class: 'cw' }, del,
+        el('div', { class: 'chg' },
+          el('span', { class: 'tag ' + c.kind, text: KIND[c.kind] }),
+          el('div', null,
+            el('div', { text: c.team + ' \u2013 ' + c.opp }),
+            el('div', { class: 'small muted', text: chgText(c) + (S.showOld && !isNew(c) ? ' \u00B7 al gezien' : '') })))));
+    });
+    var row = el('div', { class: 'row', style: 'margin-top:10px' });
+    if (list.length > 5) row.appendChild(el('button', { class: 'btn ghost', type: 'button', onclick: function () { S.showAll = !S.showAll; render(); } }, S.showAll ? 'Minder tonen' : 'Alles tonen (' + list.length + ')'));
+    if (fresh) row.appendChild(el('button', { class: 'btn ghost', type: 'button', onclick: function () { store('kroeg-seen', String(Date.now())); S.showAll = false; S.showOld = false; render(); } }, 'Wissen'));
+    if (old) row.appendChild(el('button', { class: 'btn ghost', type: 'button', onclick: function () { S.showOld = !S.showOld; S.showAll = false; render(); } }, S.showOld ? 'Eerdere verbergen' : 'Eerdere tonen (' + old + ')'));
+    if (row.childNodes.length) box.appendChild(row);
+    attachSwipe(box);
+    return box;
+  }
+
+  /* swipe naar links toont een prullenbak; tik erop om de wijziging te verwijderen */
+  var TRASH = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>';
+  function chgKey(c) { return [c.kind, c.team, c.opp, c.at].join('|'); }
+  function dismissed() { try { return JSON.parse(store('kroeg-dismissed') || '{}') || {}; } catch (e) { return {}; } }
+  function dismiss(key) { var d = dismissed(); d[key] = Date.now(); store('kroeg-dismissed', JSON.stringify(d)); }
+  function attachSwipe(box) {
+    var OPEN = 88, sw = null;
+    function closeOthers(except) {
+      Array.prototype.forEach.call(box.querySelectorAll('.chg.open'), function (e) { if (e !== except) { e.classList.remove('open'); e.style.transform = ''; } });
+    }
+    function end() {
+      if (!sw) return;
+      var s = sw; sw = null;
+      s.el.classList.remove('dragging');
+      if (s.dir !== 'h') return;
+      s.el.classList.toggle('open', s.x < -OPEN / 2);
+      s.el.style.transform = '';
+    }
+    box.addEventListener('pointerdown', function (ev) {
+      var e = ev.target.closest('.chg');
+      if (!e) return;
+      closeOthers(e);
+      var o = e.classList.contains('open');
+      sw = { el: e, x0: ev.clientX, y0: ev.clientY, base: o ? -OPEN : 0, x: o ? -OPEN : 0, dir: null, id: ev.pointerId };
+    });
+    box.addEventListener('pointermove', function (ev) {
+      if (!sw || ev.pointerId !== sw.id) return;
+      var dx = ev.clientX - sw.x0, dy = ev.clientY - sw.y0;
+      if (!sw.dir) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        sw.dir = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+        if (sw.dir === 'h') { sw.el.classList.add('dragging'); sw.el.classList.remove('open'); try { sw.el.setPointerCapture(ev.pointerId); } catch (x) {} }
+      }
+      if (sw.dir !== 'h') return;
+      sw.x = Math.max(-OPEN - 24, Math.min(0, sw.base + dx));
+      sw.el.style.transform = 'translateX(' + sw.x + 'px)';
+    });
+    box.addEventListener('pointerup', end);
+    box.addEventListener('pointercancel', end);
+    box.addEventListener('click', function (ev) {
+      var b = ev.target.closest('.cdel');
+      if (!b) return;
+      dismiss(b.getAttribute('data-key'));
+      b.parentNode.classList.add('gone');
+      setTimeout(render, 260);
+    });
+  }
+
+
+  /* ---------- bericht aan spelers (tekst, afbeelding of beide) ---------- */
+  /* Het formulier wordt één keer gemaakt en bij elke verversing opnieuw opgehangen, zodat wat je typt blijft staan. */
+  var C = null;
+  function composeView() {
+    if (C) { drawTeams(); drawSent(); return C.wrap; }
+    C = { teams: null, pick: {}, all: true, file: null, blob: null, url: null, sent: null, busy: false };
+    var title = el('input', { type: 'text', id: 'ctitle', maxlength: '60', autocomplete: 'off', placeholder: 'Bijvoorbeeld: Darttoernooi 2 januari' });
+    var body = el('textarea', { id: 'cbody', maxlength: '1000', placeholder: 'Bijvoorbeeld: Iedereen welkom! Opgeven kan aan de bar.' });
+    var cnt = el('div', { class: 'cnt', text: '0 / 1000' });
+    body.addEventListener('input', function () { cnt.textContent = body.value.length + ' / 1000'; });
+    var file = el('input', { type: 'file', accept: 'image/*', 'aria-label': 'Kies een afbeelding' });
+    var prev = el('div', { class: 'imgbox' });
+    var fileLbl = el('span', { text: 'Afbeelding kiezen' });
+    var rm = el('button', { class: 'btn ghost', type: 'button', hidden: true, onclick: function () { setImage(null); } }, 'Afbeelding weghalen');
+    file.addEventListener('change', function () { setImage(file.files && file.files[0]); });
+    function setImage(f) {
+      if (C.url) URL.revokeObjectURL(C.url);
+      C.file = f || null; C.blob = null; C.url = null; prev.textContent = ''; file.value = '';
+      rm.hidden = !f; fileLbl.textContent = f ? 'Andere afbeelding' : 'Afbeelding kiezen';
+      if (!f) return;
+      shrink(f).then(function (b) {
+        if (C.file !== f) return;
+        C.blob = b; C.url = URL.createObjectURL(b);
+        prev.appendChild(el('img', { src: C.url, alt: 'Voorbeeld van de afbeelding' }));
+      }, function () { toast('Deze afbeelding kan niet worden gelezen. Kies een foto of plaatje (jpg of png).'); setImage(null); });
+    }
+    C.picker = el('div', { class: 'pick' });
+    C.who = el('p', { class: 'muted small', style: 'margin:6px 0 0' });
+    C.msg = el('div', { class: 'okbox', role: 'status', hidden: true });
+    var send = el('button', { class: 'btn', type: 'submit' }, 'Versturen');
+    C.send = send;
+    var form = el('form', { class: 'card cmp', onsubmit: function (ev) { ev.preventDefault(); doSend(title, body, setImage, cnt); } },
+      el('h2', { text: 'Bericht aan spelers' }),
+      el('p', { class: 'muted small', style: 'margin:0', text: 'Stuur een uitnodiging (afbeelding), een mededeling (tekst) of allebei. De spelers krijgen een melding en vinden het bericht onder het belletje in “Wie gooit er mee?”.' }),
+      el('label', { text: 'Naar' }), C.picker, C.who,
+      el('label', { for: 'ctitle', text: 'Titel' }), title,
+      el('label', { for: 'cbody', text: 'Tekst (mag leeg als je een afbeelding stuurt)' }), body, cnt,
+      el('label', { text: 'Afbeelding (niet verplicht)' }),
+      el('div', { class: 'imgbox' }, prev, el('div', { class: 'row' }, el('span', { class: 'btn ghost filebtn' }, fileLbl, file), rm)),
+      el('div', { class: 'row', style: 'margin-top:16px' }, send),
+      C.msg);
+    C.sentBox = el('section', { class: 'card', style: 'margin-top:16px' });
+    C.wrap = el('div', null, form, C.sentBox);
+    loadCompose();
+    return C.wrap;
+  }
+  function loadCompose() {
+    sb.rpc('venue_teams').then(function (r) { if (!r.error) { C.teams = r.data || []; drawTeams(); } else { C.teams = []; drawTeams(r.error); } });
+    sb.from('venue_messages').select('id,title,body,image_path,to_teams,created_at').order('created_at', { ascending: false }).limit(20)
+      .then(function (r) { C.sent = r.error ? [] : r.data; C.sentErr = !!r.error; drawSent(); });
+  }
+  function chosen() { return C.all ? (C.teams || []) : (C.teams || []).filter(function (t) { return C.pick[t.id]; }); }
+  function drawTeams(err) {
+    var p = C.picker; p.textContent = '';
+    if (!C.teams) { p.appendChild(el('span', { class: 'muted small', text: 'Teams laden…' })); return; }
+    if (err || !C.teams.length) { p.appendChild(el('span', { class: 'muted small', text: err ? 'De teams konden niet worden geladen. Is 9-kastelein-bericht.sql al uitgevoerd?' : 'Er zijn geen teams.' })); C.who.textContent = ''; return; }
+    p.appendChild(el('button', { class: 'chip', type: 'button', 'aria-pressed': C.all ? 'true' : 'false', onclick: function () { C.all = true; C.pick = {}; drawTeams(); } }, 'Alle teams'));
+    C.teams.forEach(function (t) {
+      var on = !C.all && !!C.pick[t.id];
+      p.appendChild(el('button', { class: 'chip', type: 'button', 'aria-pressed': on ? 'true' : 'false', onclick: function () {
+        if (C.all) { C.all = false; C.pick = {}; }
+        if (C.pick[t.id]) delete C.pick[t.id]; else C.pick[t.id] = true;
+        if (!Object.keys(C.pick).length) C.all = true;
+        drawTeams();
+      } }, el('span', { class: 'dot', style: 'background:' + hueColor(t.hue), 'aria-hidden': 'true' }), t.name));
+    });
+    var ts = chosen(), n = ts.reduce(function (a, t) { return a + (t.members || 0); }, 0);
+    C.who.textContent = (C.all ? 'Alle ' + ts.length + ' teams' : ts.length + (ts.length === 1 ? ' team' : ' teams')) + ' · ' + n + (n === 1 ? ' speler' : ' spelers') + ' met de app';
+  }
+  function drawSent() {
+    var b = C.sentBox; b.textContent = '';
+    b.appendChild(el('h2', { text: 'Verstuurd' }));
+    if (!C.sent) { b.appendChild(el('p', { class: 'muted small', text: 'Laden…' })); return; }
+    if (!C.sent.length) { b.appendChild(el('p', { class: 'muted small', text: C.sentErr ? 'Kon de verstuurde berichten niet laden.' : 'Je hebt nog geen berichten verstuurd.' })); return; }
+    var names = {}; (C.teams || []).forEach(function (t) { names[t.id] = t.name; });
+    var ul = el('ul', { class: 'sent' });
+    C.sent.forEach(function (m) {
+      var to = !m.to_teams ? 'Alle teams' : m.to_teams.map(function (id) { return names[id] || 'team'; }).join(', ');
+      ul.appendChild(el('li', null,
+        m.image_path ? el('img', { src: sb.storage.from('kroeg').getPublicUrl(m.image_path).data.publicUrl, alt: '' }) : null,
+        el('div', { class: 'sx' },
+          el('strong', { text: m.title }),
+          el('div', { class: 'small muted', text: fShort.format(new Date(m.created_at)) + ' · ' + to }),
+          m.body ? el('p', { text: m.body }) : null,
+          el('button', { class: 'del', type: 'button', onclick: function () { removeSent(m); } }, 'Verwijderen bij iedereen'))));
+    });
+    b.appendChild(ul);
+  }
+  function removeSent(m) {
+    if (!window.confirm('Bericht “' + m.title + '” verwijderen? Het verdwijnt dan ook bij alle spelers.')) return;
+    sb.from('venue_messages').delete().eq('id', m.id).then(function (r) {
+      if (r.error) { toast('Verwijderen is niet gelukt.'); return; }
+      if (m.image_path) sb.storage.from('kroeg').remove([m.image_path]).catch(function () {});
+      C.sent = C.sent.filter(function (x) { return x.id !== m.id; }); drawSent();
+    }, function () { toast('Verwijderen is niet gelukt.'); });
+  }
+  /* foto verkleinen tot max. 1600 pixels en opslaan als jpg: snel versturen, weinig data voor de spelers */
+  function shrink(f) {
+    return new Promise(function (ok, fail) {
+      var img = new Image(), u = URL.createObjectURL(f);
+      img.onload = function () {
+        URL.revokeObjectURL(u);
+        var max = 1600, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, max / Math.max(w, h));
+        var c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+        var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { b ? ok(b) : fail(); }, 'image/jpeg', 0.85);
+      };
+      img.onerror = function () { URL.revokeObjectURL(u); fail(); };
+      img.src = u;
+    });
+  }
+  function rid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, '');
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  }
+  function doSend(title, body, setImage, cnt) {
+    if (C.busy) return;
+    var t = title.value.trim(), b = body.value.trim();
+    if (!t) { toast('Geef het bericht een titel.'); title.focus(); return; }
+    if (!b && !C.file) { toast('Schrijf een tekst of kies een afbeelding.'); body.focus(); return; }
+    if (C.file && !C.blob) { toast('De afbeelding wordt nog klaargemaakt. Probeer het zo nog eens.'); return; }
+    var ts = chosen();
+    if (!ts.length) { toast('Kies minstens één team.'); return; }
+    var n = ts.reduce(function (a, x) { return a + (x.members || 0); }, 0);
+    if (!window.confirm('Versturen naar ' + (C.all ? 'alle teams' : ts.map(function (x) { return x.name; }).join(', ')) + ' (' + n + ' spelers met de app)?')) return;
+    C.busy = true; C.send.disabled = true; C.send.textContent = 'Bezig met versturen…'; C.msg.hidden = true;
+    var path = C.blob ? 'berichten/' + rid() + '.jpg' : null;
+    var up = path ? sb.storage.from('kroeg').upload(path, C.blob, { contentType: 'image/jpeg', upsert: false }).then(function (r) { if (r.error) throw new Error('upload'); }) : Promise.resolve();
+    up.then(function () {
+      return sb.functions.invoke('venue-broadcast', { body: { title: t, body: b, image_path: path, to_teams: C.all ? null : ts.map(function (x) { return x.id; }) } });
+    }).then(function (r) {
+      if (r.error) {
+        if (path) sb.storage.from('kroeg').remove([path]).catch(function () {});
+        var ctx = r.error.context;
+        return (ctx && ctx.json ? ctx.json().catch(function () { return {}; }) : Promise.resolve({})).then(function (j) { throw new Error(j.error || 'Versturen is niet gelukt.'); });
+      }
+      var d = r.data || {};
+      title.value = ''; body.value = ''; cnt.textContent = '0 / 1000'; setImage(null);
+      C.msg.textContent = 'Verstuurd naar ' + d.members + ' spelers in ' + d.teams + (d.teams === 1 ? ' team' : ' teams') + '. ' +
+        (d.reached || 0) + ' van hen kregen direct een melding; de rest ziet het bij het openen van de app.';
+      C.msg.hidden = false;
+      loadCompose();
+    }).catch(function (e) {
+      toast(e && e.message === 'upload' ? 'De afbeelding uploaden is niet gelukt. Controleer je verbinding.' : (e && e.message) || 'Versturen is niet gelukt.');
+    }).then(function () { C.busy = false; C.send.disabled = false; C.send.textContent = 'Versturen'; });
+  }
+
+  function matchView(m) {
+    // Zelfde regel als de spelersapp: geen antwoord telt als "komt"; alleen "komt later" en "kan niet" wijken af.
+    var g = { yes: [], late: [], no: [] };
+    (m.players || []).forEach(function (p) { (g[p.status === 'late' || p.status === 'no' ? p.status : 'yes']).push(p.name); });
+    var coming = g.yes.length + g.late.length, total = (m.players || []).length;
+    var head = total ? coming + ' komen' : '\u2013';
+    var parts = [];
+    if (g.late.length) parts.push(g.late.length + ' later');
+    if (g.no.length) parts.push(g.no.length + ' kan niet');
+    var sub = total ? parts.join(' \u00B7 ') : 'nog geen spelers';
+    var d = el('details', { class: 'match' },
+      el('summary', null,
+        el('div', { class: 'time', text: fTime.format(new Date(m.start)) }),
+        el('div', { class: 'mid' },
+          el('div', { class: 'team' }, el('span', { class: 'dot', style: 'background:' + hueColor(m.hue), 'aria-hidden': 'true' }), m.team_name),
+          el('div', { class: 'opp', text: 'tegen ' + (m.opp || 'nog onbekend') + (m.loc ? ' \u00B7 ' + m.loc : '') })),
+        el('div', { class: 'att' }, el('b', { text: head }), el('span', { text: sub })),
+        el('span', { class: 'chev', 'aria-hidden': 'true', text: '\u203A' })));
+    var who = el('div', { class: 'who' });
+    [['yes', 'Komt', g.yes], ['late', 'Komt later', g.late], ['no', 'Kan niet', g.no]].forEach(function (s) {
+      if (!s[2].length) return;
+      who.appendChild(el('h3', { text: s[1] + ' (' + s[2].length + ')' }));
+      who.appendChild(el('div', { class: 'names' }, s[2].map(function (n) { return el('span', { class: 'pill ' + s[0], text: n }); })));
+    });
+    if (!who.childNodes.length) who.appendChild(el('p', { class: 'muted small', text: 'Dit team heeft nog geen spelers in de app.' }));
+    d.appendChild(who);
+    return d;
+  }
+
+  function loginView() {
+    var email = el('input', { type: 'email', id: 'aemail', autocomplete: 'username', required: true });
+    var pw = el('input', { type: 'password', id: 'apass', autocomplete: S.signup ? 'new-password' : 'current-password', required: true, minlength: '6' });
+    var f = el('form', { class: 'card login', onsubmit: function (ev) { ev.preventDefault(); auth(email.value.trim(), pw.value); } },
+      el('h2', { text: S.signup ? 'Account maken' : 'Inloggen' }),
+      el('p', { class: 'muted small', text: 'Alleen voor de kastelein en de beheerder. Je ziet welke teams thuis spelen en wie er komen. Wijzigen kan hier niet.' }),
+      el('label', { for: 'aemail', text: 'E-mailadres' }), email,
+      el('label', { for: 'apass', text: 'Wachtwoord (minimaal 6 tekens)' }), pw,
+      el('div', { class: 'row' },
+        el('button', { class: 'btn', type: 'submit' }, S.signup ? 'Account maken' : 'Inloggen'),
+        el('button', { class: 'btn ghost', type: 'button', onclick: function () { S.signup = !S.signup; render(); } }, S.signup ? 'Ik heb al een account' : 'Nieuw account')));
+    return f;
+  }
+  function toast(t) { alert(t); }
+  function auth(email, pw) {
+    if (!email || pw.length < 6) { toast('Vul je e-mailadres en een wachtwoord van minimaal 6 tekens in.'); return; }
+    var p = S.signup ? sb.auth.signUp({ email: email, password: pw }) : sb.auth.signInWithPassword({ email: email, password: pw });
+    p.then(function (r) {
+      if (r.error) toast(S.signup ? 'Account maken is niet gelukt: ' + r.error.message : 'E-mailadres of wachtwoord klopt niet.');
+      else if (S.signup && !r.data.session) toast('Account gemaakt. Bevestig je e-mail en log daarna in.');
+    });
+  }
+
+  /* ---------- meldingen ---------- */
+  function isIOS() { return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+  function standalone() { return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
+  function urlB64(s) {
+    var p = '='.repeat((4 - s.length % 4) % 4), b = atob((s + p).replace(/-/g, '+').replace(/_/g, '/'));
+    return Uint8Array.from(b, function (ch) { return ch.charCodeAt(0); });
+  }
+  function pushOK() { return 'serviceWorker' in navigator && 'PushManager' in window; }
+  function checkPush() {
+    if (!pushOK()) return;
+    navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); })
+      .then(function (sub) { S.push = !!sub; render(); }).catch(function () {});
+  }
+  function togglePush() {
+    if (!pushOK()) { toast('Meldingen werken hier niet. Op iPhone: zet de pagina eerst op je beginscherm en open hem daarvandaan.'); return; }
+    navigator.serviceWorker.ready.then(function (reg) {
+      return reg.pushManager.getSubscription().then(function (sub) {
+        if (S.push && sub) { // uitzetten
+          return sb.from('push_subscriptions').delete().eq('endpoint', sub.endpoint)
+            .then(function () { return sub.unsubscribe(); })
+            .then(function () { S.push = false; render(); });
+        }
+        return Notification.requestPermission().then(function (perm) {
+          if (perm !== 'granted') { toast('Meldingen zijn niet toegestaan. Zet ze aan in de instellingen van je telefoon of browser.'); return; }
+          function fresh() { return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64(CFG.VAPID_PUBLIC_KEY) }); }
+          function save(s) {
+            var j = s.toJSON();
+            return sb.from('push_subscriptions').upsert({ endpoint: j.endpoint, user_id: S.uid, p256dh: j.keys.p256dh, auth: j.keys.auth }, { onConflict: 'endpoint' })
+              .then(function (r) { if (r.error) throw r.error; });
+          }
+          return (sub ? Promise.resolve(sub) : fresh()).then(function (s) {
+            /* hoort dit toestel nog bij een ander account? dan opnieuw aanmelden met een nieuw adres */
+            return save(s).catch(function () { return s.unsubscribe().then(fresh).then(save); });
+          }).then(function () { S.push = true; render(); });
+        });
+      });
+    }).catch(function () { toast('Meldingen aan- of uitzetten is niet gelukt.'); });
+  }
+
+  /* ---------- start ---------- */
+  $('bell').addEventListener('click', togglePush);
+  $('compose').addEventListener('click', function () { S.view = S.view === 'compose' ? null : 'compose'; render(); window.scrollTo(0, 0); });
+  $('testalert').addEventListener('click', function () {
+    var all = window.confirm('Testmelding sturen.\n\nOK = ook naar de kastelein(s)\nAnnuleren = alleen naar mij');
+    var b = $('testalert'); b.disabled = true;
+    sb.functions.invoke('venue-alert', { body: { test: true, all: all } }).then(function (r) {
+      b.disabled = false;
+      if (r.error || !r.data) toast('Testmelding mislukt.');
+      else if (r.data.sent === 0) toast('Er is geen toestel van jou aangemeld voor meldingen. Zet eerst "Meldingen aanzetten" aan.');
+      else toast(all ? 'Testmelding verstuurd naar ' + r.data.sent + ' toestel(len), kastelein(s) inbegrepen.' : 'Testmelding verstuurd.');
+    }, function () { b.disabled = false; toast('Testmelding mislukt.'); });
+  });
+  /* bij uitloggen dit toestel afmelden, zodat de volgende gebruiker geen meldingen van dit account krijgt */
+  $('logout').addEventListener('click', function () {
+    if (!sb) return;
+    var done = false;
+    function out() { if (done) return; done = true; S.push = false; sb.auth.signOut(); }
+    setTimeout(out, 4000);
+    if (!pushOK()) { out(); return; }
+    navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+      if (!sub) return;
+      return Promise.resolve(sb.from('push_subscriptions').delete().eq('endpoint', sub.endpoint)).catch(function () {})
+        .then(function () { return sub.unsubscribe(); });
+    }).catch(function () {}).then(out);
+  });
+  render();
+  if (!CFG.SUPABASE_URL || /JOUW/.test(CFG.SUPABASE_URL)) return;
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {});
+  sb = supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+  sb.auth.onAuthStateChange(function (ev, session) {
+    var id = session ? session.user.id : null;
+    if (id && id === S.uid) return;
+    S.uid = id; S.email = session ? session.user.email : ''; S.canSwitch = false; S.switchFor = null; S.view = null; C = null;
+    if (id) { S.state = 'start'; S.data = null; render(); setTimeout(function () { load(); checkPush(); }, 0); }
+    else { S.state = 'start'; S.data = null; S.push = false; S.loaded = null; render(); }
+  });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && S.uid) load(); });
+  timer = setInterval(function () { if (!document.hidden && S.uid && S.state === 'ready') load(); }, 60000);
+})();
+</script>
+<script>
+/* knop "App downloaden" */
+(function () {
+  var box = document.getElementById('dlapp'), go = document.getElementById('dlgo'), no = document.getElementById('dlno'), help = document.getElementById('dlhelp');
+  var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var deferred = null, dismissed = false;
+  try { dismissed = sessionStorage.getItem('kroeg-dl-dicht') === '1'; } catch (e) {}
+  if (standalone || dismissed) return;            /* al geïnstalleerd of net weggeklikt */
+  if (ios) box.hidden = false;                    /* iPhone: altijd tonen, daar is er geen install-event */
+  if (/[?&]installeren=1/.test(location.search)) { /* vanaf de QR-code van de beheerder: altijd tonen */
+    box.hidden = false;
+    document.getElementById('dltitle').textContent = 'Welkom! Installeer Thuiswedstrijden';
+    document.getElementById('dltext').textContent = 'Tik op de knop hieronder en bevestig. Dan staat de app op je telefoon.';
+    no.hidden = true;
+  }
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; box.hidden = false; });
+  window.addEventListener('appinstalled', function () { box.hidden = true; });
+  go.addEventListener('click', function () {
+    if (deferred) {
+      deferred.prompt();
+      deferred.userChoice.then(function () { deferred = null; box.hidden = true; }, function () {});
+      return;
+    }
+    help.textContent = ios
+      ? 'Tik onderin op het deel-icoon en kies "Zet op beginscherm".'
+      : 'Tik rechtsboven op de drie puntjes en kies "App installeren" (of "Toevoegen aan startscherm").';
+    help.hidden = false;
+  });
+  no.addEventListener('click', function () {
+    box.hidden = true;
+    try { sessionStorage.setItem('kroeg-dl-dicht', '1'); } catch (e) {}
+  });
+})();
+</script>
+<script src="update.js"></script>
+</body>
+</html>
