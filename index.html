@@ -256,6 +256,86 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   .opt svg { display: none; }
   .opp { font-size: 24px; }
 }
+/* antwoorden op berichten */
+.mw.thr { max-height: 5000px; }
+.thread { margin-top: 10px; border-left: 3px solid var(--line); padding-left: 10px; display: flex; flex-direction: column; gap: 10px; }
+.rep { font-size: 14px; }
+.rep .rhead { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.rep.rep-me strong { color: var(--accent); }
+.rep.new { border-left: 3px solid #E5372B; margin-left: -13px; padding-left: 10px; }
+.rep .linkbtn, .msg .macts .linkbtn { min-height: 36px; padding: 4px 0; }
+/* uitslagen */
+.resbox { display: flex; flex-direction: column; gap: 6px; }
+.result { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; border-radius: 10px; background: var(--surface-2); }
+.result .rs-lab { font: 700 15px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; padding: 6px 9px 5px; border-radius: 7px; color: var(--on-status); background: var(--ink-2); }
+.result.win .rs-lab { background: var(--yes); }
+.result.loss .rs-lab { background: var(--no); }
+.result .rs-score { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; color: var(--ink); }
+.result .rs-n { font: 700 24px/1 var(--font-display); white-space: nowrap; }
+.result .rs-t { font-weight: 600; }
+.resform { display: flex; flex-direction: column; gap: 8px; }
+.resin { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: end; }
+.resin label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; color: var(--ink-2); min-width: 0; }
+.resin label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.resin input { font: 700 24px/1 var(--font-display); min-height: 50px; text-align: center; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; box-sizing: border-box; }
+.resin b { padding-bottom: 13px; font-size: 20px; color: var(--ink); }
+/* uitslagenpagina (schermvullend, zoals Thuiswedstrijden) */
+.top .in { flex-wrap: wrap; }
+.top .in > div:not(.hacts) { min-width: 0; flex: 1 1 0; }
+.hacts { order: 3; flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 8px; padding-left: 68px; }
+.hacts .switchlink { margin-left: 0; }
+.hacts:not(:has(> :not([hidden]))) { display: none; }
+button.switchlink { background: transparent; cursor: pointer; min-height: 38px; }
+dialog.respage { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0; background: var(--bg); color: var(--ink); }
+dialog.respage[open] { display: flex; flex-direction: column; }
+dialog.respage::backdrop { background: var(--bg); }
+.rp-head { background: var(--brand); color: var(--brand-ink); padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 14px; flex: none; }
+.rp-in { max-width: 720px; margin: 0 auto; }
+.rp-back { appearance: none; background: transparent; border: 1px solid rgba(255,255,255,.4); color: inherit; border-radius: 999px; padding: 8px 14px; font: 600 14px var(--font-body); min-height: 40px; cursor: pointer; }
+.rp-head h2 { margin: 12px 0 0; font: 700 32px/1 var(--font-display); letter-spacing: .01em; }
+.rp-sub { margin: 4px 0 0; font-size: 13px; opacity: .8; }
+.rp-tabs { display: flex; gap: 6px; margin-top: 12px; }
+.rp-tabs button { flex: 1; appearance: none; border: 1px solid rgba(255,255,255,.4); background: transparent; color: inherit; border-radius: 10px; min-height: 44px; font: 600 15px var(--font-body); cursor: pointer; }
+.rp-tabs button[aria-pressed="true"] { background: var(--brand-ink); color: var(--brand); border-color: var(--brand-ink); }
+.rp-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px 16px calc(28px + env(safe-area-inset-bottom, 0px)); }
+.oppcard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px 6px; margin-bottom: 12px; }
+.oppcard h3 { margin: 0 0 4px; font: 700 24px/1.1 var(--font-display); color: var(--ink); }
+.rr-next { display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 2px; }
+.urow { display: grid; grid-template-columns: 58px 1fr auto; gap: 4px 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.oppcard h3 + .urow { border-top: 0; }
+.urow .rr-tag { justify-self: start; }
+.rr-mid { display: flex; flex-direction: column; min-width: 0; font-size: 14px; color: var(--ink-2); }
+.rr-mid strong { color: var(--ink); font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rr-res { display: flex; align-items: center; gap: 10px; }
+.rr-n { font: 700 28px/1 var(--font-display); color: var(--ink); white-space: nowrap; }
+.rr-open { font-size: 14px; color: var(--ink-2); }
+.rr-edit { grid-column: 1 / -1; }
+.rr-edit .linkbtn { min-height: 34px; padding: 2px 0; font-size: 14px; }
+.rbadge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; font: 700 17px/1 var(--font-display); color: var(--on-status); background: var(--ink-2); flex: none; }
+.rbadge.win { background: var(--yes); }
+.rbadge.loss { background: var(--no); }
+.prevres { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 8px 0 0; padding: 8px 12px; border-radius: 10px; background: var(--surface-2); font-size: 14px; color: var(--ink-2); }
+.prevres .pr-r { display: flex; align-items: center; gap: 8px; }
+.prevres .pr-n { font: 700 22px/1 var(--font-display); color: var(--ink); white-space: nowrap; }
+.prevres .rbadge { width: 26px; height: 26px; font-size: 15px; }
+.ressum { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 0 12px; }
+.ressum:empty { display: none; }
+.ressum span { padding: 6px 10px; border-radius: 8px; background: var(--surface-2); font-size: 14px; color: var(--ink); }
+.ressum .rw b { color: var(--yes); }
+.ressum .rl b { color: var(--no); }
+.reslist .resrow { padding: 14px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.reslist .resrow:last-child { border-bottom: 0; }
+.resrow .rr-top { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--ink-2); }
+.resrow .rr-tag { font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: .05em; padding: 3px 7px; border-radius: 5px; background: var(--ink); color: var(--bg); }
+.resrow .rr-tag.home { background: var(--home); color: var(--brand-ink); }
+.resrow .rr-opp { font: 600 21px/1.1 var(--font-display); color: var(--ink); }
+.rr-none { margin: 0; color: var(--ink-2); font-size: 14px; }
+.resin input::-webkit-outer-spin-button, .resin input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.resin input { -moz-appearance: textfield; appearance: textfield; }
+.resopen { width: 100%; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font: inherit; font-weight: 600; color: var(--ink); text-align: left; cursor: pointer; }
+.resopen .rcount { color: var(--ink-2); font-weight: 500; font-size: 14px; }
+.resopen .rcount::after { content: " ›"; font-size: 18px; }
+.switchlink { margin-left: auto; flex: none; border: 1px solid rgba(255,255,255,.4); color: var(--brand-ink); border-radius: 999px; padding: 8px 14px; font: 600 14px var(--font-body); text-decoration: none; white-space: nowrap; }
 </style>
 
 <div class="top"><div class="in">
@@ -264,11 +344,33 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     <h1>Logan's Pub 6</h1>
     <p class="sub" id="season">Wie gooit er mee? Seizoen 2026-2027</p>
   </div>
+  <div class="hacts"><button type="button" class="switchlink" id="resbtn" data-act="res-open" hidden>Uitslagen</button></div>
   <button type="button" class="bell" id="bell" hidden aria-label="Berichten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="badge" id="bellbadge" hidden></span></button>
 </div></div>
 <dialog class="inbox" id="inbox" aria-labelledby="inboxtitle">
   <div class="inbox-head"><h2 id="inboxtitle">Berichten</h2><button type="button" class="linkbtn" id="inboxclose">Sluiten</button></div>
   <ul id="inboxlist"></ul>
+</dialog>
+<dialog class="inbox" id="repdlg" aria-labelledby="reptitle">
+  <div class="inbox-head"><h2 id="reptitle">Antwoord</h2><button type="button" class="linkbtn" id="repclose">Sluiten</button></div>
+  <form id="repform" class="addform" style="padding:14px 18px 18px;overflow-y:auto">
+    <p id="repto"></p>
+    <label for="repbody">Je antwoord</label>
+    <textarea id="repbody" rows="4" maxlength="300" placeholder="Schrijf je antwoord" required></textarea>
+    <div class="acts"><button class="btn" type="submit" id="repsend">Versturen</button></div>
+  </form>
+</dialog>
+<dialog class="respage" id="resdlg" aria-labelledby="restitle">
+  <div class="rp-head"><div class="rp-in">
+    <button type="button" class="rp-back" id="resclose">‹ Terug</button>
+    <h2 id="restitle">Uitslagen</h2>
+    <p class="rp-sub" id="ressub"></p>
+    <div class="rp-tabs"><button type="button" data-act="res-tab" data-tab="opp" aria-pressed="true">Per tegenstander</button><button type="button" data-act="res-tab" data-tab="date" aria-pressed="false">Op datum</button></div>
+  </div></div>
+  <div class="rp-body"><div class="rp-in">
+    <div class="ressum" id="ressum"></div>
+    <div id="reslist"></div>
+  </div></div>
 </dialog>
 
 <main class="in">
@@ -281,6 +383,8 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   <div id="who"></div>
   <div id="summary"></div>
   <div id="list" class="group"></div>
+
+  <button type="button" class="panel resopen" id="resbtn2" data-act="res-open" hidden><span>Uitslagen</span><span class="rcount" id="rescount"></span></button>
 
   <details class="panel" id="pastbox" hidden>
     <summary id="pastsum">Gespeeld</summary>
@@ -443,6 +547,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     confirmMatch: null,
     editMatch: null,
     messages: [], reads: {}, hidden: {}, fresh: {},
+    replies: [], repMsg: null, repTo: null, resEdit: null, resVal: {},
     msgTo: [],           /* leeg = iedereen */
     seasonAsk: false,
     pending: null
@@ -671,6 +776,8 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     var wl = locParts(m);
     h += wl.length ? '<p class="where"><span class="wlab">Locatie:</span><span>' + esc(wl.length > 1 ? wl[0] + ' · ' + wl[wl.length - 1] : wl[0]) + '</span></p>'
       : '<p class="where"><span class="wnone">' + esc(whereLine(m)) + '</span></p>';
+    if (hasResult(m) || (canResult() && begun(m))) h += '<div class="resbox">' + resultBlock(m, 'c') + '</div>';
+    else if (!begun(m)) h += prevHtml(m);
     h += '<div class="bar" style="grid-template-columns:repeat(' + Math.max(PLAYERS.length, 1) + ',1fr)" aria-hidden="true">' + cells.join('') + '</div>';
     if (low) {
       h += '<p class="lowmsg"><strong>' + (pres === 0 ? 'Niemand aanwezig.' : 'Nog maar ' + pres + ' aanwezig.') + '</strong> Je hebt er minimaal ' + MIN +
@@ -826,17 +933,253 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   function myPlayerId() { var c = state.uid && state.claims[state.uid]; return c ? c.p : null; }
   function inboxList() {
     var me = myPlayerId();
-    return state.messages.filter(function (m) { return !state.hidden[m.id] && (!m.to_players || (me && m.to_players.indexOf(me) >= 0)); });
+    return state.messages.filter(function (m) {
+      var reps = repliesOf(m.id);
+      var forMe = !m.to_players || (me && m.to_players.indexOf(me) >= 0) || m.created_by === state.uid || reps.length > 0;
+      return forMe && (!state.hidden[m.id] || reps.some(unreadReply));
+    }).map(function (m) {
+      var reps = repliesOf(m.id);
+      if (!reps.length) return m;
+      var o = {}; for (var k in m) o[k] = m[k];
+      o.reps = reps; o.last = reps[reps.length - 1].created_at;
+      return o;
+    }).sort(function (a, b) { return Date.parse(b.last || b.created_at) - Date.parse(a.last || a.created_at); });
   }
-  function unreadCount() { return inboxList().filter(function (m) { return !state.reads[m.id]; }).length; }
+  function unreadCount() {
+    var n = 0;
+    inboxList().forEach(function (m) { if (!state.reads[m.id]) n++; (m.reps || []).forEach(function (r) { if (unreadReply(r)) n++; }); });
+    return n;
+  }
   function renderInbox() {
     var list = inboxList();
     var TRASH = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>';
     $('inboxlist').innerHTML = list.length ? list.map(function (m) {
-      return '<li class="mw" data-mid="' + esc(m.id) + '"><button type="button" class="mdel" data-del="' + esc(m.id) + '" aria-label="Verwijder bericht">' + TRASH + '</button>' +
-        '<div class="msg' + (state.fresh[m.id] ? ' new' : '') + '"><div class="mhead"><strong>' + esc(m.title) + '</strong><small>' + esc(matchWhen(m.created_at)) + '</small></div><p>' + esc(m.body) + '</p></div></li>';
+      return '<li class="mw' + (m.reps ? ' thr' : '') + '" data-mid="' + esc(m.id) + '"><button type="button" class="mdel" data-del="' + esc(m.id) + '" aria-label="Verwijder bericht">' + TRASH + '</button>' +
+        '<div class="msg' + (state.fresh[m.id] ? ' new' : '') + '"><div class="mhead"><strong>' + esc(m.title) + '</strong><small>' + esc(matchWhen(m.created_at)) + '</small></div><p>' + esc(m.body) + '</p>' +
+        threadHtml(m) + '</div></li>';
     }).join('') : '<li class="mw"><div class="msg empty">Je hebt geen berichten.</div></li>';
   }
+  /* captain, reserve-captain of beheerder */
+  function amCaptainish() {
+    var p = player(myPlayerId());
+    return !!state.isCaptain || !!(p && (p.role === 'C' || p.role === 'RC'));
+  }
+  /* ---------- antwoorden op berichten ---------- */
+  function repliesOf(mid) { return (state.replies || []).filter(function (r) { return String(r.message_id) === String(mid); }); }
+  function unreadReply(r) { return r.user_id !== state.uid && !state.reads['a:' + r.id]; }
+  function nameOfUser(uid) { var c = uid && state.claims[uid]; var p = c && player(c.p); return p ? (p.short || p.name) : 'de speler'; }
+  /* draad met antwoorden onder een bericht, plus de knop om te antwoorden */
+  function threadHtml(m) {
+    if (m.kroeg || m.req) return '';
+    var reps = m.reps || [], cap = amCaptainish(), h = '';
+    if (reps.length) {
+      h += '<div class="thread">' + reps.map(function (r) {
+        var mine = r.user_id === state.uid;
+        var who = mine ? 'Jij' : (r.from_name || 'Speler');
+        if (r.to_user) who += r.to_user === state.uid ? ' aan jou' : ' aan ' + nameOfUser(r.to_user);
+        return '<div class="rep' + (mine ? ' rep-me' : '') + (state.fresh['a:' + r.id] ? ' new' : '') + '"><div class="rhead"><strong>' + esc(who) + '</strong><small>' +
+          esc(matchWhen(r.created_at)) + '</small></div><p>' + esc(r.body) + '</p>' +
+          (cap && !mine && !r.to_user ? '<button type="button" class="linkbtn" data-act="rep-open" data-mid="' + esc(m.id) + '" data-to="' + esc(r.user_id) +
+            '" data-name="' + esc(r.from_name || '') + '">Reageer naar ' + esc(r.from_name || 'speler') + '</button>' : '') + '</div>';
+      }).join('') + '</div>';
+    }
+    if (m.created_by !== state.uid) h += '<div class="macts"><button type="button" class="linkbtn" data-act="rep-open" data-mid="' + esc(m.id) + '">Antwoord</button></div>';
+    return h;
+  }
+  function openReply(mid, to, name) {
+    var m = (state.messages || []).filter(function (x) { return String(x.id) === String(mid); })[0];
+    if (!m) return;
+    state.repMsg = m.id; state.repTo = to || null;
+    $('repto').innerHTML = to
+      ? 'Aan <strong>' + esc(name || 'de speler') + '</strong>. Alleen ' + esc(name || 'de speler') + ' en de captain(s) zien dit.'
+      : 'Op: <strong>' + esc(m.title) + '</strong><br>De captain en reserve-captain krijgen een melding en zien je antwoord onder het belletje.';
+    $('repbody').value = '';
+    var d = $('repdlg');
+    if (!d.open) { if (d.showModal) d.showModal(); else d.setAttribute('open', ''); }
+    setTimeout(function () { $('repbody').focus(); }, 50);
+  }
+  $('repclose').addEventListener('click', function () { $('repdlg').close(); });
+  $('repform').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var b = $('repbody').value.trim();
+    if (!sb || !state.repMsg || !b) return;
+    $('repsend').disabled = true;
+    callFn('send-reply', { message_id: state.repMsg, body: b, to_user: state.repTo || undefined }).then(function (r) {
+      if (r.error) throw r.error;
+      toast('Antwoord verstuurd.');
+      $('repbody').value = ''; $('repdlg').close();
+      return loadMessages();
+    }).catch(function () { toast('Antwoord versturen is niet gelukt.'); }).then(function () { $('repsend').disabled = false; });
+  });
+
+
+  /* ---------- uitslagen ---------- */
+  var RESLAB = { win: 'Gewonnen', loss: 'Verloren', draw: 'Gelijk' };
+  var RESLET = { win: 'W', loss: 'V', draw: 'G' };
+  var fResDate = new Intl.DateTimeFormat('nl-NL', { weekday: 'short', day: 'numeric', month: 'short', timeZone: (typeof TZ !== 'undefined' ? TZ : 'Europe/Amsterdam') });
+  function resDate(s) { return fResDate.format(new Date(s)); }
+  function canResult() { return !!state.uid && state.dbState === 'ok' && amCaptainish(); }
+  function hasResult(m) { return m.us !== null && m.us !== undefined && m.them !== null && m.them !== undefined; }
+  function resultKind(m) { return m.us > m.them ? 'win' : m.us < m.them ? 'loss' : 'draw'; }
+  function begun(m) { return Date.parse(m.start) <= Date.now(); }
+  function oppKey(o) { return String(o || '').trim().toLowerCase().replace(/\s+/g, ' '); }
+  /* score met de thuisploeg eerst, zoals op het wedstrijdformulier */
+  function scoreTxt(m) { return m.home === false ? m.them + ' – ' + m.us : m.us + ' – ' + m.them; }
+  function scoreLine(m) {
+    var us = esc(TEAM || 'Wij'), them = esc(m.opp || 'Tegenstander');
+    var a = m.home === false ? [them, us] : [us, them];
+    return '<span class="rs-t">' + a[0] + '</span><b class="rs-n">' + scoreTxt(m) + '</b><span class="rs-t">' + a[1] + '</span>';
+  }
+  /* de vorige wedstrijd tegen dezelfde tegenstander, met uitslag */
+  function prevResult(m) {
+    var k = oppKey(m.opp), t = Date.parse(m.start), best = null;
+    state.matches.forEach(function (o) {
+      if (o === m || oppKey(o.opp) !== k || !hasResult(o) || Date.parse(o.start) >= t) return;
+      if (!best || Date.parse(o.start) > Date.parse(best.start)) best = o;
+    });
+    return best;
+  }
+  function prevHtml(m) {
+    var o = prevResult(m);
+    if (!o) return '';
+    var k = resultKind(o);
+    return '<p class="prevres"><span class="pr-l">Vorige keer ' + (o.home === false ? 'uit' : 'thuis') + ' · ' + esc(resDate(o.start)) + '</span>' +
+      '<span class="pr-r"><b class="rbadge ' + k + '">' + RESLET[k] + '</b><b class="pr-n">' + scoreTxt(o) + '</b></span></p>';
+  }
+  function resForm(m, ctx) {
+    var key = ctx + ':' + m.id, mid = esc(m.id), v = state.resVal[m.id] || {};
+    function inp(side, label) {
+      return '<label><span>' + esc(label) + '</span><input type="number" inputmode="numeric" min="0" max="99" data-res="' + side + '" data-mid="' + mid +
+        '" data-fk="r' + side + ':' + esc(key) + '" value="' + esc(v[side]) + '" aria-label="Score ' + esc(label) + '"></label>';
+    }
+    var us = inp('us', TEAM || 'Wij'), them = inp('them', m.opp || 'Tegenstander');
+    return '<div class="resform"><div class="resin">' + (m.home === false ? them + '<b>–</b>' + us : us + '<b>–</b>' + them) + '</div>' +
+      '<div class="acts"><button type="button" class="btn small" data-act="res-save" data-mid="' + mid + '" data-fk="rs:' + esc(key) + '">Uitslag opslaan</button>' +
+      (hasResult(m) ? '<button type="button" class="linkbtn danger" data-act="res-clear" data-mid="' + mid + '">Wissen</button>' : '') +
+      '<button type="button" class="linkbtn" data-act="res-cancel">Annuleer</button></div></div>';
+  }
+  function editBtn(m, ctx, label) {
+    var key = ctx + ':' + m.id;
+    return '<button type="button" class="linkbtn" data-act="res-edit" data-key="' + esc(key) + '" data-mid="' + esc(m.id) + '" data-fk="re:' + esc(key) + '">' + label + '</button>';
+  }
+  /* uitslag op de wedstrijdkaart */
+  function resultBlock(m, ctx) {
+    if (state.resEdit === ctx + ':' + m.id) return resForm(m, ctx);
+    var h = '';
+    if (hasResult(m)) h += '<div class="result ' + resultKind(m) + '"><span class="rs-lab">' + RESLAB[resultKind(m)] + '</span><span class="rs-score">' + scoreLine(m) + '</span></div>';
+    if (canResult() && begun(m)) h += editBtn(m, ctx, hasResult(m) ? 'Uitslag wijzigen' : 'Uitslag invullen');
+    return h;
+  }
+  /* één regel in de uitslagenpagina */
+  function resRow(m, withOpp) {
+    var tag = m.home === false ? '<span class="rr-tag">Uit</span>' : '<span class="rr-tag home">Thuis</span>';
+    var right;
+    if (hasResult(m)) right = '<span class="rr-res"><b class="rr-n">' + scoreTxt(m) + '</b><b class="rbadge ' + resultKind(m) + '" title="' + RESLAB[resultKind(m)] + '">' + RESLET[resultKind(m)] + '</b></span>';
+    else if (!begun(m)) right = '<span class="rr-open">Nog te spelen</span>';
+    else right = '<span class="rr-open">Geen uitslag</span>';
+    var h = '<div class="urow' + (hasResult(m) ? ' ' + resultKind(m) : '') + '">' + tag +
+      '<div class="rr-mid">' + (withOpp ? '<strong>' + esc(m.opp) + '</strong>' : '') + '<span>' + esc(resDate(m.start)) + '</span></div>' + right;
+    if (state.resEdit === 'd:' + m.id) h += '<div class="rr-edit">' + resForm(m, 'd') + '</div>';
+    else if (canResult() && begun(m)) h += '<div class="rr-edit">' + editBtn(m, 'd', hasResult(m) ? 'Wijzigen' : 'Uitslag invullen') + '</div>';
+    return h + '</div>';
+  }
+  function renderResults() {
+    var all = state.matches.filter(function (m) { return oppKnown(m.opp); }).sort(byStart);
+    var on = !!state.uid && state.dbState === 'ok' && all.length > 0;
+    $('resbtn').hidden = !on;
+    $('resbtn2').hidden = !on;
+    var dn = all.filter(hasResult), cw = 0, cg = 0, cl = 0;
+    dn.forEach(function (m) { var k = resultKind(m); if (k === 'win') cw++; else if (k === 'loss') cl++; else cg++; });
+    $('rescount').textContent = dn.length ? cw + 'W · ' + cg + 'G · ' + cl + 'V' : (canResult() ? 'Invullen' : '');
+    var d = $('resdlg');
+    if (!d.open) return;
+    var done = all.filter(hasResult), w = 0, g = 0, l = 0, f = 0, a = 0;
+    done.forEach(function (m) { var k = resultKind(m); if (k === 'win') w++; else if (k === 'loss') l++; else g++; f += m.us; a += m.them; });
+    $('ressub').textContent = (TEAM || '') + ' · seizoen ' + (typeof seasonLabel === 'function' ? seasonLabel() : '');
+    $('ressum').innerHTML = done.length ? '<span><b>' + done.length + '</b> gespeeld</span><span class="rw"><b>' + w + '</b> gewonnen</span><span><b>' + g +
+      '</b> gelijk</span><span class="rl"><b>' + l + '</b> verloren</span><span>Voor – tegen <b>' + f + ' – ' + a + '</b></span>' : '';
+    var tab = state.resTab || 'opp';
+    [].forEach.call(document.querySelectorAll('[data-act="res-tab"]'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-tab') === tab ? 'true' : 'false'); });
+    var h = '';
+    if (!all.length) h = '<p class="rr-none">Er zijn nog geen wedstrijden.</p>';
+    else if (tab === 'date') {
+      var played = all.filter(begun).reverse(), coming = all.filter(function (m) { return !begun(m); });
+      h = (played.length ? '<section class="oppcard"><h3>Gespeeld</h3>' + played.map(function (m) { return resRow(m, true); }).join('') + '</section>' : '') +
+        (coming.length ? '<section class="oppcard"><h3>Nog te spelen</h3>' + coming.map(function (m) { return resRow(m, true); }).join('') + '</section>' : '');
+    } else {
+      var groups = {}, order = [];
+      all.forEach(function (m) { var k = oppKey(m.opp); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(m); });
+      var now = Date.now();
+      function nextOf(k) { var n = groups[k].filter(function (m) { return !begun(m); })[0]; return n ? Date.parse(n.start) : null; }
+      function lastOf(k) { var g2 = groups[k]; return Date.parse(g2[g2.length - 1].start); }
+      order.sort(function (x, y) {
+        var nx = nextOf(x), ny = nextOf(y);
+        if (nx !== null && ny !== null) return nx - ny;
+        if (nx !== null) return -1;
+        if (ny !== null) return 1;
+        return lastOf(y) - lastOf(x);
+      });
+      var firstNext = order.length && nextOf(order[0]) !== null ? order[0] : null;
+      h = order.map(function (k) {
+        var g3 = groups[k], res = g3.filter(hasResult), tw = 0, tl = 0;
+        res.forEach(function (m) { if (resultKind(m) === 'win') tw++; else if (resultKind(m) === 'loss') tl++; });
+        var label = k === firstNext ? '<span class="rr-next">Eerstvolgende</span>' : '';
+        return '<section class="oppcard">' + label + '<h3>' + esc(g3[0].opp) + '</h3>' + g3.map(function (m) { return resRow(m, false); }).join('') + '</section>';
+      }).join('');
+    }
+    $('reslist').innerHTML = h;
+  }
+  function saveResult(mid, clear) {
+    var m = state.matches.filter(function (x) { return String(x.id) === String(mid); })[0];
+    var v = state.resVal[mid] || {};
+    var us = clear ? null : parseInt(v.us, 10), them = clear ? null : parseInt(v.them, 10);
+    if (!clear && (isNaN(us) || isNaN(them) || us < 0 || them < 0 || us > 99 || them > 99)) { toast('Vul bij allebei de teams een getal in.'); return; }
+    run(sb.rpc('set_result', { p_match: m ? m.id : mid, p_us: us, p_them: them })).then(function () {
+      if (m) { m.us = us; m.them = them; }
+      state.resEdit = null; delete state.resVal[mid];
+      toast(clear ? 'Uitslag gewist.' : 'Uitslag opgeslagen.');
+      render();
+    }).catch(function (e) { toast(e && e.message ? e.message : 'Opslaan is niet gelukt.'); });
+  }
+  function openResults() {
+    var d = $('resdlg');
+    if (d.open) return;
+    if (d.showModal) d.showModal(); else d.setAttribute('open', '');
+    try { history.pushState({ uitslagen: 1 }, ''); } catch (e) {}
+    renderResults();
+    $('reslist').parentNode.scrollTop = 0;
+  }
+  document.addEventListener('input', function (ev) {
+    var t = ev.target;
+    if (!t || !t.dataset || !t.dataset.res) return;
+    var mid = t.dataset.mid;
+    (state.resVal[mid] = state.resVal[mid] || {})[t.dataset.res] = t.value;
+  });
+  document.addEventListener('click', function (ev) {
+    var t = ev.target.closest ? ev.target.closest('[data-act]') : null;
+    if (!t) return;
+    var act = t.getAttribute('data-act'), mid = t.getAttribute('data-mid');
+    if (act === 'rep-open') openReply(mid, t.getAttribute('data-to'), t.getAttribute('data-name'));
+    else if (act === 'res-open') openResults();
+    else if (act === 'res-tab') { state.resTab = t.getAttribute('data-tab'); state.resEdit = null; renderResults(); }
+    else if (act === 'res-edit') {
+      var m = state.matches.filter(function (x) { return String(x.id) === String(mid); })[0];
+      state.resEdit = t.getAttribute('data-key');
+      state.resVal[mid] = { us: m && hasResult(m) ? m.us : '', them: m && hasResult(m) ? m.them : '' };
+      render();
+      var f = document.querySelector('[data-fk="r' + (m && m.home === false ? 'them' : 'us') + ':' + state.resEdit + '"]');
+      if (f) f.focus();
+    } else if (act === 'res-cancel') { state.resEdit = null; render(); }
+    else if (act === 'res-save') saveResult(mid, false);
+    else if (act === 'res-clear') saveResult(mid, true);
+  });
+  $('resclose').addEventListener('click', function () { $('resdlg').close(); });
+  $('resdlg').addEventListener('close', function () {
+    if (state.resEdit && state.resEdit.indexOf('d:') === 0) { state.resEdit = null; render(); }
+    if (history.state && history.state.uitslagen) { try { history.back(); } catch (e) {} }
+  });
+  /* terugknop van de telefoon sluit de uitslagenpagina */
+  window.addEventListener('popstate', function () { if ($('resdlg').open) $('resdlg').close(); });
   function renderBell() {
     var on = !!state.uid && state.dbState === 'ok';
     var n = on ? unreadCount() : 0;
@@ -851,18 +1194,30 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     function reads() {
       return run(sb.from('message_reads').select('message_id,hidden')).catch(function () { return run(sb.from('message_reads').select('message_id')); });
     }
+    function replies() {
+      /* antwoorden op berichten (werkt pas na 10-antwoorden-en-uitslagen.sql; daarvoor gewoon leeg) */
+      return Promise.all([
+        run(sb.from('message_replies').select('*').order('created_at', { ascending: false }).limit(300)),
+        run(sb.from('reply_reads').select('reply_id'))
+      ]).then(function (x) { return { r: (x[0].data || []).reverse(), rd: x[1].data || [] }; }).catch(function () { return { r: [], rd: [] }; });
+    }
     return Promise.all([
       run(sb.from('messages').select('*').order('created_at', { ascending: false }).limit(50)),
-      reads()
+      reads(),
+      replies()
     ]).then(function (r) {
       var rd = {}, hd = {}; r[1].data.forEach(function (v) { rd[v.message_id] = true; if (v.hidden) hd[v.message_id] = true; });
+      state.replies = r[2].r;
+      r[2].rd.forEach(function (v) { rd['a:' + v.reply_id] = true; });
       state.messages = r[0].data; state.reads = rd; state.hidden = hd;
       renderBell();
       if (wantInbox) { wantInbox = false; history.replaceState(null, '', location.pathname + location.search); openInbox(); }
     }).catch(function () {});
   }
   function openInbox() {
-    var unread = inboxList().filter(function (m) { return !state.reads[m.id]; });
+    var all = inboxList();
+    var unread = all.filter(function (m) { return !state.reads[m.id]; });
+    all.forEach(function (m) { (m.reps || []).forEach(function (r) { if (unreadReply(r)) unread.push({ id: 'a:' + r.id }); }); });
     state.fresh = {}; unread.forEach(function (m) { state.fresh[m.id] = true; });
     renderInbox();
     var d = $('inbox');
@@ -870,7 +1225,12 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     if (unread.length) {
       unread.forEach(function (m) { state.reads[m.id] = true; });
       renderBell();
-      if (sb) run(sb.from('message_reads').upsert(unread.map(function (m) { return { message_id: m.id, user_id: state.uid }; }))).catch(function () {});
+      if (sb) {
+        var mr = unread.filter(function (m) { return String(m.id).indexOf('a:') !== 0; }).map(function (m) { return { message_id: m.id, user_id: state.uid }; });
+        var rr = unread.filter(function (m) { return String(m.id).indexOf('a:') === 0; }).map(function (m) { return { reply_id: m.id.slice(2), user_id: state.uid }; });
+        if (mr.length) run(sb.from('message_reads').upsert(mr)).catch(function () {});
+        if (rr.length) run(sb.from('reply_reads').upsert(rr)).catch(function () {});
+      }
     }
   }
   /* swipe naar links toont een prullenbak; tik erop om het bericht te verwijderen */
@@ -1043,6 +1403,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
     renderNote();
     renderWho();
     renderLists();
+    renderResults();
     renderAdmin();
     renderBell();
     if (state.isCaptain) renderMatchAdmin();
@@ -1192,7 +1553,7 @@ dialog.inbox::backdrop { background: rgba(0,0,0,.55); }
   var rt = null, channel = null;
   function loadAll() {
     return Promise.all(['matches', 'players', 'claims', 'answers'].map(function (t) { return run(sb.from(t).select('*')); })).then(function (r) {
-      var ms = r[0].data.map(function (v) { return { id: v.id, start: new Date(v.start).toISOString().replace('.000Z', 'Z'), opp: v.opp || '', home: v.home, loc: v.loc || '' }; });
+      var ms = r[0].data.map(function (v) { return { id: v.id, start: new Date(v.start).toISOString().replace('.000Z', 'Z'), opp: v.opp || '', home: v.home, loc: v.loc || '', us: v.score_us, them: v.score_them }; });
       state.matches = ms.sort(byStart);
       var pl = r[1].data.map(function (v) { return { id: v.id, name: v.name, short: v.short || v.name.split(' ')[0], role: v.role || '', order: v.sort || 99 }; });
       pl.sort(function (a, b) { return a.order - b.order; });
