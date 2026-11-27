@@ -1343,11 +1343,15 @@ dialog.respage::backdrop { background: var(--bg); }
     var before = null; state.matches.forEach(function (x) { if (x.id === rec.id) before = x; });
     var nowKnown = oppKnown(rec.opp) && !(before && oppKnown(before.opp)); /* tegenstander net bekend geworden */
     var notify = $('mnotify').checked || nowKnown;
+    /* andere dag? dan zet de database iedereen weer op Kan (zie 11-verzetten-iedereen-op-kan.sql) */
+    var dayOf = function (x) { return new Date(x).toLocaleDateString('nl-NL', { timeZone: TZ }); };
+    var moved = !!(before && before.start && dayOf(before.start) !== dayOf(rec.start));
     run(sb.from('matches').upsert(rec)).then(function () {
-      toast(isNew ? 'Wedstrijd toegevoegd.' : 'Wijziging opgeslagen.');
+      toast(isNew ? 'Wedstrijd toegevoegd.' : moved ? 'Wedstrijd verzet. Iedereen staat weer op Kan.' : 'Wijziging opgeslagen.');
       resetMatchForm(); $('mnotify').checked = true;
       if (notify) {
         var body = matchWhen(rec.start) + (rec.opp ? ' tegen ' + rec.opp : '') + (rec.home === true ? ' (thuis)' : rec.home === false ? ' (uit)' : '');
+        if (moved) body += '. Iedereen staat weer op Kan: geef het door als je niet kunt.';
         return sendMessage(nowKnown ? 'Wedstrijd bekend' : isNew ? 'Nieuwe wedstrijd' : 'Wedstrijd gewijzigd', body).catch(function () { toast('Opgeslagen, maar de melding is niet verstuurd.'); });
       }
     }).then(loadAll).catch(writeFail);
